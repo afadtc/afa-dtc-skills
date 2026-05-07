@@ -1,6 +1,11 @@
+---
+name: afa-cx
+description: "DTC 客户体验与服务智能引擎——客服优化、售后流程、退货策略、客户旅程设计、NPS/CSAT 管理。Use when user mentions: 客户体验, customer experience, CX, 客服, customer service, 退货, returns, 售后, after-sales, NPS, CSAT, 客户满意度, 投诉, complaints, 客户旅程, customer journey, 自动化客服."
+---
+
 # afa-cx — 客户体验与服务智能引擎
 
-> **Supervisor**: afa-monetize · **版本**：v2.4.6
+> **Supervisor**: afa-monetize · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -59,31 +64,85 @@
 
 ## 3. Core Workflow
 
-激活后按以下顺序加载 references：
+### Phase 1 — 边界检查与意图路由
 
-### Step 1 — 理解 CX 全景
-加载 `references/core-frameworks.md` 获取 2026 CX 范式转变、客户健康评分模型、主动式 CX 优化以及体验溢价（Tier 2）构建。
+1. 检查用户请求是否属于本模块职责：
+   - 若属于转化率优化（落地页/产品页/结账）→ 回交 afa-convert。
+   - 若属于复购策略/LTV/流失防止 → 回交 afa-retain。
+   - 若属于邮件/SMS 内容撰写 → 回交 afa-email / afa-sms。
+   - 若匹配客户体验、工单、客服、NPS、退货体验、帮助中心、Bot、声誉管理 → 进入 Phase 2。
+2. 根据用户意图信号选择工作模式：
 
-### Step 2 — 旅程映射与工单分析
-加载 `references/journey-mapping-framework.md` 获取六阶段客户旅程模型、触点差距分析和旅程健康仪表盘。
-加载 `references/ticket-intelligence-system.md` 获取三阶段工单分析引擎、DPS 评分模型和执行路线图。
+| 用户意图信号 | 工作模式 | 主加载 Reference |
+|:---|:---|:---|
+| 客户旅程、触点审计、体验断裂点 | Mode 1: 客户旅程映射 | `work-modes-and-templates.md` Mode 1 + `journey-mapping-framework.md` |
+| 工单分析、DPS 评分、工单分类 | Mode 2: 工单智能分析 | `work-modes-and-templates.md` Mode 2 + `ticket-intelligence-system.md` |
+| 帮助中心、FAQ、Bot、客服宏 | Mode 3: 自助服务内容构建 | `work-modes-and-templates.md` Mode 3 + `self-service-content-engine.md` |
+| 客户情绪、VoC、评价分析、声誉危机 | Mode 4: 客户情绪与 VoC 审计 | `work-modes-and-templates.md` Mode 4 + `sentiment-analysis-playbook.md` |
+| 客户健康度、流失预警、主动式 CX | Mode 5: 客户健康度评估 | `work-modes-and-templates.md` Mode 5 + `cx-automation-toolkit.md` + `core-frameworks.md`（健康评分模型） |
+| 声誉危机、差评爆发、PR 危机客服端 | Mode 6: 危机公关与声誉管理 | `work-modes-and-templates.md` Mode 6 + `sentiment-analysis-playbook.md`（T-A-S-C 模型） |
+| 工单飙升、NPS 下降、退货率异常（诊断类） | 诊断模式 | `diagnostic-system.md`（见 Phase 3） |
 
-### Step 3 — 构建自助服务与监控情感
-加载 `references/self-service-content-engine.md` 获取三层防御模型（帮助中心文章、Bot Q&A、客服宏）及完整模板与原则。
-在整理任何帮助中心文章、Bot Q&A 或客服宏时，必须先区分用户可见层与 internal-only 层：用户可直接复制的正文只保留自然语言和业务动作；内部操作说明、升级条件、标签、系统映射必须放入显式标记的“仅供系统使用 / internal-only”区块，不得与前台正文混写。
-加载 `references/sentiment-analysis-playbook.md` 获取情感模式、VoC 闭环方法论以及危机/声誉管理（T-A-S-C、黄金三段式模型）。
+### Phase 2 — 数据收集与基线建立
 
-### Step 4 — 自动化与留存
-加载 `references/cx-automation-toolkit.md` 获取主动式自动化工作流、触发器设计和升级规则。
-加载 `references/return-and-retention.md` 获取退货体验工程、忠诚度计划设计和订阅管理。
+1. 收集 CX 上下文（当前工单量 / CSAT / NPS / 退货率 / FRT / 帮助中心状态）。
+2. 加载 `references/benchmark-data.md` 建立 DTC CX 行业基准对照。
+3. 加载 `references/core-frameworks.md` 获取：
+   - 2026 CX 范式转变（主动式 > 被动式）
+   - 客户健康评分模型
+   - 体验溢价（Tier 2）构建框架
 
-### Step 5 — 问题诊断
-加载 `references/diagnostic-system.md` 获取 6 棵诊断决策树（工单飙升、CSAT/NPS 下降、退货率异常、FRT 超标、低偏转率、旅程断裂）和 ICE 优先级排序框架。
+⟐ **用户确认点**：
+- Mode 1（客户旅程映射）：旅程地图和触点差距分析完成后展示给用户确认，再进入优化建议
+- Mode 6（危机公关）：展示危机严重度评估和建议的响应等级后确认再执行
 
-### Step 6 — 基准对标与执行
-加载 `references/benchmark-data.md` 获取 DTC CX 行业基准。
-加载 `references/work-modes-and-templates.md` 获取 KPI 体系、6 大工作模式和 3 个输出模板（帮助中心文章、Bot Q&A、客服宏）。
-加载 `references/anti-patterns.md` 获取禁止操作、常见错误、CX 专属降级策略和危机模式协议。
+**数据不足时的降级策略**：
+
+| 可用数据 | 可执行操作 | 输出调整 |
+|:---|:---|:---|
+| 工单数据 + CSAT/NPS | 全量分析 + 诊断 | 标准报告 |
+| 仅工单数据 | 工单分类 + DPS 评分 | 精简报告 + 建议补充 CSAT 数据 |
+| 仅用户反馈（评价/投诉） | VoC 分析 + 情感模式 | 定性报告 + 建议开始采集结构化数据 |
+| 无数据 | 仅做帮助中心/Bot 内容构建 | 输出数据采集引导 + 帮助中心模板 |
+
+### Phase 3 — 诊断（当用户描述 CX 异常时触发）
+
+加载 `references/diagnostic-system.md`，按症状进入对应诊断决策树：
+
+```
+症状 → 诊断决策树路由：
+├── 工单飙升 → 树一：产品缺陷 → 物流延迟 → 信息缺失 → 策略变更副作用
+├── CSAT/NPS 下降 → 树二：响应速度 → 解决质量 → 渠道一致性 → 期望管理
+├── 退货率异常 → 树三：产品描述匹配 → 包装质量 → 尺码/预期偏差 → 竞品比较
+├── FRT 超标 → 树四：人力配置 → 工单分流 → 自助服务偏转 → 峰值管理
+├── 低偏转率 → 树五：帮助中心可发现性 → 内容质量 → Bot 触发覆盖 → 搜索体验
+└── 旅程断裂 → 树六：触点连接性 → 信息一致性 → 情绪转折点 → 主动式干预缺失
+```
+
+诊断完成后 → 使用 CX 专属 ICE 框架对发现的问题排序 → 输出优先行动清单。
+
+### Phase 4 — 框架应用与执行
+
+1. 按所选工作模式执行其 SOP，按需加载对应深度参考：
+   - `journey-mapping-framework.md` → 六阶段旅程模型 + 触点差距分析 + 旅程健康仪表盘
+   - `ticket-intelligence-system.md` → 三阶段工单分析引擎 + DPS 评分
+   - `self-service-content-engine.md` → 三层防御模型（帮助中心/Bot/宏）
+   - `sentiment-analysis-playbook.md` → 情感模式 + VoC 闭环 + T-A-S-C 危机模型
+   - `cx-automation-toolkit.md` → 主动式自动化工作流 + 触发器 + 升级规则
+   - `return-and-retention.md` → 退货体验工程 + 忠诚度设计 + 订阅管理
+2. 输出模板选择（`work-modes-and-templates.md`）：
+   - 帮助中心文章模板（含 DPS + SEO 描述 + 相关文章）
+   - Bot Q&A 模板（训练短语 + Bot 回复 + Fallback + Handoff）
+   - 客服快捷回复模板（正文 + internal notes + 升级条件）
+3. **重要规则**：在整理任何帮助中心文章、Bot Q&A 或客服宏时，必须先区分用户可见层与 internal-only 层。
+
+### Phase 5 — 防护与质量检查
+
+加载 `references/anti-patterns.md` 进行最终检查：
+- 禁止操作交叉验证（如删除差评、虚假承诺、未经授权共享客户数据）
+- CX 专属降级策略：当资源不足时的优先级排序
+- 危机模式协议：当 `crisis_mode = pr_crisis` 时优先激活 Mode 6
+- 确保每个建议都有清晰的 KPI 影响预期（CSAT/NPS/CES/FRT）
 
 ## 4. Completion Protocol
 

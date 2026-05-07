@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 AFA DTC Memory Manager — 增强加载脚本
-版本：v2.4.6
+版本：v2.4.7
 对齐协议：brand-memory-protocol.md §9.5「增强实现」
 
 功能：

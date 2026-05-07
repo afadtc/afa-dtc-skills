@@ -1,6 +1,11 @@
+---
+name: afa-fb
+description: "Meta 广告优化引擎——Facebook/Instagram 广告账户结构、受众策略、出价优化、创意测试、Advantage+ 、CBO/ABO。Use when user mentions: Facebook广告, Meta Ads, Instagram广告, FB广告, CPM, CPA, 受众定向, targeting, Advantage+, CBO, ABO, 广告组, ad set, 像素, pixel, ROAS, Meta投放."
+---
+
 # afa-fb — Meta 广告优化引擎
 
-> **Supervisor**: afa-paid · **版本**：v2.4.6
+> **Supervisor**: afa-paid · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -69,14 +74,37 @@
 3. 执行诊断 → 加载 `references/diagnostic-rules.md`（Meta Ads 诊断决策树）。
 4. 输出：按 ICE 评分排序的优先问题清单。
 
+**诊断决策树摘要**（完整规则见 `references/diagnostic-rules.md`）：
+
+```
+ROAS 不达标时，按优先级诊断：
+├── CPM 异常（成本端）→ 受众竞争/广告相关度/账户质量/季节性/版位分配
+├── CTR 异常（创意端）→ Hook 失效/受众不匹配/创意疲劳/版位适配/文案失效
+├── CVR 异常（落地页端）→ 落地页不匹配/加载速度/定价/信任信号/结账流程
+├── AOV 异常（产品/定价端）→ 产品组合/定价策略/交叉销售
+└── 多因素叠加 → 综合诊断（按影响大小排序）
+```
+
 ### Phase 2 — 策略选择
+
 根据用户意图匹配工作模式 → 加载 `references/work-modes-and-kpi.md`：
-- 模式 1：账户结构与设置 → 加载 `references/core-frameworks.md`
-- 模式 2：受众策略 → 加载 `references/audience-strategy.md`
-- 模式 3：创意与文案 → 加载 `references/creative-templates.md`
-- 模式 4：预算与扩量 → 加载 `references/planning-and-budget.md` 和 `references/scaling-sop.md`
-- 模式 5：追踪与归因 → 加载 `references/tracking-setup.md`
-- 模式 6：账户健康与合规 → 加载 `references/account-health.md`
+
+| 用户意图信号 | 工作模式 | 主加载 Reference |
+|:---|:---|:---|
+| 账户搭建、新品牌开始投广、账户结构 | 模式 1：账户架构设计 | `core-frameworks.md` |
+| 广告文案、推广产品、创建广告 | 模式 2：广告创建 | `creative-templates.md` |
+| ROAS 下降、CPA 高、广告效果差 | 模式 3：广告诊断 | `diagnostic-rules.md` + `benchmark-data.md` |
+| 受众定向、Lookalike、广泛定向 | 模式 4：受众策略 | `audience-strategy.md` |
+| 扩量、加预算、预算分配 | 模式 5：预算与扩量 | `planning-and-budget.md` + `scaling-sop.md` |
+| Pixel、CAPI、归因、追踪设置 | 模式 6：追踪与归因 | `tracking-setup.md` |
+| 账户受限、广告拒绝、合规问题 | 模式 7：账户健康与合规 | `account-health.md` |
+
+**前置条件检查**（执行前必须确认）：
+- 所有模式：`products.md` + `audience.md` 必须存在
+- 模式 2（广告创建）：额外需要 `voice-and-tone.md`
+- 模式 5（预算与扩量）：需要当前广告数据（至少 7 天数据）
+- 模式 6（追踪）：需要站点 URL
+- 前置条件不满足时：不阻塞，先给保守可执行版，并在 concerns 中标注待补充项
 
 ### Phase 3 — 框架应用
 1. 加载 `references/core-frameworks.md` 获取 Meta Ads 范式与季节性策略。

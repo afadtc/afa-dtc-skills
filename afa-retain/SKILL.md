@@ -1,6 +1,11 @@
+---
+name: afa-retain
+description: "DTC 品牌用户留存与 LTV 增长引擎——留存健康体检、RFM+LTV 分层、微诚度计划设计、订阅防流失、召回体系、群组分析。Use when user mentions: 留存, retention, 复购率, repurchase, LTV, 客户生命周期, customer lifetime value, 流失, churn, 微诚度, loyalty, 会员, membership, 订阅, subscription, 召回, win-back, 沉睡客户, 再激活, reactivation, RFM分层."
+---
+
 # afa-retain — 用户留存与 LTV 增长引擎
 
-> **Supervisor**: afa-monetize · **版本**：v2.4.6
+> **Supervisor**: afa-monetize · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -60,30 +65,68 @@
 
 ## 3. Core Workflow
 
-### Step 1 — 加载核心框架
-加载 `references/core-frameworks.md`
-→ 五维留存健康检查、RFM+JTBD+LTV 整合分层（11大客群矩阵）、六阶段客户生命周期、无利润侵蚀 LTV 增长模型、订阅双轮防流失、忠诚度设计、群组分析实战、召回体系、流失预测模型、品类专属 Playbook。
+### Phase 1 — 边界检查与上下文收集
 
-### Step 2 — 加载诊断系统
-加载 `references/diagnostic-system.md`
-→ 7 大诊断决策树（宏观留存率/订阅退订/LTV:CAC/VIP流失/新品异常/季节性波动/忠诚度失效）+ ICE 优先级排序。
+1. 加载 `references/anti-patterns.md` 执行**边界检查**：
+   - 若用户核心问题属于邮件/短信文案、落地页转化、仪表盘搭建、获客成本、客单价策略 → 通过 `completion.out_of_scope` 回交上层。
+   - 若匹配本模块职责 → 进入 Phase 2。
+2. 收集 `references/work-modes-and-templates.md` §1 中定义的**上下文契约**（品牌名称 / 产品品类 / 月订单量 / 业务阶段 + 可选：复购率 / LTV:CAC / 流失率 / AOV / 订阅模式 / 忠诚度计划 / 季节模式 / 群组数据）。
 
-### Step 3 — 加载工作模式与模板
-加载 `references/work-modes-and-templates.md`
-→ 上下文契约、5 大工作模式（体检/生命周期/忠诚度/防流失/召回）、输出格式规范、淡季留存策略。
+### Phase 2 — 意图路由与模式选择
 
-### Step 4 — 加载反模式与边界
-加载 `references/anti-patterns.md`
-→ 7 条禁令、边界路由、Dropshipping 适配、降级策略 Level 1-3、危机模式。
+根据用户意图信号匹配工作模式：
 
-### Step 5 — 按需加载原有深度参考
-- `references/benchmark-data.md` → 按品类/阶段/渠道的行业留存基准数据
-- `references/rfm-ltv-framework.md` → RFM + LTV 整合分群方法论与评分模型
-- `references/loyalty-program-playbook.md` → 忠诚度计划设计与实施指南
-- `references/subscription-management.md` → 订阅模式设计与流失预防深度指南
-- `references/win-back-workflows.md` → 按客户分群的完整召回序列模板
-- `references/cohort-analysis-guide.md` → 留存队列分析方法论与解读指南
-- `references/report-templates.md` → 5 种工作模式的完整输出报告模板
+| 用户意图信号 | 工作模式 | 主加载 Reference |
+|:---|:---|:---|
+| 留存体检、留存诊断、复购率分析 | Mode 1: 全面留存体检 | `work-modes-and-templates.md` §2 Mode 1 + `benchmark-data.md` + `rfm-ltv-framework.md` |
+| 设计客户旅程、生命周期自动化、购后序列 | Mode 2: 生命周期架构设计 | `work-modes-and-templates.md` §2 Mode 2 + `core-frameworks.md`（六阶段生命周期） |
+| 设计会员体系、忠诚度计划、积分系统 | Mode 3: 忠诚度计划设计 | `work-modes-and-templates.md` §2 Mode 3 + `loyalty-program-playbook.md` |
+| 流失率高、订阅取消、Dunning | Mode 4: 流失预防与订阅优化 | `work-modes-and-templates.md` §2 Mode 4 + `subscription-management.md` |
+| 召回流失客户、Win-back、再激活 | Mode 5: 召回体系编排 | `work-modes-and-templates.md` §2 Mode 5 + `win-back-workflows.md` |
+| 指标异常（留存率下降/LTV失调/VIP流失） | 诊断模式 | `diagnostic-system.md`（见 Phase 3） |
+| 群组分析、队列解读 | 群组分析模式 | `cohort-analysis-guide.md` + `core-frameworks.md` |
+
+### Phase 3 — 诊断（当用户描述留存指标异常时触发）
+
+加载 `references/diagnostic-system.md`，按症状进入对应决策树：
+
+```
+症状 → 决策树路由：
+├── 宏观留存率低 → 模式一：群组分解 → 断崖检测（M1/M3/M6+）→ 品类基准对标
+├── 订阅退订率高 → 模式二：主动 vs 被动流失拆解 → 取消原因分析 → Dunning 序列评估
+├── LTV:CAC 失调 → 模式三：拆解 LTV 组成 → 识别拖累维度 → AOV 问题外转
+├── VIP 流失 → 模式四：高价值客户专项分析 → 个性化挡留策略
+├── 新品上线后留存异常 → 模式五：检查自唠化 → 客群转移分析
+├── 季节性波动 → 模式六：季节性 vs 结构性流失判别
+└── 忠诚度计划失效 → 模式七：参与率/兑换率/升级率诊断
+```
+
+诊断完成后 → 使用 ICE 框架对发现的问题按 Impact × Confidence × Ease 排序 → 输出优先行动清单。
+
+### Phase 4 — 框架应用与执行
+
+1. 加载 `references/core-frameworks.md` 获取执行所需的底层框架：
+   - 五维留存健康检查：复购行为 / 客户价值 / 流失模式 / 互动健康 / 留存经济学
+   - RFM+JTBD+LTV 整合分层（11 大客群矩阵）：决定"对谁做什么"
+   - 六阶段客户生命周期：决定"何时做"
+   - 无利润侵蚀 LTV 增长模型：确保策略不侵蚀毛利
+2. 按所选工作模式执行其 SOP，套用 `references/report-templates.md` 中对应的输出模板。
+3. 按需加载深度参考：
+   - `rfm-ltv-framework.md` → RFM 评分模型与分群方法
+   - `loyalty-program-playbook.md` → 忠诚度计划设计
+   - `subscription-management.md` → 订阅防流失
+   - `win-back-workflows.md` → 召回序列模板
+   - `cohort-analysis-guide.md` → 群组分析方法
+4. 若 `seasonal_mode = off_season` → 加载 `work-modes-and-templates.md` 淡季留存策略章节。
+   若 `crisis_mode = cash_crisis` → 转向低成本高回报动作（无成本关怀邮件、高意向群组精准召回）。
+
+### Phase 5 — 防护与质量检查
+
+执行完成前，加载 `references/anti-patterns.md` 进行最终检查：
+- 7 条禁令交叉验证（含折扣护栏规则）
+- 降级策略（Level 1-3）：信息不足时的保守输出规则
+- Dropshipping 适配：供应链模式下的特殊留存策略
+- 留存指标必须与品类基准对标（参考 `benchmark-data.md`）
 
 ## 4. Completion Protocol
 

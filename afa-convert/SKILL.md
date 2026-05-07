@@ -1,6 +1,11 @@
+---
+name: afa-convert
+description: "DTC 全链路转化率优化引擎——转化漏斗分析、结账流程优化、弃单挽回、落地页优化、A/B测试、信任元素。Use when user mentions: 转化率, conversion rate, CRO, 加购率, add to cart, 结账, checkout, 弃单, abandoned cart, 落地页, landing page, A/B测试, 信任度, trust, 购买流程, 转化漏斗, funnel."
+---
+
 # afa-convert — 全链路转化率优化引擎
 
-> **上层承接**：变现统筹层 · **版本**：v2.4.6
+> **上层承接**：变现统筹层 · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -60,27 +65,66 @@
 
 ## 3. Core Workflow
 
-**Step 1 — 范围界定**
-分类用户请求 → 全链路审计 | 落地页 | PDP 优化 | CRO 飞轮 | 结账优化 | 微转化漏斗分析。
+### Phase 1 — 边界检查与意图路由
 
-**Step 2 — 按需加载 references**
+1. 检查用户请求是否属于本模块职责：
+   - 若属于广告创意、客单价提升、用户留存、邮件/短信、产品定价、技术 SEO → 通过 `completion.out_of_scope` 回交上层。
+   - 若匹配本模块职责 → 进入 Phase 2。
+2. 根据用户意图信号选择工作模式：
 
-| 请求类型 | 主要 refs | 辅助 refs |
+| 用户意图信号 | 工作模式 | 主加载 Reference |
 |:---|:---|:---|
-| 全链路转化审计 | `references/audit-checklist.md` · `references/benchmark-data.md` | `references/report-templates.md` · `references/diagnostic-system.md` |
-| 落地页架构设计 | `references/landing-page-playbook.md` | `references/core-frameworks.md` (品类特化) |
-| PDP 深度优化 | `references/core-frameworks.md` (9段式框架) | `references/audit-checklist.md` (PDP模块) |
-| CRO 增长飞轮 | `references/core-frameworks.md` (四阶段飞轮) | `references/ab-testing-playbook.md` · `references/personalization-playbook.md` |
-| 结账流程优化 | `references/core-frameworks.md` (8大原则) | `references/benchmark-data.md` |
-| 微转化漏斗分析 | `references/diagnostic-system.md` | `references/benchmark-data.md` |
-| 工作模式/KPI/淡季 | `references/work-modes-and-templates.md` | 按模式加载对应 ref |
-| 反模式/降级/危机 | `references/anti-patterns.md` | — |
+| 审计网站转化率、CRO 审计、转化诊断 | 模式一：全链路转化审计 | `work-modes-and-templates.md` §2 Mode 1 + `audit-checklist.md` + `benchmark-data.md` |
+| 设计/优化落地页、Landing Page | 模式二：落地页架构设计 | `work-modes-and-templates.md` §2 Mode 2 + `landing-page-playbook.md` |
+| 优化产品详情页、PDP 优化 | 模式三：PDP 深度优化 | `work-modes-and-templates.md` §2 Mode 3 + `core-frameworks.md`（9段式框架） |
+| 建立持续 CRO 体系、转化优化流程 | 模式四：CRO 增长飞轮 | `work-modes-and-templates.md` §2 Mode 4 + `core-frameworks.md`（四阶段飞轮）+ `ab-testing-playbook.md` |
+| 优化结账流程、降低购物车放弃率 | 模式五：结账流程优化 | `work-modes-and-templates.md` §2 Mode 5 + `core-frameworks.md`（8大原则） |
+| 分析转化漏斗细节、微转化优化 | 模式六：微转化漏斗分析 | `work-modes-and-templates.md` §2 Mode 6 + `diagnostic-system.md` |
 
-**Step 3 — 执行**
-从 `references/work-modes-and-templates.md` 中运行匹配的工作模式；当存在多条建议时，应用 ICE 优先级排序（CRO 专属评分指南）。
+### Phase 2 — 数据收集与基线建立
 
-**Step 4 — 验证**
-交叉检查 `references/anti-patterns.md`（7 项禁止操作 + 边界处理）；确保每条建议包含收入影响估算和成本/时间/技能标签。
+1. 按所选工作模式的输入要求（`work-modes-and-templates.md` §2）收集必要数据。
+2. 加载 `references/benchmark-data.md` 建立基线：优先用品牌自身历史数据，行业基准仅作外部对照。
+3. 若 `traffic_temperature` 已知 → 调整分析视角（冷流量重落地页、暖流量重 PDP、热流量重结账）。
+
+### Phase 3 — 诊断与漏斗分析
+
+加载 `references/diagnostic-system.md`，按微转化漏斗模型定位断裂点：
+
+```
+微转化漏斗诊断路由：
+├── CTR 低 → 广告端排查 + 受众与落地页承接检查
+├── 页面加载慢 → 技术优化方案
+├── 首屏跳出高 → 英雄区与广告一致性优化
+├── 滚动浅 → 内容结构和视觉层次优化
+├── 加购率低 → PDP 深度优化（9段式框架）
+├── 结账率低 → 结账流程优化（8大原则）
+└── 支付完成率低 → 支付方式/安全信号优化
+```
+
+全链路审计时，按 12 模块权重优先级诊断（参考 `diagnostic-system.md` §4）：PDP > 结账 > 信任体系 > 落地页 > 导航 > ...
+
+### Phase 4 — 执行与方案输出
+
+1. 按所选工作模式执行其 SOP（`work-modes-and-templates.md` §2）。
+2. 所有优化建议通过 **ICE 评分**（`work-modes-and-templates.md` §1）排序：
+   - ICE 总分 = Impact × Confidence × Ease / 10
+   - 按总分降序输出，分为立即/本周/本月/本季度
+3. 每条建议必须包含：
+   - 预期营收影响区间（或条件说明）
+   - 成本/时间/技能标签
+   - 数据基础声明
+4. 若 `crisis_mode = cash_crisis` → 优先输出止血级快修动作，暂缓高投入长周期优化。
+5. 输出格式套用 `references/report-templates.md` 对应模板。
+
+### Phase 5 — 防护与质量检查
+
+加载 `references/anti-patterns.md` 进行最终检查：
+- 7 项禁止操作交叉验证
+- 边界处理规则：确认未越线到广告/留存/客单价等领域
+- 低信息执行规则：缺少关键数据时输出保守方向判断 + 数据缺口清单
+- 降级策略：信息不足时的保守输出规则
+- 确保行业平均值仅作外部对照，不伪装成品牌基线
 
 ## 4. Completion Protocol
 

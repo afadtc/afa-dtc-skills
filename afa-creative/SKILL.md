@@ -1,6 +1,11 @@
+---
+name: afa-creative
+description: "DTC 创意生产与测试引擎——广告创意策略、创意角度矩阵、Hook 变体、A/B测试、创意疲劳刷新。Use when user mentions: 创意, creative, 广告素材, ad creative, 视频广告, video ads, hook, 创意测试, creative testing, 创意疲劳, creative fatigue, 文案, copy, 视觉风格, 广告图片, 创意策略."
+---
+
 # afa-creative — 创意生产与测试引擎
 
-> **Supervisor**: afa-paid · **版本**：v2.4.6
+> **Supervisor**: afa-paid · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -62,33 +67,184 @@
 
 ## 3. Core Workflow
 
-### Phase 1 — 分诊与诊断
+### Phase 1 — 边界检查与意图路由
+
+1. 检查用户请求是否属于本模块职责：
+   - 若属于广告账户投放执行、SEO、邮件营销、品牌定位等非创意生产领域 → 通过 `completion.out_of_scope` 回交上层。
+   - 若匹配本模块职责 → 进入意图路由。
+2. 检查特殊触发器：
+
+```
+触发器检查：
+├── crisis_mode = cash_crisis → 激活止血创意策略（见 §3.5）
+├── crisis_mode = pr_crisis → 激活形象修复策略（见 §3.5）
+├── seasonal_mode = off_season → 激活淡季创意测试框架（见 Phase 3 淡季分支）
+├── creative_maturity = zero → 强制先执行模式 1（品牌视觉基建）
+└── creative-kit.md 不存在 → 建议先执行模式 1 再进入其他模式
+```
+
+3. 根据用户意图信号选择工作模式：
+
+| 用户意图信号 | 工作模式 | 主加载 Reference |
+|:---|:---|:---|
+| 定义视觉风格、建立品牌视觉规范、新品牌接入 | 模式 1：品牌视觉基建 | `work-modes-and-templates.md` 模式 1 + `brand-kit-template.md` + `typography-guide.md` |
+| 做一组广告、准备投放素材、生成广告创意 | 模式 2：广告测试矩阵生成 | `work-modes-and-templates.md` 模式 2 + `ad-testing-matrix.md` + `copywriting-frameworks.md` |
+| 做社媒图、Instagram 帖子、LinkedIn 内容图 | 模式 3：社交媒体资产包 | `work-modes-and-templates.md` 模式 3 + `platform-specs.md` + `content-policy.md` |
+| 写 TikTok 脚本、做 UGC 视频、写 Reels 脚本 | 模式 4：Reali-TEA 短视频脚本 | `work-modes-and-templates.md` 模式 4 + `reali-tea-scripting.md` |
+| 做主图、官网 Hero Image、产品发布主图 | 模式 5：单点视觉突破 | `work-modes-and-templates.md` 模式 5 + `product-visual-system.md` |
+| 某个创意获胜了要做变体、围绕胜者迭代 | 模式 6：胜者迭代 | `work-modes-and-templates.md` 模式 6 + `ad-testing-matrix.md` |
+| 创意效果下降、CTR 降低、素材疲劳（诊断类） | 诊断模式 | `diagnostic-system.md`（见 Phase 2） |
+
+### Phase 2 — 诊断与基线建立
+
 1. 收集 Context Matrix 字段；必需字段缺失时 → 按 `_system/degradation-rules.md` Level 1-3 降级处理。
 2. 加载 `references/benchmark-data.md` 获取效果基准数据。
-3. 执行诊断 → 加载 `references/diagnostic-system.md`（创意诊断决策树）。
-4. 输出：按 ICE 评分排序的优先问题清单。
+3. 若为诊断类任务 → 加载 `references/diagnostic-system.md`，按症状进入对应诊断决策树：
 
-### Phase 2 — 策略选择
-根据用户意图匹配工作模式 → 加载 `references/work-modes-and-templates.md`：
-- 模式 1：品牌视觉套件与视觉体系 → 加载 `references/brand-kit-template.md` 和 `references/typography-guide.md`
-- 模式 2：创意概念与脚本 → 加载 `references/reali-tea-scripting.md`、`references/product-visual-system.md` 和 `references/copywriting-frameworks.md`（Hook 库、文案结构公式、创意产出节奏）
-- 模式 3：Prompt Engineering → 加载 `references/prompt-engineering.md`
-- 模式 4：广告测试矩阵 → 加载 `references/ad-testing-matrix.md`
-- 模式 5：平台适配 → 加载 `references/platform-specs.md` 和 `references/content-policy.md`
+```
+症状 → 诊断树路由：
+├── 素材看起来假/塑料感/AI味重
+│   → 诊断模式一：AI Slop 诊断
+│   → 检查项：是否使用了禁止词 → 是否缺少具体光影锚定 → 是否缺少材质描述 → 是否缺少模式中断
+├── 广告效果持续下降/频次升高
+│   → 诊断模式二：创意疲劳诊断
+│   → 检查项：是 Hook 疲劳还是视觉疲劳 → 频次是否超过受众耐受上限 → 是否需要全新概念还是微调变体
+├── 广告被拒/政策违规
+│   → 诊断模式三：平台政策诊断
+│   → 检查项：具体违规类型 → 是否为 Google 响应式广告文字违规 → 是否为健康声明 → 修复方案
+├── 品牌一致性问题/视觉混乱
+│   → 诊断模式四：品牌一致性诊断
+│   → 检查项：是否有 creative-kit.md → 色彩是否偏移 → 排版是否一致 → 情绪是否匹配
+├── 高 CTR 低 CVR（点击高但不转化）
+│   → 诊断模式五：CTR-CVR 错配诊断
+│   → 检查项：是否为 bait-click → 落地页承接是否一致 → 受众是否匹配 → Offer 是否清晰
+└── 跨平台表现差异大
+    → 诊断模式六：跨平台适配诊断
+    → 检查项：尺寸是否原生化 → 内容风格是否适配 → 是否一图多裁
+```
 
-### Phase 3 — 框架应用
+4. 诊断完成后 → 按 ICE 评分排序输出优先问题清单。
+
+### Phase 3 — 策略选择与框架应用
+
 1. 加载 `references/visual-intelligence.md` 获取 2026 创意范式与 Anti-Slop Playbook。
 2. 加载 `references/core-frameworks.md` 获取创意核心理论框架（创意概念层级、测试方法论）。
-3. 结合品牌上下文执行所选模式的 playbook。
-4. 若 `seasonal_mode = off_season` → 加载 `references/seasonal-creative-calendar.md` 获取季节性创意日历 + 加载 `references/work-modes-and-templates.md` 中的淡季策略章节。
-   若 `seasonal_mode = pre_season` → 加载 `references/seasonal-creative-calendar.md` 获取预热期创意准备。
-   若 `seasonal_mode = peak_season` → 加载 `references/seasonal-creative-calendar.md` 获取旺季活动创意执行。
-5. 交叉检查 `references/anti-patterns.md`（黑帽零容忍 + 常见错误）。
+3. 按所选工作模式执行其 SOP（`work-modes-and-templates.md`），核心步骤骨架：
+
+**模式 1 — 品牌视觉基建**：
+```
+Step 1: 收集输入（品牌定位 + 现有视觉资产 + 竞品参考）
+Step 2: 多方向探索法（生成差异化视觉方向描述，含色彩/光影/构图/情绪/风险等级）
+Step 3: 锁定视觉规范（色彩锚点HEX + 光影参数 + 排版方向 + 反模式清单）→ 生成 creative-kit.md
+Step 4: 验证（生成测试图确认一致性）
+```
+
+**模式 2 — 广告测试矩阵生成**：
+```
+Step 1: 确认输入（creative-kit.md + 产品/Offer + 目标受众 + 目标平台）
+Step 2: 构建 Hook 组（痛点放大 / 状态转变 / 社会认同 / 好奇心鸿沟）
+Step 3: 设定视觉 Format 组（产品英雄 / UGC 风格 / 粗体排版）
+Step 4: 输出变体组合（每个含 Tracking ID + Prompt + 画面内文本 + 文案 + 标题 + 尺寸）
+```
+
+**模式 3 — 社交媒体资产包**：
+```
+Step 1: 确认输入（creative-kit.md + 目标平台 + 内容日历 + 主题）
+Step 2: 选择原生模板（IG Feed/Carousel/LinkedIn/TikTok/Pinterest 各有规格）
+Step 3: 批量生成（统一色彩光影排版 + 留出文本安全区）
+Step 4: 排版建议（文本叠加位置 + 字体 + 移动端可读性）
+```
+
+**模式 4 — Reali-TEA 短视频脚本**：
+```
+Step 1: 确认输入（产品 + 核心卖点 + 目标受众 + 视频时长）
+Step 2: 构建 Hook（强制"前7秒不提产品"法则 + 选择 Hook 类型）
+Step 3: 注入 Reali-TEA（言语不完美 + 行为真实感 + 视觉提示 + 替换营销词汇）
+Step 4: 输出结构化脚本表格（时间戳 | 视觉/动作 | 画外音/字幕 | 真实感注入）
+```
+
+**模式 5 — 单点视觉突破**：
+```
+Step 1: 深度需求分析（用途 + 目标情绪 + 竞品同位置视觉）
+Step 2: 极度细化 Prompt（5层约束模型最高精度 + 光源角度色温 + 材质胶片型号 + 模式中断元素）
+Step 3: 生成 3 个微调变体（标准执行 / 更大胆 / 更克制）
+Step 4: 用户选择 → 最终微调 → 交付
+```
+
+**模式 6 — 胜者迭代**：
+```
+Step 1: 分析获胜原因（Hook 获胜 vs Format 获胜 + 具体指标 + Tracking ID）
+Step 2: 确定迭代变量（绝对禁止同时改变多个变量）
+Step 3: 生成微调变体（保留所有其他元素 + 只改变单一变量 + 分配新 Tracking ID）
+Step 4: 交付（Prompt + 文案 + 测试预算分配建议 + 最小样本量建议）
+```
+
+4. 季节性分支：
+   - `seasonal_mode = off_season` → 加载 `references/seasonal-creative-calendar.md` + `work-modes-and-templates.md` 淡季策略章节（低成本测试新方向 + 品牌故事/教育/UGC 内容 + 素材库建设）
+   - `seasonal_mode = pre_season` → 加载预热期创意准备（锁定 Top 创意 + 完成主要素材准备）
+   - `seasonal_mode = peak_season` → 加载旺季活动创意执行
 
 ### Phase 4 — 输出与验证
-1. 按 `references/work-modes-and-templates.md` 中的模板格式化交付物。
-2. 按 `_system/iron-rules.md` 附加成本标签与时间线。
+
+1. 按 `references/work-modes-and-templates.md` 中的模板格式化交付物：
+   - 广告测试矩阵输出模板 → 模式 2
+   - Reali-TEA 视频脚本模板 → 模式 4
+   - 产品视觉包模板 → 模式 5
+2. 按 `_system/output-format.md` 附加成本标签与时间线。
 3. 验证：每条建议都必须包含 ICE 评分 + 预期影响 + 数据依据。
+
+### §3.5 危机模式创意策略
+
+当 `crisis_mode ≠ none` 时，创意策略切换到止血模式：
+
+```
+crisis_mode → 创意策略切换：
+├── cash_crisis（现金危机）
+│   → 聚焦「低成本高转化」：
+│   ├── 不建议高成本拍摄（危机期不应增加支出）
+│   ├── 聚焦 UGC 风格内容（手机拍摄、真实感、零成本）
+│   ├── 复用现有素材重新剪辑（新 Hook + 旧素材）
+│   ├── 聚焦「清仓型」创意（稀缺感、限时优惠、最后机会）
+│   └── 不建议品牌形象类创意（危机期需要直接转化）
+│
+└── pr_crisis（公关危机）
+    → 聚焦「形象修复」：
+    ├── 暂停所有攻击性/对比性创意（避免火上浇油）
+    ├── 聚焦品牌价值观与社会责任类内容
+    ├── 优先使用真实用户证言和品牌故事类素材
+    ├── 避免幽默/讽刺语气，保持真诚、透明的语调
+    └── 所有创意需经过 Supervisor 审核后再发布
+```
+
+> **重要**：以上是「止血建议」的方向指引，不是「禁止用户做其他事」。如果用户在危机期坚持要做非止血类的事，尊重用户意愿，正常执行。
+
+**季节性淡季排除规则**：当品牌处于季节性淡季时，不自动触发危机模式。使用 YoY（同比）而非环比来评估业绩趋势。除非用户同时有非季节性危机信号（现金流断裂、账户被封等）。
+
+### Phase 5 — 防护与质量检查
+
+加载 `references/anti-patterns.md` 进行最终检查：
+
+**质量门禁（交付前必须通过）**：
+- 技术审查：分辨率 + AI 伪影 + 对焦 + 比例匹配
+- 品牌审查：色彩匹配 creative-kit.md + 排版一致 + 情绪匹配 + 反模式清单
+- 策略审查：服务传播目标 + 构图支持用途 + 视觉层级清晰 + 竞品差异化
+- 平台审查：尺寸匹配 + 缩略图有效 + 3秒 Hook + 移动端可读
+- 政策检查：平台广告政策 + AI 披露 + 无误导声明
+
+**7 项绝对禁止操作**：
+1. 禁止输出通用"美丽"提示词（beautiful/stunning/masterpiece/ultra-detailed/8K）
+2. 禁止在 Google 响应式广告中加字（硬性违规）
+3. 禁止一次性改变多个测试变量
+4. 禁止忽视平台安全区（9:16 顶部 14% / 底部 10%）
+5. 禁止在 AI 图像中渲染超过 3 个词的长文本
+6. 禁止将横图裁剪为竖屏（必须重新构思垂直构图）
+7. 禁止使用营销词汇写 UGC 脚本（game-changer/revolutionary/must-have）
+
+**边界处理**：
+- 真人照片用于广告 → 提醒不能伪造代言，建议 UGC 创作者真实素材
+- 竞品 Logo/品牌元素 → 拒绝（商标侵权）
+- 医疗/健康声明视觉 → 添加免责声明 + 提醒确认平台政策
+- 超出 AI 图像能力（信息图表/数据可视化）→ 建议 Canva/Figma + 提供视觉方向
 
 ## 4. Completion Protocol
 
@@ -150,6 +306,9 @@ completion:
 - `primary_market_used` 必须与本次结论真正适用的市场一致，不得机械复写输入字段。
 
 完成前检查清单：
+- 确认已通过质量门禁 5 大维度检查。
+- 确认已通过 7 项绝对禁止操作交叉验证。
+- 确认已根据 `crisis_mode` 和 `seasonal_mode` 调整了策略（如适用）。
 - Summarize: changes made, expected impact timeline (Creative = short term impact).
 - Provide optimization roadmap and testing hypotheses.
 - Offer next-step options: Meta Ads setup / TikTok Ads setup.

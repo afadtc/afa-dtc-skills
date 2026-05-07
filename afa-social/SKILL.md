@@ -1,6 +1,11 @@
+---
+name: afa-social
+description: "DTC 社交内容与 UGC 引擎——内容日历规划、平台策略、UGC 征集与管理、社区运营、品牌叙事。Use when user mentions: 社交媒体, social media, Instagram, TikTok内容, 内容日历, content calendar, UGC, 用户生成内容, 社区, community, 帖子, posts, Reels, 短视频, 品牌内容, 内容策略, content strategy."
+---
+
 # afa-social: DTC 社交内容与 UGC 引擎
 
-> **Supervisor**: afa-organic · **版本**：v2.4.6
+> **Supervisor**: afa-organic · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -60,24 +65,79 @@
 
 ## 3. Core Workflow
 
-### 3.1 策略与框架加载 (Strategy & Frameworks)
-- 加载 `references/core-frameworks.md` 获取 2026 社交电商新范式、三大内容支柱、平台优先级矩阵、社交搜索 SEO 策略和一鱼多吃矩阵。
-- 加载 `references/content-archetypes-library.md` 获取 15+ 高转化电商内容原型库。
-- 加载 `references/platform-playbooks.md` 获取各平台运营手册（Instagram/TikTok/Pinterest/YouTube 等平台特定策略和最佳实践）。
-- 加载 `references/content-calendar-template.md` 获取内容日历模板（周/月度发布节奏、内容类型分配、大促日历对齐）。
+### Phase 1 — 边界检查与意图路由
 
-### 3.2 诊断与反模式检查 (Diagnosis & Anti-Patterns)
-- 加载 `references/diagnostic-system.md` 获取 6 大诊断模式（有机停滞、高流量低转化、UGC 质量低下、素材疲劳、社区参与度低下、跨平台分发失效）及 ICE 优先级排序框架。
-- 加载 `references/anti-patterns.md` 获取供应链模式适配（Dropshipping）、危机模式止血策略、严格禁止的操作和常见错误纠正。
+1. 检查用户请求是否属于本模块职责：
+   - 若属于付费广告投放、SEO 技术优化、红人合作谈判、PR 媒体关系、邮件自动化 → 通过 `completion.out_of_scope` 回交上层。
+   - 若匹配本模块职责 → 进入 Phase 2。
+2. 根据用户意图信号选择工作模式：
 
-### 3.3 运营与执行体系 (Operations & Execution)
-- 加载 `references/ugc-management-system.md` 获取创作者筛选标准、UGC 脚本库（PAS/Storytime/对比）和创作者简报结构。
-- 加载 `references/organic-to-paid-pipeline.md` 获取获胜者识别标准、Spark Ads/Partnership Ads 放大策略和创意测试框架。
-- 加载 `references/community-flywheel.md` 获取购后 UGC 激励机制和品牌大使分层计划。
+| 用户意图信号 | 工作模式 | 主加载 Reference |
+|:---|:---|:---|
+| 制定社交内容策略、平台选择、内容支柱 | Mode 1: 全盘社交内容策略 | `work-modes-and-templates.md` Mode 1 + `core-frameworks.md` + `platform-playbooks.md` |
+| UGC 招募、创作者筛选、简报撰写 | Mode 2: UGC 项目启动 | `work-modes-and-templates.md` Mode 2 + `ugc-management-system.md` |
+| 写脚本、爆款内容、Hook 优化 | Mode 3: 爆款脚本工程 | `work-modes-and-templates.md` Mode 3 + `content-archetypes-library.md` |
+| 有机转付费、Spark Ads、获胜者放大 | Mode 4: 有机转付费管道 | `work-modes-and-templates.md` Mode 4 + `organic-to-paid-pipeline.md` |
+| 大促内容规划、季节性日历、BFCM | Mode 5: 大促/季节性内容日历 | `work-modes-and-templates.md` Mode 5 + `content-calendar-template.md` |
+| 社区运营、品牌大使、购后激励 | Mode 6: 社区飞轮构建 | `work-modes-and-templates.md` Mode 6 + `community-flywheel.md` |
+| 有机流量停滞、互动下降、素材疲劳（诊断类） | 诊断模式 | `diagnostic-system.md`（见 Phase 3） |
 
-### 3.4 衡量与输出 (Measurement & Output)
-- 加载 `references/social-commerce-kpis.md` 获取增长、互动、转化和内容效率的核心 KPI 体系。
-- 加载 `references/work-modes-and-templates.md` 获取 6 大工作模式（全盘策略、UGC 项目、爆款脚本、有机转付费、大促日历、社区飞轮）、淡季社媒策略及对应输出模板。
+### Phase 2 — 数据收集与基线建立
+
+1. 收集平台特定上下文（当前粉丝量 / 发布频率 / 内容类型分布 / 平台算法偏好）。
+2. 加载 `references/social-commerce-kpis.md` 建立 KPI 基线（增长/互动/转化/内容效率）。
+3. 若 `platform_focus` 已知 → 加载 `references/platform-playbooks.md` 对应平台章节。
+4. 若 `supply_chain_mode = dropshipping` → 调整内容承诺边界和 UGC 素材要求。
+
+⟐ **用户确认点**：当制定全盘内容策略（Mode 1）时，内容支柱和平台矩阵确定后展示给用户确认，再进入内容日历规划。
+
+### Phase 3 — 诊断（当用户描述社交指标异常时触发）
+
+加载 `references/diagnostic-system.md`，按症状进入对应诊断模式：
+
+```
+症状 → 诊断模式路由：
+├── 有机流量停滞 → 模式一：算法变化 → 内容类型失衡 → 发布节奏 → 社交搜索 SEO
+├── 高流量低转化 → 模式二：内容-产品脱节 → CTA 缺失 → 落地页承接 → 受众匹配
+├── UGC 质量低下 → 模式三：简报清晰度 → 创作者筛选 → 激励机制 → 反馈循环
+├── 素材疲劳 → 模式四：内容原型单一 → 视觉风格固化 → Hook 模式重复 → 受众分层不足
+├── 社区参与度低 → 模式五：内容互动性 → 社区激励 → 品牌人格 → 回复策略
+└── 跨平台分发失效 → 模式六：平台原生适配 → 一鱼多吃策略 → 发布时机 → 格式转换
+```
+
+诊断完成后 → 使用社交专属 ICE 框架对发现的问题排序 → 输出优先行动清单。
+
+### Phase 4 — 框架应用与执行
+
+1. 加载 `references/core-frameworks.md` 获取执行所需的底层框架：
+   - 2026 社交电商新范式（平台电商融合 + AI 内容生产 + 社交搜索优化）
+   - 三大内容支柱：教育/娱乐/转化的比例分配
+   - 平台优先级矩阵：根据品牌阶段和受众分布选择主战平台
+   - 一鱼多吃矩阵：一条内容多平台适配规则
+2. 按所选工作模式执行其 SOP，按需加载对应深度参考：
+   - `content-archetypes-library.md` → 15+ 高转化内容原型
+   - `ugc-management-system.md` → 创作者筛选 + 脚本库 + 简报结构
+   - `organic-to-paid-pipeline.md` → 获胜者识别 + Spark Ads 放大
+
+   **O2P 管道触发条件**（有机内容何时建议转付费放大）：
+   - 单条内容互动率 > 账户平均 2x
+   - UGC 内容获得 > 50 次自然转化
+   - 内容保存率 > 5%（表明高质量意向）
+   - 触发时在报告中标注 O2P Flag，建议回传 Supervisor 路由到付费投放组
+   - `community-flywheel.md` → 购后激励 + 大使分层
+   - `content-calendar-template.md` → 发布节奏 + 大促对齐
+3. 季节性适配：
+   - `seasonal_mode = off_season` → 加载淡季社媒策略（内容比例调整 + KPI 降级 + 发布节奏放缓）
+   - `seasonal_mode = peak_season` → 加载大促内容日历模式
+4. 若 `crisis_mode = cash_crisis` → 优先低成本内容动作（UGC 复用 + 社区激励 + 已有素材再制作）。
+
+### Phase 5 — 防护与质量检查
+
+加载 `references/anti-patterns.md` 进行最终检查：
+- 严格禁止操作交叉验证（购买粉丝/虚假互动/拄袭内容/违规标签）
+- Dropshipping 适配：供应链模式下的内容承诺边界
+- 危机模式止血：舆情应对 + 低扰动内容编排
+- 确保内容符合品牌调性（`voice-and-tone.md`）和平台规范
 
 ## 4. Completion Protocol
 

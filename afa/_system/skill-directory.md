@@ -1,7 +1,7 @@
 # AFA DTC 模块全局字典
 > **协议层级**：全局参考 · Supervisor 越界路由时查阅
 >
-> **版本**：v2.4.6
+> **版本**：v2.4.7
 > 本文件为 Supervisor 和 Hub 提供全局拓扑视野。当 Worker 通过 `completion.out_of_scope` 结构化回交时，Supervisor 根据本字典判断应将用户引导至哪个方向，并默认沿主问题给出最自然的下一步；只有在出现真实方向分叉、资源投入差异或高风险执行动作时，才请求用户拍板。
 >
 > **display_name 规范**：`display_name` 是面向用户输出时使用的模块显示名称。根据铁律 2，所有面向用户的输出（包括 Visible Loading、WHAT'S NEXT、Header、话术模板、越界转向说明）必须使用 `display_name`，严禁暴露 `afa-` 前缀的内部代号。

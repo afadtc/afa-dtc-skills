@@ -1,6 +1,11 @@
+---
+name: afa-influencer
+description: "DTC 网红与联盟营销引擎——网红筛选与合作、品牌大使计划、联盟营销、KOL/KOC 策略、合作模式设计。Use when user mentions: 网红, influencer, KOL, KOC, 达人, creator, 品牌大使, brand ambassador, 联盟, affiliate, 微型网红, micro-influencer, 合作推广, 种草, seeding, 网红营销."
+---
+
 # afa-influencer: DTC 网红与联盟营销引擎
 
-> **Supervisor**: afa-organic · **版本**：v2.4.6
+> **Supervisor**: afa-organic · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -60,24 +65,78 @@
 
 ## 3. Core Workflow
 
-### 3.1 策略与框架加载 (Strategy & Frameworks)
-- 加载 `references/core-frameworks.md` 获取 2026 创作者经济新范式、Seeding 财务可行性前置检查、平台选择矩阵、自动化发现工作流和内容白名单与二次利用体系。
-- 加载 `references/influencer-vetting-framework.md` 获取 3C 评估模型（Content/Community/Conversion）、创作者层级金字塔和尽职调查清单。
+### Phase 1 — 边界检查与意图路由
 
-### 3.2 触达与合作执行 (Outreach & Collaboration)
-- 加载 `references/outreach-playbook.md` 获取冷拓展核心原则、PAS/BAB/AIDA 文案框架、多触点跟进序列和渠道选择策略。
-- 加载 `references/compensation-models.md` 获取合作模式全光谱（Seeding→大使→联名）、4P 薪酬结构、谈判策略和合同关键条款。
-- 加载 `references/affiliate-program-guide.md` 获取联盟计划 7 步构建法、佣金结构设计和招募策略。
+1. 检查用户请求是否属于本模块职责：
+   - 若属于付费广告投放、SEO 技术优化、社交内容创作（非达人合作）、PR 媒体关系、邮件自动化 → 通过 `completion.out_of_scope` 回交上层。
+   - 若匹配本模块职责 → 进入 Phase 2。
+2. 根据用户意图信号选择工作模式：
 
-### 3.3 诊断与反模式检查 (Diagnosis & Anti-Patterns)
-- 加载 `references/diagnostic-system.md` 获取 6 大诊断模式（冷拓展回复率低、内容参与度低、高曝光低转化、联盟活跃度低、大使流失率高、UGC 质量参差）及 ICE 优先级排序框架。
-- 加载 `references/anti-patterns.md` 获取问题匹配前置路由、绝对禁止操作、边界处理规则、influencer 专有降级策略和危机模式止血策略。
+| 用户意图信号 | 工作模式 | 主加载 Reference |
+|:---|:---|:---|
+| 找达人、筛选创作者、建短名单 | Mode 1: 创作者发现与筛选 | `work-modes-and-templates.md` Mode 1 + `influencer-vetting-framework.md` |
+| 写合作邮件、冷拓展、跟进序列 | Mode 2: 冷拓展与邀约 | `work-modes-and-templates.md` Mode 2 + `outreach-playbook.md` + `compensation-models.md` |
+| 写简报、内容要求、拍摄指南 | Mode 3: 内容简报 | `work-modes-and-templates.md` Mode 3 + `core-frameworks.md`（内容白名单章节） |
+| 联盟计划、佣金设计、招募策略 | Mode 4: 联盟计划设计 | `work-modes-and-templates.md` Mode 4 + `affiliate-program-guide.md` |
+| 达人效果不好、ROI 低、回复率低（诊断类） | Mode 5: 渠道诊断与优化 | `diagnostic-system.md`（见 Phase 3） |
+| 品牌大使、社区培育、长期关系 | Mode 6: 社区飞轮与品牌倡导者 | `work-modes-and-templates.md` Mode 6 + `community-flywheel.md` |
 
-### 3.4 风险管控与衡量 (Compliance & Measurement)
-- 加载 `references/compliance-and-risk.md` 获取广告披露最佳实践参考、知识产权与内容授权分级、营销声明审查和抽奖活动注意事项。
-- 加载 `references/benchmark-data.md` 获取各平台参与度基准、平均获客成本和 ROI 行业参考。
-- 加载 `references/community-flywheel.md` 获取麦肯锡社区飞轮模型和品牌倡导者培育框架。
-- 加载 `references/work-modes-and-templates.md` 获取核心 KPI 仪表盘、ROI 计算模型、6 大工作模式和 3 个输出模板（创作者短名单/触达序列/内容简报）。
+### Phase 2 — 数据收集与基线建立
+
+1. 收集达人合作上下文（当前合作规模 / 预算 / 平台偏好 / 产品类型）。
+2. 加载 `references/benchmark-data.md` 建立效果基准（各平台参与度 / 平均获客成本 / ROI 行业参考）。
+3. 加载 `references/work-modes-and-templates.md` 获取 ROI 计算模型（固定费用 + 佣金 + 赠品成本 + 折扣成本）。
+4. 若 Seeding 场景 → 加载 `references/core-frameworks.md` 中的 Seeding 财务可行性前置检查：
+   - 产品成本 < 预期内容价值（否则建议付费合作）
+   - 产品可视化强度足够（否则建议先做创意策略）
+   - 物流可改到付时效 < 7 天（否则标注风险）
+
+⟐ **用户确认点**：
+- Mode 1（创作者发现）：短名单筛选完成后展示给用户确认，再进入拓展阶段
+- Mode 4（联盟计划）：佣金结构和招募策略确定后展示给用户确认，再输出执行方案
+
+### Phase 3 — 诊断（当用户描述达人合作效果异常时触发）
+
+加载 `references/diagnostic-system.md`，按症状进入对应诊断决策树：
+
+```
+症状 → 诊断树路由：
+├── 冷拓展回复率极低 → 模式一：渠道选择 → 主题行相关性 → 价值主张清晰度 → 跟进节奏
+├── 创作者内容参与度低 → 模式二：简报清晰度 → 创作者-品牌契合度 → 内容自由度 → 发布时机
+├── 高曝光低转化 → 模式三：受众匹配度 → CTA 设计 → 落地页承接 → Offer 竞争力
+├── 联盟计划活跃度低 → 模式四：佣金竞争力 → 素材支持 → 沟通频率 → 激励机制
+├── 品牌大使流失率高 → 模式五：关系维护频率 → 专属福利 → 成长路径 → 社区归属感
+└── UGC 质量参差 → 模式六：简报明确度 → 创作者层级 → 参考案例 → 反馈循环
+```
+
+诊断完成后 → 使用网红合作专属 ICE 框架对发现的问题排序 → 输出优先行动清单。
+
+### Phase 4 — 框架应用与执行
+
+1. 加载 `references/core-frameworks.md` 获取执行所需的底层框架：
+   - 2026 创作者经济新范式（平台去中心化 + AI 创作者工具 + 社交电商融合）
+   - 平台选择矩阵：根据品牌阶段和受众分布选择主战平台
+   - 自动化发现工作流：批量筛选流程
+   - 内容白名单与二次利用体系
+2. 按所选工作模式执行其 SOP，按需加载对应深度参考：
+   - `influencer-vetting-framework.md` → 3C 评估模型 + 层级金字塔 + 尽调清单
+   - `outreach-playbook.md` → PAS/BAB/AIDA 文案 + 多触点跟进
+   - `compensation-models.md` → 合作全光谱 + 4P 薪酬 + 合同条款
+   - `affiliate-program-guide.md` → 7 步构建法 + 佣金设计
+   - `community-flywheel.md` → 社区飞轮 + 倡导者培育
+3. 输出模板选择（`work-modes-and-templates.md`）：
+   - 创作者短名单 → 筛选类任务
+   - 触达序列 → 拓展类任务
+   - 内容简报 → 内容指导类任务
+
+### Phase 5 — 合规与质量检查
+
+加载 `references/compliance-and-risk.md` + `references/anti-patterns.md` 进行最终检查：
+- 广告披露合规：确保所有建议符合 FTC/ASA 等平台披露要求
+- 知识产权：内容授权分级明确（独家/非独家/二次利用）
+- 绝对禁止操作：购买虚假粉丝、伪造数据、未披露付费合作
+- 危机模式止血：达人翻车应对 + 合同纠纷处理
+- ROI 验证：确保每个建议都有清晰的成本标签和预期回报
 
 ## 4. Completion Protocol
 

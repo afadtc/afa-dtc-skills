@@ -1,6 +1,11 @@
+---
+name: afa-ops
+description: "DTC 运营与供应链优化引擎——仓储物流、库存管理、3PL 选择、发货时效、供应商管理。Use when user mentions: 运营, operations, 供应链, supply chain, 仓储, warehouse, 物流, logistics, 发货, shipping, 库存, inventory, 3PL, 履约, fulfillment, 供应商, supplier, 运营效率."
+---
+
 # afa-ops — 运营与供应链优化引擎
 
-> **Supervisor**: afa-scale · **版本**：v2.4.6
+> **Supervisor**: afa-scale · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -58,48 +63,122 @@
 
 ## 3. Core Workflow
 
-### Step 1 — 需求识别
+### 意图路由表
 
-读取用户输入 → 匹配触发词 → 路由到对应工作模式：
+读取用户输入 → 匹配触发词 → 路由到对应工作模式（详见 `references/work-modes-and-templates.md` 七大工作模式 SOP）：
 
-| 触发词 | 工作模式 |
-|--------|---------|
-| 利润/成本/毛利率/单位经济 | → 单位经济审计 |
-| 断货/库存积压/补货/需求预测 | → 库存健康检查 |
-| 发货慢/退货率/3PL/仓库/履约 | → 履约优化 |
-| 客服/工单/响应时间/CSAT | → 客服运营优化 |
-| 招人/团队/外包/VA/组织架构 | → 团队架构规划 |
-| 自动化/工作流/API/集成/N8N | → 自动化蓝图 |
-| 供应商/供应链风险/断供/交期 | → 供应链风险评估 |
-| 现金流/对账/支付失败/财务 | → 财务运营优化 |
+| 触发词 | 工作模式 | 核心 Reference |
+|--------|---------|--------|
+| 利润/成本/毛利率/单位经济 | **单位经济审计** | `unit-economics-calculator.md` |
+| 断货/库存积压/补货/需求预测 | **库存健康检查** | `inventory-management-handbook.md` |
+| 发货慢/退货率/3PL/仓库/履约 | **履约优化** | `fulfillment-optimization-guide.md` |
+| 客服/工单/响应时间/CSAT | **客服运营优化** | `customer-service-playbook.md` |
+| 招人/团队/外包/VA/组织架构 | **团队架构规划** | `team-building-roadmap.md` |
+| 自动化/工作流/API/集成/N8N | **自动化蓝图** | `automation-blueprint-collection.md` |
+| 供应商/供应链风险/断供/交期 | **供应链风险评估** | `core-frameworks.md`（供应链风险管理矩阵） |
+| 现金流/对账/支付失败/财务 | **财务运营优化** | `core-frameworks.md`（CCC + 支付回收策略） |
 
-### Step 2 — 加载领域知识
+### 诊断决策树（当用户描述运营异常时）
 
-根据工作模式加载对应 refs：
+当用户描述的是异常症状而非明确任务时，按以下决策树路由到对应诊断模式（详见 `references/diagnostic-system.md` 6 大诊断模式）：
+
+```
+症状 → 诊断模式：
+├── 毛利率下降 / 隐性成本升高 / 单位经济恶化
+│   → 诊断模式 1：利润侵蚀诊断
+│   → 检查项：COGS 结构 / 履约成本 / 退货成本 / 折扣侵蚀 / 广告分摊
+├── 断货频繁 / 库存周转慢 / 滞销库存高
+│   → 诊断模式 2：库存健康诊断
+│   → 检查项：周转率 / ABC 分类 / 安全库存 / 需求预测准确度 / 滞销比例
+├── 发货时效差 / 退货率高 / 履约成本异常
+│   → 诊断模式 3：履约效率诊断
+│   → 检查项：发货时效 / 退货原因分布 / 3PL SLA 达标率 / 包装破损率
+├── 工单飙升 / 响应时间变长 / CSAT 下降
+│   → 诊断模式 4：客服运营诊断
+│   → 检查项：工单量/人效比 / 工单分类分布 / 首次解决率 / 自助服务覆盖率
+├── 团队超负荷 / 招人难 / 人效低
+│   → 诊断模式 5：团队瓶颈诊断
+│   → 检查项：订单/人效比 / 外包 vs 全职分布 / 关键岗位单点故障风险
+└── 供应商交期不稳 / 断供风险 / 质量波动
+    → 诊断模式 6：供应链风险诊断
+    → 检查项：供应商集中度 / 交期达标率 / 质检通过率 / 备用供应商覆盖
+```
+
+诊断优先级排序（ICE 框架）：
+- **Impact**：对利润/现金流的直接影响
+- **Data Basis**：是否有数据支撑诊断
+- **Ease**：修复难度和时间成本
+
+### 季节性模式路由
+
+根据 `seasonal_mode` 切换运营策略重心：
+
+```
+seasonal_mode → 策略重心：
+├── off_season（淡季）
+│   → 六大支柱：现金流管理 / 库存与供应链 / 产品测试 / 系统升级 / 团队流程 / 营销与品牌
+│   → 参考：`work-modes-and-templates.md` 淡季运营指南
+├── pre_season（旺季前）
+│   → 优先：库存备货 + 供应链确认 + 履约压测 + 客服扩容
+│   → 参考：`core-frameworks.md` 季节性日历
+├── peak_season（旺季）
+│   → 优先：履约时效监控 + 库存实时预警 + 客服应急 + 现金流日报
+│   → 参考：`anti-patterns.md` 旺季应急策略
+└── none（无季节性）
+    → 正常模式，按意图路由表执行
+```
+
+### 危机模式路由
+
+当 `crisis_mode ≠ none` 时，优先激活止血策略：
+
+```
+crisis_mode → 止血优先级：
+├── cash_crisis
+│   → 立即：单位经济审计（找出利润泄漏点）+ 库存清理（释放现金）+ 财务运营（支付回收）
+│   → 暂缓：团队扩张 / 自动化升级 / 新供应商开发
+└── pr_crisis
+    → 立即：客服运营应急（工单洪峰处理）+ 履约检查（确保产品质量）
+    → 暂缓：常规优化项目
+```
+
+### Reference 加载规则
 
 **始终加载**：
-- `references/core-frameworks.md` — 2026新范式 · 供应链风险 · 团队建设增强 · 自动化增强 · 财务运营 · 逆向物流 · 季节性日历 · 自动化成熟度 · 工具栈 · 行业基准
-- `references/anti-patterns.md` — 10大致命错误 · 3种错误模式 · 旺季应急 · 供应链中断 · 降级策略 · Dropshipping适配 · 危机模式
+- `references/core-frameworks.md` — 2026新范式 · 供应链风险 · 团队建设 · 自动化 · 财务运营 · 季节性日历 · 行业基准
+- `references/anti-patterns.md` — 10大致命错误 · 旺季应急 · 供应链中断 · 降级策略 · Dropshipping适配 · 危机模式
 
-**按工作模式加载**：
-- 单位经济审计 → `references/unit-economics-calculator.md`
-- 库存健康检查 → `references/inventory-management-handbook.md`
-- 履约优化 → `references/fulfillment-optimization-guide.md`
-- 客服运营优化 → `references/customer-service-playbook.md`
-- 团队架构规划 → `references/team-building-roadmap.md`
-- 自动化蓝图 → `references/automation-blueprint-collection.md`
-- 诊断类任务 → `references/diagnostic-system.md` — 6大诊断模式 · ICE优先级
+**按工作模式加载**（见意图路由表第三列）
 
-**输出阶段加载**：
-- `references/work-modes-and-templates.md` — KPI体系 · 7大工作模式SOP · 5个输出模板 · 淡季六大支柱
+**诊断类任务** → `references/diagnostic-system.md`（6大诊断模式 + ICE 优先级框架）
 
-### Step 3 — 执行与输出
+**输出阶段** → `references/work-modes-and-templates.md`（KPI体系 + 5个输出模板）
 
-1. 按工作模式 SOP 逐步执行
-2. 检查 `supply_chain_mode` → Dropshipping 适配
-3. 检查 `seasonal_mode` → 根据枚举值激活对应策略（off_season → 淡季策略 / pre_season → 旺季前备货 / peak_season → 旺季运营加速）
-4. 检查 `crisis_mode` → 危机止血优先
-5. 套用对应输出模板，交付结果
+### 执行流程
+
+```
+Phase 1 → 意图识别：匹配触发词 → 确定工作模式
+Phase 2 → 环境检查：检查 supply_chain_mode / seasonal_mode / crisis_mode
+Phase 3 → 加载知识：按工作模式加载对应 Reference
+Phase 4 → 执行 SOP：按 work-modes-and-templates.md 中的具体步骤执行
+Phase 5 → 交叉检查：核对 anti-patterns.md 中的致命错误清单
+Phase 6 → 输出交付：套用对应输出模板，交付结果
+```
+
+⟐ **用户确认点**：
+- 单位经济审计：成本结构分解完成后展示给用户确认（确保数据准确性），再给优化建议
+- 团队架构规划：岗位分配和外包策略确定后展示给用户确认，再输出招聘方案
+- 自动化蓝图：工作流架构图展示给用户确认，再进入具体实施步骤
+
+**数据不足时的降级策略**：
+
+| 数据充足度 | 可执行操作 | 输出调整 |
+|:---|:---|:---|
+| 充分（有 COGS + 履约数据 + 工单数据） | 全量审计 + 诊断 + 优化方案 | 标准报告 |
+| 部分（仅有部分运营数据） | 可用数据审计 + 定性诊断 | 精简报告 + 数据采集引导 |
+| 极少（仅知品牌阶段和品类） | 仅给框架性建议 + 行业基准对标 | 框架报告 + 强烈建议采集数据 |
+
+Dropshipping 适配：当 `supply_chain_mode = dropshipping` 时，所有库存/履约建议自动切换为无库存模式（供应商直发）。
 
 ## 4. Completion Protocol
 

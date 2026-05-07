@@ -1,6 +1,11 @@
+---
+name: afa-expand
+description: "DTC 渠道扩张与多元化引擎——多市场扩张规划、新渠道开拓、亚马逊/沿海双轨策略、国际化合规、本地化运营。Use when user mentions: 扩张, expansion, 新市场, new market, 亚马逊, Amazon, 多渠道, multi-channel, 国际化, internationalization, 欧洲市场, 东南亚, 渠道多元化, 沿海市场, wholesale, 批发, 渠道评估, MEURO."
+---
+
 # afa-expand: DTC 渠道扩张与多元化引擎
 
-> **Supervisor**: afa-scale · **版本**：v2.4.6
+> **Supervisor**: afa-scale · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -63,26 +68,85 @@
 
 ## 3. Core Workflow
 
-### 3.1 策略与框架加载 (Strategy & Frameworks)
-- 加载 `references/core-frameworks.md` 获取 2026 渠道扩张新范式（5大范式转变）、渠道成熟度五级模型（L0-L4）、MEURO 评估框架完整版（5维度+权重+四色灯决策+90天测试协议）、渠道组合优化（波士顿矩阵+黄金比例+蚕食效应检测）、跨渠道品牌一致性审计、渠道扩张年度日历和行业基准数据。
+### Phase 1 — 边界检查与意图路由
 
-### 3.2 渠道执行手册加载 (Channel Playbooks)
-- 加载 `references/marketplace-entry-playbook.md` 获取 Amazon/TikTok Shop/Etsy/Walmart 等 Marketplace 入驻完整执行手册。
-- 加载 `references/wholesale-pricing-calculator.md` 获取批发定价模型、MOQ 设定、Linesheet 模板和 Faire/B2B 门户指南。
-- 加载 `references/international-compliance-guide.md` 获取国际化进入框架、落地成本复杂度、属地化风险信号与需咨询专业方清单。
-- 如需 AI 搜索或本地化搜索适配，只将其视为进入方案中的一个输入维度；相关搜索建议可向有机增长体系请求协同，但本模块只负责给出进入优先级与风险整合，不替代税务、认证、法律或报关专业判断。
-- 加载 `references/landed-cost-calculator.md` 获取落地成本测算框架（关税、物流、保险、合规成本的风险拆分），用于进入复杂度判断而非最终申报裁决。
-- 加载 `references/tariff-arbitrage-strategies.md` 获取关税与产地多元化的策略信号，用于比较进入路径，不得输出需要专业执照支持的最终操作性裁决。
-- 加载 `references/pop-up-execution-playbook.md` 获取线下零售进入策略（Pop-up/寄售/精品店/战略零售）和 O2O 协同方案。
-- 加载 `references/channel-economics-toolkit.md` 获取渠道 P&L 独立核算、ROI 对比和渠道退出决策框架。
-- 加载 `references/new-digital-channels-guide.md` 获取新兴数字渠道（社交电商/直播/联盟/B2B）评估和进入策略。
+1. 检查用户请求是否属于本模块职责：
+   - 若属于广告投放优化、SEO 技术、内容创作、邮件营销、品牌定位 → 通过 `completion.out_of_scope` 回交上层。
+   - 若涉及税务/认证/法律/报关的最终操作性裁决 → 明确告知用户需咨询专业方，本模块只提供策略信号。
+   - 若匹配本模块职责 → 进入 Phase 2。
+2. 根据用户意图信号选择工作模式：
 
-### 3.3 诊断与反模式检查 (Diagnosis & Anti-Patterns)
-- 加载 `references/diagnostic-system.md` 获取 5 大诊断模式（渠道集中度风险、新渠道表现不佳、渠道蚕食、国际化困境、批发渠道冲突）及 ICE 优先级排序框架。
-- 加载 `references/anti-patterns.md` 获取 7 大致命错误、4 个常见错误模式、5 个边界处理规则、降级策略、Dropshipping 适配和危机模式。
+| 用户意图信号 | 工作模式 | 主加载 Reference |
+|:---|:---|:---|
+| 评估新渠道、渠道优先级、MEURO 评分 | Mode A: 渠道评估 | `work-modes-and-templates.md` Mode A + `core-frameworks.md`（MEURO 框架） |
+| 上架 Amazon/TikTok Shop/Etsy、平台入驻 | Mode B: Marketplace 入驻 | `work-modes-and-templates.md` Mode B + `marketplace-entry-playbook.md` |
+| 批发定价、MOQ、Linesheet、Faire | Mode C: 批发计划 | `work-modes-and-templates.md` Mode C + `wholesale-pricing-calculator.md` |
+| 出海、国际化、新市场进入 | Mode D: 国际化进入规划 | `work-modes-and-templates.md` Mode D + `international-compliance-guide.md` + `landed-cost-calculator.md` |
+| 线下零售、Pop-up、寄售、O2O | Mode E: 线下零售进入 | `work-modes-and-templates.md` Mode E + `pop-up-execution-playbook.md` |
+| 渠道健康度、渠道蚕食、集中度风险（诊断类） | Mode F: 渠道健康审计 | `diagnostic-system.md`（见 Phase 3）+ `channel-economics-toolkit.md` |
 
-### 3.4 工作模式与输出 (Work Modes & Output)
-- 加载 `references/work-modes-and-templates.md` 获取 6 大工作模式（渠道评估、Marketplace 入驻、批发计划、国际化规划、线下零售、渠道健康审计）及 3 个输出模板（渠道评估报告、落地成本计算、批发计划文档）。
+### Phase 2 — 数据收集与基线建立
+
+1. 收集渠道扩张上下文（当前渠道结构 / 各渠道收入占比 / 产品毛利 / 履约能力 / 团队资源）。
+2. 加载 `references/core-frameworks.md` 建立基线：
+   - 渠道成熟度五级模型（L0-L4）定位当前阶段
+   - 波士顿矩阵分类现有渠道（明星/金牛/问题/瘦狗）
+   - 行业基准数据对照
+3. 若 `supply_chain_mode = dropshipping` → 加载 Dropshipping 适配规则（限制批发和线下路径）。
+
+**运营准备度前置检查**（扩张前必须确认）：
+- 现有渠道稳定性：主渠道连续 3 个月盈利且无重大运营问题
+- 团队容量：现有团队有剩余精力或已规划新增人力
+- 履约能力：当前履约体系可支撑新渠道订单量
+- 不满足时：标注风险但不阻塞，在方案中加入“先强化基础再扩张”的建议
+
+⟐ **用户确认点**：
+- Mode A（渠道评估）：MEURO 评分结果和四色灯决策展示给用户确认，再进入具体进入规划
+- Mode D（国际化）：落地成本测算和合规风险评估展示给用户确认，再输出进入方案
+
+### Phase 3 — 诊断（当用户描述渠道问题时触发）
+
+加载 `references/diagnostic-system.md`，按症状进入对应诊断路径：
+
+```
+症状 → 诊断路径路由：
+├── 渠道集中度风险 → 模式一：单渠道依赖度 → 平台政策风险 → 分散策略 → MEURO 评估新渠道
+├── 新渠道表现不佳 → 模式二：进入时机 → 资源分配 → 本地化程度 → 竞争环境
+├── 渠道蚕食 → 模式三：价格一致性 → 受众重叠 → 促销冲突 → 归因模型
+├── 国际化困境 → 模式四：落地成本失控 → 合规障碍 → 本地化不足 → 物流时效
+└── 批发渠道冲突 → 模式五：价格体系混乱 → 渠道保护 → MOQ 设计 → 合同约束
+```
+
+诊断完成后 → 使用渠道扩张专属 ICE 框架对发现的问题排序 → 输出优先行动清单。
+
+### Phase 4 — 框架应用与执行
+
+1. 加载 `references/core-frameworks.md` 获取执行所需的底层框架：
+   - MEURO 评估框架（5 维度 + 权重 + 四色灯决策 + 90 天测试协议）
+   - 渠道组合优化（波士顿矩阵 + 黄金比例 + 蚕食效应检测）
+   - 跨渠道品牌一致性审计
+   - 渠道扩张年度日历
+2. 按所选工作模式执行其 SOP，按需加载对应深度参考：
+   - `marketplace-entry-playbook.md` → Amazon/TikTok Shop/Etsy/Walmart 入驻 SOP
+   - `wholesale-pricing-calculator.md` → 批发定价 + MOQ + Linesheet
+   - `international-compliance-guide.md` → 国际化框架 + 属地化风险
+   - `landed-cost-calculator.md` → 落地成本测算
+   - `tariff-arbitrage-strategies.md` → 关税策略信号
+   - `pop-up-execution-playbook.md` → 线下零售 + O2O
+   - `channel-economics-toolkit.md` → 渠道 P&L + ROI 对比 + 退出决策
+   - `new-digital-channels-guide.md` → 新兴数字渠道评估
+3. 输出模板选择（`work-modes-and-templates.md`）：
+   - 渠道评估报告（含 MEURO 维度 + 四色灯决策）→ 评估类任务
+   - 国际化进入复杂度筛查模板 → 国际化任务
+   - 批发计划文档模板 → 批发类任务
+
+### Phase 5 — 防护与质量检查
+
+加载 `references/anti-patterns.md` 进行最终检查：
+- 7 大致命错误交叉验证（盲目扩张/忽视蚕食/低估复杂度/无退出机制等）
+- 专业边界声明：涉及税务/认证/法律/报关的建议必须标注“需咨询专业方”
+- 危机模式止血：现金承压时优先维护现有渠道而非扩张
+- 确保每个渠道建议都有清晰的 MEURO 评分 + 风险等级 + 时间线
 
 ## 4. Completion Protocol
 

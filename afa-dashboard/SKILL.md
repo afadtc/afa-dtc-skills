@@ -1,6 +1,11 @@
+---
+name: afa-dashboard
+description: "DTC 数据仪表盘与体检引擎——全链路数据分析、KPI 追踪、行业基准对标、数据健康度评估、市场趋势监控。Use when user mentions: 数据体检, data audit, KPI, 仪表盘, dashboard, 指标追踪, metrics, 基准线, benchmark, 数据分析, data analysis, 营收报表, revenue report, 渠道数据, 广告数据, ROAS跟踪."
+---
+
 # afa-dashboard: DTC 数据仪表盘与体检引擎
 
-> **层级**：全局引擎（直接向 Hub 汇报）· **版本**：v2.4.6
+> **层级**：全局引擎（直接向 Hub 汇报）· **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -63,23 +68,84 @@
 
 ## 3. Core Workflow
 
-### 3.1 框架与基准加载 (Frameworks & Benchmarks)
-- 加载 `references/core-frameworks.md` 获取三层漏斗式仪表盘架构（高管摘要层/渠道管理层/客户洞察层）、北极星指标（NSM）罗盘（商业模式选择决策树、健康度评分、设定引导流程）、用户基准线机制（五级优先级：用户目标→历史最优→上月环比→盈亏平衡线→无基准）、供应链模式适配（Dropshipping 指标优先级调整）。
-- 加载 `references/benchmark-database.md` 获取仪表盘基准引擎（用户数据采集清单、指标计算公式库、基准线来源与优先级、品类特征参考、渠道指标框架、财务健康度框架、季节性调整因子、品牌阶段参考）。所有状态判断基于用户自己的数据和目标。
-- 加载 `references/nsm-playbook.md` 获取 NSM 实战手册深度支撑（定义、分解、跟踪节奏、周会模板）。
+### Phase 1 — 意图识别与工作流选择
 
-### 3.2 诊断与异常检测 (Diagnosis & Anomaly Detection)
-- 加载 `references/diagnostic-system.md` 获取分层异常检测机制（绝对阈值/相对变化/动态基线等）、IDA 三步诊断框架（确认量化→关联分析→维度下钻）、异常预警输出格式、跨模块协同路由规则。
-- 加载 `references/anomaly-diagnosis-rules.md` 获取 7 大异常模式具体规则、跨指标关联表、严重度评估矩阵、误报排除规则。
-- 加载 `references/anti-patterns.md` 获取禁止操作（5条）、边界处理规则、推理透明化规则。
+根据用户意图信号选择工作流：
 
-### 3.3 工作模式与执行 (Work Modes & Execution)
-- 加载 `references/work-modes-and-templates.md` 获取 4 大工作流（首次体检/周期复检/专项分析/实时响应）、数据驱动决策循环（五步闭环）、假设驱动分析模板、数据收集引导（极简模板/数据源/自动化 SOP）、输出报告模板（首次体检/复检）与品牌指标文件规范。
-- 加载 `references/report-templates.md` 获取完整报告模板库（6 种场景模板及其适用条件、输出结构与执行纪律）。
-- 加载 `references/data-driven-decision-loop.md` 获取决策循环深度手册（SMART 目标、ICE 优先级、实验评估、周会/月会模板）。
+| 用户意图信号 | 工作流 | 主加载 Reference |
+|:---|:---|:---|
+| 首次接触、数据体检、全面健康度评估 | WF1: 首次体检 | `work-modes-and-templates.md` WF1 + `benchmark-database.md` + `report-templates.md` |
+| 周报/月报、定期复查、环比分析 | WF2: 周期复检 | `work-modes-and-templates.md` WF2 + `report-templates.md` |
+| 单一指标深挖、渠道专项、客户分层 | WF3: 专项分析 | `work-modes-and-templates.md` WF3 + `data-driven-decision-loop.md` |
+| 指标突变、数据异常、紧急响应 | WF4: 实时异常响应 | `work-modes-and-templates.md` WF4 + `diagnostic-system.md` + `anomaly-diagnosis-rules.md` |
+| NSM 设定、北极星指标定义 | NSM 模式 | `core-frameworks.md`（NSM 罗盘）+ `nsm-playbook.md` |
 
-### 3.4 反模式与输出规范 (Anti-Patterns & Output Standards)
-- 加载 `references/anti-patterns.md` 获取成本标签体系、报告视觉化规则、自适应输出规则（急诊/常规/深度/简答 4 种场景）。
+### Phase 2 — 数据采集与基准建立
+
+1. 加载 `references/benchmark-database.md` 获取**数据采集清单**，引导用户提供最少必要数据。
+2. 加载 `references/core-frameworks.md` 建立**用户基准线**（五级优先级）：
+   - 用户目标值 → 历史最优 → 上月环比 → 盈亏平衡线 → 无基准（标注“—”）
+3. 若 `supply_chain_mode = dropshipping` → 调整指标优先级和 NSM 推荐。
+
+⟐ **用户确认点**：数据采集完成后，展示已获得的指标清单和缺失项，确认是否继续（缺失项标注“—”不估算）。
+
+**降级策略（数据不足时）**：
+
+| 数据充足度 | 可执行操作 | 输出调整 |
+|:---|:---|:---|
+| 充分（♥5个核心指标） | 全量分析 + 三层看板 | 标准报告 |
+| 部分（2-4个核心指标） | 可用指标分析 + 异常检测 | 精简报告 + 数据缺口清单 |
+| 极少（≤1个核心指标） | 仅做单指标健康度判断 | 单指标快报 + 强烈建议补充数据 |
+| 无数据 | 不做任何分析 | 仅输出数据采集引导（具体到菜单路径） |
+
+### Phase 3 — 异常检测与诊断
+
+加载 `references/diagnostic-system.md` + `references/anomaly-diagnosis-rules.md`，执行三层异常检测：
+
+```
+三层异常检测机制：
+├── Layer 1: 绝对阈值检测（指标超出安全范围）
+├── Layer 2: 相对变化检测（环比/同比异常波动）
+└── Layer 3: 动态基线检测（偏离品牌自身趋势）
+
+发现异常后 → IDA 三步诊断：
+① 确认并量化异常（多大偏差、持续多久）
+② 关联分析（跨指标关联表：CVR下降→检查流量质量/落地页/价格）
+③ 维度下钻（按渠道/设备/地区/产品/客群/时间定位根因）
+```
+
+**异常升级决策阀值**：
+
+| 异常严重度 | 判定条件 | 处理方式 |
+|:---|:---|:---|
+| 低（监控） | 偏离基准 10-20% | 记录到异常列表，下次复检时跟踪 |
+| 中（预警） | 偏离基准 20-50% 或连续 2 周下滑 | 在报告中标红 + 建议专项分析 |
+| 高（升级） | 偏离基准 >50% 或影响收入 >20% | 建议深度诊断（回交 Hub 路由到 afa-diagnose） |
+| 紧急（危机） | 收入单日下降 >30% 或 ROAS 崩溃 | 立即升级为危机模式（回交 Hub 触发 crisis_mode） |
+
+7 大异常模式路由（参考 `anomaly-diagnosis-rules.md`）：
+- CVR 突然下降 / ROAS 持续下滑 / CAC 上升 / 复购率下降 / 收入下降但流量稳定 / 邮件打开率崩溃 / 花费增加但收入不增
+
+### Phase 4 — 报告生成与决策支持
+
+1. 加载 `references/report-templates.md` 选择对应场景的报告模板（6 种）。
+2. 加载 `references/core-frameworks.md` 生成**三层分层看板**：
+   - 高管摘要层：北极星指标 + 营收 + 利润
+   - 渠道管理层：各渠道 ROAS/CPA/贡献度
+   - 客户洞察层：留存/复购/LTV/分层
+3. 加载 `references/data-driven-decision-loop.md` 输出**决策建议**：
+   - 按 ICE 排序的优先行动清单
+   - 假设驱动分析模板（待验证项）
+   - 周会/月会跟踪节奏建议
+
+### Phase 5 — 防护与输出规范
+
+加载 `references/anti-patterns.md` 进行最终检查：
+- 5 条禁止操作（无数据不下结论 / 不过度精确预测 / 不硬编码行业基准 / 不替代深度诊断 / 不暴露内部代号）
+- 推理透明化规则：每个结论必须标注数据来源和置信度
+- 自适应输出规则：按场景调整输出深度（急诊精简 / 常规标准 / 深度详尽 / 简答快速）
+- 成本标签体系：每个建议附带预算/时间/技能成本标注
+- 异常发现后的升级规则：仪表盘发现异常 → 建议深度诊断（回交 Hub）→ 执行模块优化
 
 ## 4. Completion Protocol
 

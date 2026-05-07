@@ -1,6 +1,11 @@
+---
+name: afa-email
+description: "DTC 品牌全生命周期邮件营销引擎——自动化流设计、Campaign 文案撰写、可交付性诊断、列表健康度管理、BFCM 作战规划。Use when user mentions: 邮件营销, email marketing, 弃单挽回, abandoned cart, 邮件自动化, email flow, 打开率, open rate, 可交付性, deliverability, BFCM邮件, 邮件文案, email copy, 列表清理, list hygiene, welcome flow, 欢迎流."
+---
+
 # afa-email — 邮件营销引擎
 
-> **上层承接**：变现统筹层 · **版本**：v2.4.6
+> **上层承接**：变现统筹层 · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -56,28 +61,61 @@
 
 ## 3. Core Workflow
 
-根据用户意图，按需加载以下 reference 文件：
+### Phase 1 — 边界检查与分诊
 
-### Step 1 — 理解框架
-加载 `references/core-frameworks.md`：AI 编排网络(瀑布式路由/预测触发器) + LTV 动态分层 + 信息阶梯 + 个性化层级 + BFCM 五阶段 + 预热计划 + 行业基准。
+1. 加载 `references/anti-patterns.md` §1 执行**问题匹配检查**：
+   - 若用户核心问题属于 6 种常见误归类之一（获客引流 / 客户流失根因 / 落地页转化 / 品牌定位 / 客单价策略 / 全局诊断）→ 通过 `completion.out_of_scope` 回交上层。
+   - 若匹配本模块职责 → 进入 Phase 2。
+2. 收集 `references/work-modes-and-templates.md` §1 中定义的**上下文契约**（ESP 平台 / 列表规模 / 品牌阶段 / 品类 / 当前痛点 / SMS 能力）。
 
-### Step 2 — 深度知识
-按需加载原有 6 个 reference 文件：
-- `references/core-flows-playbook.md`：五大核心自动化流详细设计
-- `references/segmentation-guide.md`：互动度与 LTV 高级分层策略
-- `references/copywriting-formulas.md`：PAS/BAB 框架与高转化标题公式库
-- `references/deliverability-checklist.md`：12 步可交付性技术与运营清单
-- `references/email-design-guidelines.md`：移动端优先设计与无障碍规范
-- `references/campaign-archetypes.md`：单次活动标准结构模板
+### Phase 2 — 意图路由与模式选择
 
-### Step 3 — 诊断（如需）
-加载 `references/diagnostic-system.md`：3 大诊断决策树（打开率暴跌/点击率极低/自动化流收入占比低）+ ICE 优先级排序。
+根据用户意图信号匹配工作模式：
 
-### Step 4 — 执行
-加载 `references/work-modes-and-templates.md`：上下文契约 + 4 大工作模式（/build-flow, /write-campaign, /fix-deliverability, /plan-calendar）+ 2 个输出模板 + KPI 体系 + 淡季邮件策略。
+| 用户意图信号 | 工作模式 | 主加载 Reference |
+|:---|:---|:---|
+| 创建/优化自动化流、Welcome Flow、弃单挽回 | `/build-flow` | `work-modes-and-templates.md` §2 Mode 1 + `core-flows-playbook.md` |
+| 撰写 Campaign 邮件、促销文案、节日邮件 | `/write-campaign` | `work-modes-and-templates.md` §2 Mode 2 + `copywriting-formulas.md` + `campaign-archetypes.md` |
+| 邮件进垃圾箱、打开率暴跌、黑名单 | `/fix-deliverability` | `work-modes-and-templates.md` §2 Mode 3 + `deliverability-checklist.md` |
+| 规划月度/季度邮件日历 | `/plan-calendar` | `work-modes-and-templates.md` §2 Mode 4 + `campaign-archetypes.md` |
+| 打开率/点击率/Flow收入异常（诊断类） | 诊断模式 | `diagnostic-system.md`（见 Phase 3） |
+| 分层策略、列表清理、日落策略 | 分层模式 | `segmentation-guide.md` + `core-frameworks.md` §2 |
+| BFCM 作战规划 | BFCM 模式 | `core-frameworks.md` §5-6 + `work-modes-and-templates.md` |
 
-### Step 5 — 边界与防护
-加载 `references/anti-patterns.md`：问题匹配检查(6 种误归类) + 5 大致命反模式 + 降级策略(Level 1-3) + Dropshipping 适配 + 危机模式止血。
+### Phase 3 — 诊断（当用户描述指标异常时触发）
+
+加载 `references/diagnostic-system.md`，按症状进入对应决策树：
+
+```
+症状 → 决策树路由：
+├── 打开率暴跌 → 诊断模式一（§1）：检查发送对象 → 技术指标 → 标题/预览文本
+├── 点击率极低 → 诊断模式二（§2）：移动端体验 → CTA 明确性 → 内容/Offer 匹配
+└── Flow 收入占比低 → 诊断模式三（§3）：核心流覆盖率 → 弃单流逻辑 → 欢迎序列连贯性
+```
+
+诊断完成后 → 使用 ICE 框架（§4）对发现的问题按 Impact × Confidence × Ease 排序 → 输出优先行动清单。
+
+### Phase 4 — 框架应用与执行
+
+1. 加载 `references/core-frameworks.md` 获取执行所需的底层框架：
+   - §1 瀑布式优先级路由：解决多 Flow 冲突抑制
+   - §2 LTV 动态分层：决定"发给谁"
+   - §3 信息阶梯：决定"发什么内容"
+   - §4 个性化层级：决定"个性化到什么程度"
+2. 按所选工作模式执行，套用 `references/work-modes-and-templates.md` §3 中的输出模板：
+   - Flow Blueprint（执行级拓扑语法）→ 用于 `/build-flow`
+   - Campaign Brief → 用于 `/write-campaign`
+3. 若 `seasonal_mode = bfcm` → 加载 `core-frameworks.md` §5-6（BFCM 五阶段 + 预热计划）。
+   若 `seasonal_mode = off_season` → 加载 `work-modes-and-templates.md` 淡季策略章节。
+4. 邮件设计规范 → 加载 `references/email-design-guidelines.md`（移动端优先 + 无障碍）。
+
+### Phase 5 — 防护与质量检查
+
+执行完成前，加载 `references/anti-patterns.md` §2-6 进行最终检查：
+- 5 大致命反模式交叉验证（全量发送 / 过度折扣 / 忽视移动端 / 无 A/B 测试 / 无日落策略）
+- 降级策略（Level 1-3）：信息不足时的保守输出规则
+- Dropshipping 适配：供应链模式下的特殊邮件策略调整
+- 危机模式止血：`crisis_mode = cash_crisis` 时的低扰动邮件编排
 
 ## 4. Completion Protocol
 

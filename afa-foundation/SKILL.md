@@ -1,6 +1,11 @@
+---
+name: afa-foundation
+description: "品牌与产品基建 Supervisor——统筹市场探索、竞争情报、品牌定位、产品策略、产品上市的全流程路由与协同。Use when user mentions: 品牌建设, brand building, 产品规划, product planning, 从零开始, from scratch, 品牌基建, foundation, 市场调研, market research, 品牌定位, brand positioning, 产品上市, product launch."
+---
+
 # afa-foundation — 品牌与产品基建 Supervisor
 
-> **层级**：Supervisor（中层路由器）· **版本**：v2.4.6
+> **层级**：Supervisor（中层路由器）· **版本**：v2.4.7
 > **管辖 Worker**：afa-explore · afa-compete · afa-brand · afa-product · afa-launch
 
 ---
@@ -122,12 +127,43 @@ completion:
 
 | 用户意图信号 | 路由目标 | 前置条件检查 |
 |:---|:---|:---|
-| 不知道卖什么、选品、找赛道、市场机会 | **afa-explore** | 无 |
-| 竞品分析、竞品调研、对手在做什么 | **afa-compete** | 优先检查 `competitors.md` 是否已有 |
+| 不知道卖什么、选品、找赛道、市场机会、新市场可行性 | **afa-explore** | 无 |
+| 竞品深度拆解、竞品逆向工程、对标学习、差异化策略、竞品监控 | **afa-compete** | 优先检查 `competitors.md` 是否已有 |
 | 品牌定位、品牌故事、品牌调性、品牌升级 | **afa-brand** | 检查 `brand-master.md` 是否已有（已有则提示迭代 vs 重建） |
 | 产品策略、定价、选品优化、溢价、产品矩阵 | **afa-product** | 检查 `products.md` 是否已有 |
 | 新品上市、冷启动、产品发布、PMF | **afa-launch** | 需要 `products.md` + `voice-and-tone.md` |
 | 模糊意图（如「我想开始做独立站」） | 进入**引导流程**（见下方） | 无 |
+
+### explore 与 compete 的路由区分
+
+```
+两者的核心区别：
+├── afa-explore = 「这个市场值不值得进？竞争格局允不允许？」
+│   → 视角：市场机会发现，竞品只是评估维度之一
+│   → 典型场景：选品阶段、新市场评估、Go/No-Go 决策
+│   → 输出：市场机会报告、竞争格局概览、进入建议
+│
+└── afa-compete = 「这个竞品怎么做到的？我怎么比他做得更好？」
+    → 视角：竞争情报与逆向工程，竞品是全部焦点
+    → 典型场景：已确定赛道后的竞品研究、对标学习、差异化突围
+    → 输出：竞品拆解报告、对标蓝图、差异化策略、竞品监控方案
+
+边界场景处理：
+├── 用户说「帮我看看这个市场有哪些竞品」→ afa-explore（市场评估视角）
+├── 用户说「帮我拆解一下 XX 品牌」→ afa-compete（深度逆向）
+├── 用户说「竞品比我便宜怎么办」→ afa-compete（竞争诊断）
+└── 用户说「这个品类竞争激烈吗，值得做吗」→ afa-explore（Go/No-Go）
+```
+
+### 前置条件不满足时的处理路径
+
+| 缺失文件 | 影响的 Worker | 处理方式 |
+|:---|:---|:---|
+| `competitors.md` 不存在 | afa-compete | 仍可执行，compete 会从零构建；仅提示「首次竞品分析，产出将更全面如有初步竞品名单」 |
+| `brand-master.md` 不存在 | afa-brand | 区分：用户说「品牌升级」→ 提示需先有基线；用户说「从零定位」→ 正常执行 |
+| `products.md` 不存在 | afa-product / afa-launch | afa-product 可从零构建；afa-launch 必须等 products.md 就绪，降级为先路由到 afa-product |
+| `voice-and-tone.md` 不存在 | afa-launch | 降级为先路由到 afa-brand 完成品牌调性定义 |
+| 多个文件同时缺失 | 多个 Worker | 自动进入工作流 A（从零起步），按顺序补齐 |
 
 ### 模糊意图引导流程
 
@@ -142,6 +178,39 @@ completion:
       ├── 产品相关 → afa-product
       └── 上市相关 → afa-launch
 ```
+
+### 阶段适配路由
+
+根据用户的业务阶段（`stage`）调整路由优先级：
+
+```
+阶段 → 路由优先级：
+├── Level 0（纯白） → afa-explore → afa-compete → afa-brand → afa-product → afa-launch
+├── 0→1（已有产品） → afa-brand → afa-product → afa-launch（跳过探索）
+├── 1→10（已有订单） → afa-compete（差异化）/ afa-product（产品线扩展）/ afa-brand（品牌升级）
+├── 10→100（规模化） → afa-compete（竞争壁垒）/ afa-brand（溢价）
+└── 衰退期 → afa-compete（市场变化分析）/ afa-product（产品线重组）
+```
+
+### 诊断路由（当用户描述品牌/产品基建异常时）
+
+```
+症状 → 诊断路由：
+├── 不知道卖什么 / 赛道选择困难 → afa-explore（市场验证模式）
+├── 竞品比我便宜 / 市场份额下降 → afa-compete（竞争诊断）
+├── 品牌没辨识度 / 定位模糊 → afa-brand（品牌审计模式）
+├── 产品利润低 / 定价混乱 / SKU 太多 → afa-product（产品线审计）
+├── 新品上市失败 / PMF 未验证 → afa-launch（冷启动诊断）
+├── 多个基建问题交叉 → 进入工作流 A（从零起步）重新梳理
+└── 不确定问题出在哪 → 先问「你目前最头疼的是什么？」定位后再路由
+```
+
+### 多 Worker 协调冲突处理
+
+当多个 Worker 的建议产生冲突时（如 afa-brand 建议高端定位但 afa-product 发现产品力不支撑）：
+1. 以用户的 `stage` 和 `premium_tier` 为裁决依据
+2. 优先保护已验证的 PMF 信号，不轻易推翻
+3. 将冲突点作为 `concerns` 回传 Hub，由用户最终裁决
 
 ---
 
@@ -168,6 +237,11 @@ completion:
     ↓
   Step 5 → afa-launch（冷启动）
     输出：四阶段启动计划
+
+⟐ **用户确认点**：
+- Step 1 完成后：展示赛道机会列表，用户选择方向后再继续
+- Step 3 完成后：展示品牌定位方案，确认后再进入产品策略
+- 整体完成后：展示全链路成果摘要，确认是否需要调整
 
 默认沿主问题连续推进；只有遇到赛道选择分叉、资源投入差异、高风险外部动作或用户明确要求自己拍板时，才暂停请求确认。
 ```

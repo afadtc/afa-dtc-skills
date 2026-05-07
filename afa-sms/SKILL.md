@@ -1,6 +1,11 @@
+---
+name: afa-sms
+description: "DTC SMS 营销引擎——短信自动化流、合规建设、列表增长、BFCM 短信策略、短信文案。Use when user mentions: SMS, 短信营销, text message, 短信自动化, SMS flow, TCPA, 短信合规, SMS compliance, 短信列表, 短信文案, SMS copy, MMS, 短信推送, BFCM短信."
+---
+
 # afa-sms — SMS 营销引擎
 
-> **Supervisor**: afa-monetize · **版本**：v2.4.6
+> **Supervisor**: afa-monetize · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -35,6 +40,20 @@
 
 若上游已标记 `crisis_mode = cash_crisis`，或当前请求明显处于现金承压、预算吃紧、需要先止损的时效场景，本模块先把建议翻译成**止血优先、低扰动、可快速回退**的版本；除非用户明确要求且已确认有额外资源承接，否则不优先给高投入、长周期或依赖新增资源的增长动作。
 
+### 1.2 执行输入触发器
+
+| 触发器 | 值 | 行为调整 |
+|:---|:---|:---|
+| `crisis_mode` | `cash_crisis` | 止血模式：立即发 Flash Sale + 检查弃购 Flow + VIP 专属优惠；暂停非营收 SMS |
+| `crisis_mode` | `pr_crisis` | SMS 非主渠道，按 Supervisor 指令执行（可能被暂缓） |
+| `seasonal_mode` | `off_season` | 从"促销驱动"转向"关系维护+列表建设"；降频+对话式内容 |
+| `seasonal_mode` | `pre_season` | 列表增长冲刺 + 预热序列设计 |
+| `seasonal_mode` | `peak` / `bfcm` | BFCM 频率豁免规则生效；5 阶段作战模板 |
+| `consent_risk` | `high` | 优先执行合规审计（加载 compliance-checklist.md）；先治理再扩量 |
+| `supply_chain_mode` | `dropshipping` | 订单状态通知优先级提升；弃购 SMS 最高优先；复购周期延长 |
+| `supply_chain_mode` | `wholesale` | B2B 视角：订单通知+补货提醒为主；降低冲动购买型 SMS |
+| `supply_chain_mode` | `manufacturing` | 产品教育+品牌故事型 SMS 优先；保护价格形象 |
+
 ## 2. Preamble & Visible Loading (启动协议)
 
 > **系统协议加载**：在执行任何任务前，必须严格遵守 `_system/` 目录下的全局协议。
@@ -62,11 +81,26 @@
 
 1. 加载 `references/anti-patterns.md` → 执行 **问题匹配检查**（§1）。
    - 若用户核心问题超出 SMS 职责范围 → 通过结构化 `completion.out_of_scope` 回交，并填写 `reason` 与 `suggested_route`，同时返回当前最优保守下一步，而非将边界处理视为立即停工。
-2. 收集 `references/work-modes-and-templates.md`（§1）中定义的 **上下文契约**。
+2. 收集 `references/work-modes-and-templates.md`（§1）中定义的 **上下文契约**：
 
-### Phase 2 — 框架选择
+```
+上下文契约收集：
+├── Core（优先获取）：
+│   ├── 目标市场 → 影响发送策略和时区配置
+│   ├── 当前 ESP/SMS 平台（Klaviyo/Postscript/Attentive/Omnisend）
+│   ├── 列表规模 → 决定发送策略
+│   └── 品牌基调 → 决定文案风格
+├── Nice-to-have（尽量获取）：
+│   ├── 客单价 → 决定折扣策略
+│   ├── 产品类型（消耗品/耐用品/时尚品/订阅品）→ 决定复购策略
+│   ├── 当前 SMS 表现数据（CTR/CVR/退订率/RPR）
+│   └── Email 发送日历 → 用于协同排期
+└── 降级处理：Core 不全时仍可给保守版，标注待校准项
+```
 
-根据任务按需加载 references：
+### Phase 2 — 框架选择与诊断
+
+根据任务信号按需加载 references：
 
 | 任务信号 | 加载参考 |
 |-------------|---------------|
@@ -81,20 +115,160 @@
 | 行业基准 | `core-frameworks.md` §9 |
 | 淡季策略 | `work-modes-and-templates.md` §4 |
 
-### Phase 3 — 执行
+**当任务信号为"渠道诊断"时**，使用以下内联诊断决策树：
 
-从 `references/work-modes-and-templates.md`（§2）中选择匹配的 **工作模式** 并执行。
-应用 §3 中对应的 **输出模板**。
-所有优化建议必须按 `diagnostic-system.md`（§4）中的 **ICE 框架** 排序。
+```
+诊断树 1：退订率异常
+├── 退订率明显高于品牌可接受区间？
+│   ├── YES → 检查发送频率
+│   │   ├── Campaign 频率偏高？→ 下调频率，观察窗口复核
+│   │   └── NO → 检查文案质量
+│   │       ├── 缺少品牌识别？→ 开头加品牌名
+│   │       ├── 过度大写/emoji？→ 回归简洁专业
+│   │       └── 每条都推销？→ 引入对话式/价值型内容
+│   └── 检查列表质量
+│       ├── 新订阅者早期退订率异常？→ 弹窗授权说明不清晰
+│       └── 老订阅者突然退订？→ 检查最近 Campaign 异常
+└── NO → 退订率正常，继续监控
+
+诊断树 2：点击率下降
+├── 点击率明显低于品牌可接受区间？
+│   ├── YES → 检查链接质量
+│   │   ├── 链接被缩短器破坏？→ 使用品牌短链
+│   │   ├── 落地页非移动端友好？→ 优先移动端体验
+│   │   └── 链接指向错误页面？→ 直链产品页
+│   ├── 检查文案 CTA
+│   │   ├── CTA 不清晰？→ 明确动作导向 CTA
+│   │   ├── 价值主张不明？→ 极短时间内传达利益
+│   │   └── 决策疲劳？→ 单一主 CTA
+│   └── NO → 点击率健康，关注转化率
+└── 输出诊断结论 + ICE 排序优化建议
+
+诊断树 3：SMS 渠道 ROI 衰减
+├── RPR 持续下降？
+│   ├── YES → 检查受众质量
+│   │   ├── 活跃订阅者占比偏低？→ 执行日落策略
+│   │   └── 新订阅者质量下降？→ 审查订阅来源
+│   ├── 检查 Flow 健康度
+│   │   ├── 弃购 Flow 转化偏弱？→ 检查触发时间/文案/折扣
+│   │   ├── 欢迎 Flow 转化偏弱？→ 检查折扣兑现/文案
+│   │   └── 所有 Flow 同时下降？→ 技术问题排查
+│   └── 检查竞争环境
+│       └── BFCM 后"短信疲劳期"？→ 降频+对话式内容
+└── NO → ROI 健康，继续优化
+```
+
+### Phase 3 — 执行（按工作模式 SOP）
+
+根据 Phase 2 的路由结果，按以下 SOP 执行：
+
+```
+模式一：SMS Flow 架构设计
+├── 加载：core-frameworks.md §2-3 + core-flows-playbook.md
+├── Flow 搭建优先级（按 ROI 排序）：
+│   ├── P0：欢迎序列（收入占比 15-20%）→ 第 1 个搭建
+│   ├── P0：弃购挽回（收入占比 25-35%）→ 第 2 个搭建
+│   ├── P1：浏览放弃（收入占比 10-15%）→ 第 3 个搭建
+│   ├── P1：购后跟进（收入占比 10-15%）→ 第 4 个搭建
+│   └── P2：流失召回（收入占比 5-10%）→ 第 5 个搭建
+├── 每个 Flow 输出：
+│   ├── 触发条件 (Trigger)
+│   ├── 时间线 (Timeline) + 条件分支
+│   ├── 每条 SMS 英文文案（≤160 字符）
+│   ├── 与 Email Flow 的协同规则（瀑布式抑制）
+│   └── KPIs & Benchmarks
+├── 关键规则内联：
+│   ├── 欢迎序列：opt-in 后 5 分钟内发送；折扣与弹窗承诺一致；最多 3 条
+│   ├── 弃购挽回：SMS T+1h → Email T+4h；第一条不给折扣；最多 2 条
+│   ├── 浏览放弃：每用户每 7 天最多 1 条；绝不给折扣；优先级低于弃购
+│   ├── 购后跟进：评价请求至少送达后 3 天；不推销其他产品
+│   └── 流失召回：折扣渐进递增；间隔≥15 天；VIP 独立序列
+└── 输出物：完整 Flow 架构文档 + A/B 测试建议
+
+模式二：SMS Campaign 文案撰写
+├── 加载：core-frameworks.md §7 + copywriting-formulas.md
+├── Step A：确认 Campaign 类型（闪购/新品/补货/VIP/BFCM/对话式）
+├── Step B：应用文案结构公式 [Brand] + [Hook] + [Value] + [CTA] + [Opt-out]
+│   ├── 字符预算：Brand 10-15 | Hook 20-40 | Value 40-60 | CTA 30-40 | Opt-out 20-25
+│   └── 总计 ≤ 160 字符
+├── Step C：输出多版本文案（安全版 + 强驱动版 + 对话版如适用）
+├── Step D：每版标注字符数 + 推荐发送时间 + 目标受众分层
+└── 输出物：文案版本集 + A/B 测试建议 + 发送时间推荐
+
+模式三：SMS 渠道诊断
+├── 加载：diagnostic-system.md
+├── Step A：收集关键数据（退订率/CTR/CVR/RPR/列表规模/发送频率）
+├── Step B：对照基准定位异常指标（参考 core-frameworks.md §9）
+├── Step C：使用 Phase 2 内联诊断决策树逐一排查
+├── Step D：输出诊断报告
+│   ├── 问题定位（根因分析）
+│   ├── 优化建议（按 ICE 框架排序）
+│   ├── 预期改善方向或待验证假设
+│   └── 执行时间线
+└── 输出物：诊断报告 + ICE 排序行动清单
+
+模式四：SMS × Email 协同规划
+├── 加载：core-frameworks.md §5 + omnichannel-orchestration.md
+├── Step A：获取当前 Email 发送日历 + SMS 发送计划
+├── Step B：检查"同日轰炸"或"信息重复"问题
+├── Step C：应用瀑布式抑制规则（6 条）：
+│   ├── 1. SMS 已转化 → 跳过后续 Email
+│   ├── 2. Email 已转化 → 跳过后续 SMS
+│   ├── 3. 同天 SMS+Email 总量 ≤ 2 条
+│   ├── 4. 同周 SMS Campaign ≤ 1 条（Flow 不受限）
+│   ├── 5. 仅订阅 Email 的用户不发 SMS
+│   └── 6. 日落名单跨渠道独立
+├── Step D：输出优化后的协同日历
+│   ├── 月度 SMS + Email 发送计划
+│   ├── 渠道分工矩阵（SMS=即时/紧迫 vs Email=内容/培育）
+│   └── BFCM 等关键节点特殊编排
+└── 输出物：协同日历 + 抑制规则配置指南
+```
 
 ### Phase 4 — 防护检查
 
 交付输出前，按 `references/anti-patterns.md` 进行验证：
-- §2 七大致命反模式
-- §3 文案禁令
-- §4 边界处理
-- §6 Dropshipping 适配（如适用）
-- §7 危机模式（若 `crisis_mode = cash_crisis`）
+
+```
+七大致命反模式交叉验证：
+├── ❌ 是否存在群发轰炸（Batch & Blast）？→ 必须分层发送
+├── ❌ 是否直接复制 Email 文案到 SMS？→ SMS 独立撰写 ≤160 字符
+├── ❌ 是否每条都给折扣？→ 折扣仅用于弃购高价值+召回末段
+├── ❌ 是否忽略合规最佳实践？→ 参考 compliance-checklist.md
+├── ❌ 是否缺少日落策略？→ 90 天无互动必须日落
+├── ❌ 是否 SMS 和 Email 同时发同一信息？→ 渠道分工+瀑布抑制
+└── ❌ 是否 BFCM 后未降频？→ BFCM 后一周静默
+
+文案禁忌检查：
+├── ❌ "FREE" 全大写（触发运营商过滤）
+├── ❌ 多个感叹号 "!!!"（垃圾短信特征）
+├── ❌ 无品牌名开头（用户不知发件方）
+├── ❌ 无 opt-out 提示（首条必须有）
+└── ❌ 缩写过多（损害品牌形象）
+
+Supply Chain 适配检查：
+├── dropshipping → 订单通知优先？弃购最高优先？复购周期延长？
+├── wholesale → B2B 视角？补货提醒优先？降低冲动型 SMS？
+├── manufacturing → 产品教育优先？品牌故事优先？保护价格形象？
+└── dtc → 默认，无需额外调整
+
+Crisis Mode 检查：
+├── cash_crisis → 是否已切换止血模式？Flash Sale + 弃购检查 + VIP 专属？
+├── pr_crisis → 是否已暂缓非必要 SMS？
+└── none → 正常输出
+
+合规最终门控（加载 compliance-checklist.md）：
+├── 授权：明确 opt-in + 清晰披露 + 建议 double opt-in
+├── 内容：品牌标识 + 退订指令 + HELP 支持 + 费率提示
+├── 发送：遵守收件人当地静默时段 + 承诺频率
+├── 退订：即时抑制 + 确认消息 + 常见退订关键词
+└── 记录：授权来源/时间戳/渠道 + 抑制记录
+
+降级处理（信息不足时）：
+├── Level 1（无品牌数据）→ 行业通用基准 + 通用策略框架
+├── Level 2（无 ESP 信息）→ 平台无关策略和文案
+└── Level 3（无历史数据）→ 行业基准起点 + A/B 测试计划 + 冷启动策略
+```
 
 ## 4. Completion Protocol
 
@@ -166,3 +340,14 @@ completion:
 本模块**仅负责** SMS 营销领域：短信自动化流架构、Campaign 文案与日历、对话式 SMS 策略、跨渠道协同编排、频率治理和 BFCM 作战规划。
 
 如果用户需求超出此范围（例如列表增长获客、品牌叙事、落地页转化、留存复购根因、客单价策略或全局诊断等非 SMS 营销领域），**不要尝试回答，也不要向用户暴露其他 Skill 代号**。请向用户简要解释边界，并在内部回传中使用结构化 `completion.out_of_scope`（填写 `reason` 与 `suggested_route`）将控制权交还给 Supervisor（afa-monetize）重新路由；用户可见文案只保留自然语言下一步建议。
+
+越界路由表：
+
+| 用户请求 | 越界原因 | 建议路由 |
+|:---|:---|:---|
+| SMS 列表太小/获客 | 列表增长是获客问题 | 回交上层 → 付费获客/社交引擎 |
+| 客户不复购的根因 | SMS 召回是执行层，根因在留存 | 回交上层 → afa-retain |
+| 用 SMS 做品牌建设 | SMS 不适合长内容品牌叙事 | 回交上层 → afa-brand + afa-email |
+| 落地页转化率低 | SMS 点击正常但页面不转化 | 回交上层 → afa-convert |
+| 客单价策略 | 客单价策略先行，SMS 是执行工具 | 回交上层 → afa-aov |
+| 不知道问题在哪 | 需要全局诊断 | 回交上层 → afa-diagnose |

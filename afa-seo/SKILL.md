@@ -1,6 +1,11 @@
+---
+name: afa-seo
+description: "DTC SEO 与有机搜索增长引擎——技术SEO、关键词策略、内容规划、产品页优化、结构化数据、链接建设。Use when user mentions: SEO, 搜索引擎优化, 关键词, keywords, 有机流量, organic traffic, 技术SEO, technical SEO, 内容SEO, 反向链接, backlinks, 产品页SEO, 网站速度, 索引, indexing, 搜索排名."
+---
+
 # afa-seo — SEO 与有机搜索增长引擎
 
-> **Supervisor**: afa-organic · **版本**：v2.4.6
+> **Supervisor**: afa-organic · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 

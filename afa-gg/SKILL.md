@@ -1,6 +1,11 @@
+---
+name: afa-gg
+description: "Google Ads 优化引擎——Shopping 广告、搜索广告、PMax、关键词策略、出价优化、Feed 优化、否定词管理。Use when user mentions: Google Ads, 谷歌广告, Shopping广告, PMax, Performance Max, 搜索广告, search ads, 关键词, keywords, ROAS, 出价, bidding, Feed优化, 否定词, negative keywords, 质量得分."
+---
+
 # afa-gg — Google Ads 优化引擎
 
-> **上层承接**：付费投放统筹层 · **版本**：v2.4.6
+> **上层承接**：付费投放统筹层 · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -63,32 +68,78 @@
 
 ## 3. Core Workflow
 
-### Phase 1 — 分诊与诊断
-1. 收集 Context Matrix 字段；必需字段缺失时 → 按 `_system/degradation-rules.md` Level 1-3 降级处理。
-2. 加载 `references/benchmark-data.md` 获取效果基准数据。
-3. 执行诊断 → 加载 `references/diagnostic-rules.md`（Google Ads 诊断决策树）。
-4. 输出：按 ICE 评分排序的优先问题清单。
+### Phase 1 — 边界检查与意图路由
 
-### Phase 2 — 策略选择
-根据用户意图匹配工作模式 → 加载 `references/work-modes-and-kpi.md`：
-- 模式 1：搜索广告策略 → 加载 `references/search-ads-playbook.md`
-- 模式 2：PMax 深度优化 → 加载 `references/pmax-playbook.md`
-- 模式 3：产品 Feed 优化 → 加载 `references/feed-optimization.md`
-- 模式 4：预算与扩量 → 加载 `references/planning-and-budget.md`
-- 模式 5：追踪与设置 → 加载 `references/tracking-and-feed.md` 和 `references/shopify-google-setup.md`
+1. 检查用户请求是否属于本模块职责：
+   - 若属于 Meta Ads、TikTok Ads、SEO、邮件营销、品牌定位 → 通过 `completion.out_of_scope` 回交上层。
+   - 若匹配本模块职责 → 进入 Phase 2。
+2. 根据用户意图信号选择工作模式：
 
-### Phase 3 — 框架应用
-1. 加载 `references/core-frameworks.md` 获取 Google Ads 范式（PMax、Demand Gen、DDA 2.0、GEO）。
-2. 结合品牌上下文执行所选模式的 playbook。
-3. 若 `seasonal_mode = off_season` → 加载 `references/work-modes-and-kpi.md` 中的淡季策略章节。
-   若 `seasonal_mode = pre_season` → 加载 `references/work-modes-and-kpi.md` 中的预热期准备章节。
-   若 `seasonal_mode = peak_season` → 加载 `references/work-modes-and-kpi.md` 中的旺季执行章节。
-4. 交叉检查 `references/anti-patterns.md`（黑帽零容忍 + 常见错误）。
+| 用户意图信号 | 工作模式 | 主加载 Reference |
+|:---|:---|:---|
+| 设计账户结构、广告系列规划、新账户搭建 | Mode 1: 账户架构设计 | `work-modes-and-kpi.md` §14 Mode 1 + `planning-and-budget.md` |
+| 写广告文案、素材组配置、RSA 标题 | Mode 2: 广告创建 | `work-modes-and-kpi.md` §14 Mode 2 + `search-ads-playbook.md` |
+| 效果不好、ROAS 低、CPA 高、诊断账户 | Mode 3: 诊断优化 | `diagnostic-rules.md` + `benchmark-data.md`（见 Phase 3） |
+| 增加预算、扩量、规模化 | Mode 4: 扩量规划 | `work-modes-and-kpi.md` §14 Mode 4 + `planning-and-budget.md` |
+| AI 搜索曝光、GEO 策略 | Mode 5: GEO 策略 | `work-modes-and-kpi.md` §14 Mode 5 + `core-frameworks.md`（GEO 章节） |
+| PMax 优化、资产组评分、转化价值规则 | PMax 模式 | `pmax-playbook.md` + `core-frameworks.md`（PMax 章节） |
+| Feed 优化、商品数据、购物广告 | Feed 模式 | `feed-optimization.md` + `tracking-and-feed.md` |
+| 转化追踪、Shopify 设置、归因 | 追踪模式 | `tracking-and-feed.md` + `shopify-google-setup.md` |
 
-### Phase 4 — 输出与验证
-1. 按 `references/work-modes-and-kpi.md` 或 `references/report-templates.md` 中的模板格式化交付物。
-2. 按 `_system/iron-rules.md` 附加成本标签与时间线。
-3. 验证：每条建议都必须包含 ICE 评分 + 预期影响 + 数据依据。
+### Phase 2 — 数据收集与基线建立
+
+1. 收集模块特定执行输入（store_url / target_audience / product_margins / ad_account_status）。
+2. 加载 `references/benchmark-data.md` 建立效果基准对照：
+   - 搜索广告：CTR / CPC / CVR / Quality Score
+   - 购物广告：CTR / CVR / ROAS / Impression Share
+   - PMax：ROAS / 资产组评分 / 转化价值规则准确率
+   - Demand Gen：CPM / VTR / View-through CVR
+3. 若 `tracking_health = broken` → 优先进入追踪修复模式，暂缓其他优化。
+   若 `feed_health = poor` → 优先进入 Feed 优化模式。
+
+### Phase 3 — 诊断（当用户描述效果异常时触发）
+
+加载 `references/diagnostic-rules.md`，按症状进入对应诊断决策树：
+
+```
+症状 → 诊断树路由：
+├── CTR 低 → §1.1：质量得分检查 → 三维度定位（点击率/相关性/落地页）→ 扩展/排名/匹配类型
+├── CPC 高 → §1.2：质量得分 → 竞争环境 → 关键词宽度 → 出价策略 → 落地页
+├── CVR 低 → §1.3：搜索意图匹配 → 落地页体验 → Offer 竞争力
+├── ROAS 低 → §1.4：流量质量 → 转化路径 → 归因窗口 → 价值传递
+├── 购物广告异常 → §2：Feed 质量 → 出价策略 → 产品页承接
+├── PMax 异常 → §3：品牌词混入 → 资产组质量 → 转化价值规则 → 受众信号
+└── Demand Gen 异常 → §4：受众质量 → 素材形态 → 归因窗口
+```
+
+诊断完成后 → 使用 ICE 框架（`work-modes-and-kpi.md` §13.7）对发现的问题排序 → 输出优先行动清单。
+
+### Phase 4 — 框架应用与执行
+
+1. 加载 `references/core-frameworks.md` 获取执行所需的底层范式：
+   - PMax 架构范式：资产组分层 + 转化价值规则 + 品牌词隔离
+   - Demand Gen 范式：受众分层 + 素材形态适配 + 归因理解
+   - DDA 2.0 范式：数据驱动归因 + 转化延迟处理
+   - GEO 范式：AI 搜索可见性 + 结构化数据规划
+2. 按所选工作模式执行其 SOP，按需加载对应深度参考：
+   - `search-ads-playbook.md` → 搜索广告策略与文案
+   - `pmax-playbook.md` → PMax 深度优化
+   - `feed-optimization.md` → 商品 Feed 优化
+   - `planning-and-budget.md` → 预算分配与扩量节奏
+   - `tracking-and-feed.md` + `shopify-google-setup.md` → 追踪与设置
+3. 季节性适配：
+   - `seasonal_mode = off_season` → 加载淡季策略（保守预算 + 素材储备 + 受众测试）
+   - `seasonal_mode = pre_season` → 加载预热期准备（账户结构检查 + 素材储备 + 受众分层）
+   - `seasonal_mode = peak_season` → 加载旺季执行（加预算 + 实时监控 + 快速迭代）
+4. 若 `crisis_mode = cash_crisis` → 优先止血级动作（暂停低效系列 + 收缩到高意图词 + 降低日预算）。
+
+### Phase 5 — 防护与质量检查
+
+加载 `references/anti-patterns.md` 进行最终检查：
+- 黑帽零容忍：确保无任何违规操作
+- 常见错误交叉验证：购物广告与搜索广告内耗、PMax 品牌词污染、归因窗口误读
+- 每条建议必须包含：ICE 评分 + 预期影响区间 + 数据依据 + 成本/时间标签
+- 输出格式套用 `references/work-modes-and-kpi.md` §15 或 `references/report-templates.md` 对应模板
 
 ## 4. Completion Protocol
 

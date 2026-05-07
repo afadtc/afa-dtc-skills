@@ -1,6 +1,11 @@
+---
+name: afa-geo
+description: "AI 搜索可见度与本地化搜索引擎——AEO/GEO 策略、AI 搜索优化、结构化数据、多语言本地化、hreflang 策略。Use when user mentions: AI搜索, AI search, GEO, AEO, 结构化数据, structured data, 本地化, localization, hreflang, 多语言, multi-language, ChatGPT搜索, Perplexity, AI推荐, AI可见度, 本地SEO, local SEO."
+---
+
 # afa-geo — AI 搜索可见度与本地化搜索引擎
 
-> **Supervisor**: afa-organic · **版本**：v2.4.6
+> **Supervisor**: afa-organic · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -60,25 +65,116 @@
 
 ## 3. Core Workflow
 
-**Step 1 — 范围界定**
-分类用户请求 → GEO 审计 | 内容重构 | 引用机会映射 | 本地化搜索适配。
+### Phase 1 — 边界检查与意图路由
 
-**Step 2 — 按需加载 references**
+1. 检查用户请求是否属于本模块职责：
+   - 若属于市场进入/定价/物流/贸易合规决策 → 通过 `completion.out_of_scope` 回交上层。
+   - 若属于传统 SEO 技术优化（纯爬虫/索引/反链）→ 回交 afa-seo。
+   - 若匹配 AI 搜索可见度/本地化搜索信号/内容结构适配 → 进入 Phase 2。
+2. 根据用户意图信号选择工作模式：
 
-| 请求类型 | 主要 refs | 辅助 refs |
+| 用户意图信号 | 工作模式 | 主加载 Reference |
 |:---|:---|:---|
-| GEO 审计/优化 | `references/geo-optimization-playbook.md` · `references/ai-visibility-audit.md` | `references/core-frameworks.md` (平台差异化/原子化) |
-| 引用机会识别/回答引擎优化 | `references/geo-optimization-playbook.md` | `references/core-frameworks.md` |
-| 本地化搜索适配 | `references/core-frameworks.md` | `references/work-modes-and-templates.md` |
-| 诊断/问题排查 | `references/diagnostic-system.md` | 按诊断结果加载对应 ref |
-| 工作模式/输出 | `references/work-modes-and-templates.md` | 按模式加载对应 ref |
-| 反模式/边界/危机 | `references/anti-patterns.md` | — |
+| AI 搜索曝光、品牌在 AI 中的引用、Perplexity/ChatGPT 可见度 | Mode 1: AI 可见度审计 | `work-modes-and-templates.md` Mode 1 + `ai-visibility-audit.md` + `geo-optimization-playbook.md` |
+| 内容重构、答案前置、可抽取性优化 | Mode 2: 内容结构重塑 | `work-modes-and-templates.md` Mode 2 + `geo-optimization-playbook.md` + `core-frameworks.md`（原子化章节） |
+| 跨市场搜索信号、地区查询差异、本地化搜索适配 | Mode 3: 跨市场搜索信号输入 | `work-modes-and-templates.md` Mode 3 + `core-frameworks.md`（本地化矩阵） |
+| AI 引用异常、零引用、引用失真（诊断类） | 诊断模式 | `diagnostic-system.md`（见 Phase 3） |
 
-**Step 3 — 执行**
-从 `references/work-modes-and-templates.md` 中运行匹配的工作模式；当存在多条建议时，应用 ICE 优先级排序。
+### Phase 2 — 数据收集与基线建立
 
-**Step 4 — 验证**
-交叉检查 `references/anti-patterns.md`（5 项致命错误 + 3 个边界场景）；确认所有建议都停留在 AI 搜索可见度、本地化搜索信号与内容适配层，不越界到市场进入、定价、物流或贸易合规决策。
+1. 收集 GEO 上下文：
+   - 构建核心查询词库（15-20词矩阵：品牌词 + 品类定义词 + 痛点解决词 + 竞品对比词）
+   - 确认竞品列表（直接竞品 + AI 搜索中高频被引用的品牌）
+   - 确认目标 AI 平台（默认三大核心：Google AIO / ChatGPT Browsing / Perplexity）
+   - 确认目标市场（单市场 vs 多市场）
+2. ⟐ **用户确认点**：展示查询词库和目标平台选择，确认后再进入执行。
+3. 加载 `references/core-frameworks.md` 建立基线：
+   - AI 语音份额追踪模型（SOAIV = 引用次数 / 总回答数，含平台权重和情感因子）
+   - 平台差异化偏好（§2：Google AIO 重传统SEO基础 / Perplexity 重数据权威 / ChatGPT 重Bing索引+第三方 / Claude 重逻辑严密性）
+   - 本地化搜索信号优先级矩阵（§3.1：X轴=搜索需求与内容机会，Y轴=本地化适配难度）
+4. 若 `market_scope = multi_market` → 优先进入 Mode 3（跨市场搜索信号输入）。
+
+### Phase 3 — 诊断（当用户描述 AI 搜索异常时触发）
+
+加载 `references/diagnostic-system.md`，按症状进入对应诊断路径：
+
+```
+症状 → 诊断路径路由：
+├── AI 零引用 → 模式一：robots.txt 封锁 → 内容可抽取性 → Schema 缺失 → 平台索引状态
+├── AI 引用失真 → 模式二：信息过时 → 结构化数据矛盾 → 多源一致性 → 更新频率
+├── 本地化搜索信号缺失 → 模式三：地区查询覆盖 → 本地实体清晰度 → 本地化转化支撑
+└── AI 声誉危机 → 模式四：负面引用源 → 信息供给策略 → 正面内容补充 → 监控机制
+```
+
+诊断完成后 → 使用 GEO 专属 ICE 框架对发现的问题排序 → 输出优先行动清单。
+
+**GEO 专属 ICE 排序标准**：
+
+| 维度 | 评分标准 (1-10) | GEO 专属考量 |
+|:---|:---|:---|
+| **Impact（影响力）** | 该修复对 AI 可见度的预期提升 | 10 = 解除技术拦截（如 robots.txt）；7 = 内容结构重塑（定义块+表格）；4 = 权威信号补充；1 = 微调 |
+| **Confidence（数据基础）** | 基于审计数据的成功把握 | 10 = 有明确的技术拦截证据；7 = 有竞品对比数据支撑；4 = 有行业最佳实践；1 = 纯假设 |
+| **Ease（易实施度）** | 实施所需的时间和技术门槛 | 10 = 修改配置即可；7 = 内容重写（1-2天）；4 = 需要第三方平台播种（持续性）；1 = 需要全站架构调整 |
+
+**优先级分层**：
+- **Quick Wins**（ICE ≥ 70）：技术拦截修复、已有页面添加 Schema
+- **Content Upgrade**（ICE 40-69）：核心页面内容重构、统计数据和专家引言补充
+- **Authority Building**（ICE < 40）：第三方平台播种、长期声誉建设
+
+### Phase 4 — 框架应用与执行
+
+1. 加载 `references/core-frameworks.md` 获取执行所需的底层框架：
+   - 2026 GEO 范式转变（从传统 SEO 到 AI 搜索可见性）
+   - 平台差异化优化策略（Google AIO / Perplexity / ChatGPT / Claude）
+   - GEO 内容原子化复用策略（定义块→社交 Hook、对比表→广告素材、FAQ→邮件序列）
+2. 按所选工作模式执行其 SOP：
+
+   **Mode 1: AI 可见度审计**（加载 `ai-visibility-audit.md`）：
+   - Step 1：手动多平台查询测试 → 记录6维度（触发/提及/位置/情感/竞品/来源URL）
+   - Step 2：竞品逆向工程 → 结构分析 + 权威分析 + 技术分析
+   - Step 3：技术拦截排查 → robots.txt 检查 + 渲染可提取性检查（禁用JS测试）
+   - Step 4：ICE 排序 → 输出优先级分层路线图（Quick Wins / Content Upgrade / Authority Building）
+   - Step 5：输出《AI 搜索可见度审计报告》（使用 `work-modes-and-templates.md` §3.1 模板）
+
+   **Mode 2: 内容结构重塑**（加载 `geo-optimization-playbook.md`）：
+   - Step 1：分析现有页面内容结构 → 识别散文段落、缺失的可抽取块
+   - Step 2：应用 GEO 内容模板 → 40-60词定义块 + 对比表格 + 专家引言块 + FAQ
+   - Step 3：Schema 标记建议 → FAQPage / Product / Article / HowTo（按页面类型选择）
+   - Step 4：添加权威信号 → 统计数据（带来源）+ 更新日期 + 专家署名
+   - Step 5：输出重构后的内容草稿 + Schema 实施建议
+
+   **Mode 3: 跨市场搜索信号输入**（加载 `core-frameworks.md` §3.1）：
+   - Step 1：多市场查询需求对比 → 各地区搜索兴趣 + 问答覆盖率 + SERP 结构差异
+   - Step 2：本地化适配难度评估 → 语言差异 + 内容重写量 + 知识源稀缺度
+   - Step 3：优先级矩阵定位 → Quick Wins / Strategic Builds / Opportunistic / Defer
+   - Step 4：输出《跨市场搜索信号输入备忘》（明确声明不输出市场进入决策）
+
+3. ⟐ **用户确认点**：展示执行结果和行动建议，确认优先级排序后再进入防护检查。
+4. 执行检查清单（`work-modes-and-templates.md` 中的发布前检查 + 跨市场适配检查）。
+
+### Phase 5 — 防护与质量检查
+
+加载 `references/anti-patterns.md` 进行最终检查：
+- 5 项致命错误交叉验证：
+  1. 关键词堆砌（会主动伤害 AI 可见性）
+  2. 盲目拦截 AI 爬虫（品牌在 AI 搜索中彻底隐形）
+  3. 忽视内容新鲜度/无日期标记（在竞争引用时败给标注近期更新的竞品）
+  4. 忽视 AI 情感倾向（负面背书比不被提及更具破坏性）
+  5. 跨平台信息不一致（导致引用失真或权威性降低）
+- 3 个边界场景确认：确保所有建议停留在 AI 搜索可见度、本地化搜索信号与内容适配层
+- **不越界到**：市场进入决策、定价、物流、贸易合规、预算、库存
+
+### Phase 6 — 降级策略（当数据不足时）
+
+当用户缺乏必要数据或工具时，按以下级别降级执行（来自 `anti-patterns.md` §3）：
+
+| 降级级别 | 缺失条件 | 替代方案 |
+|:---|:---|:---|
+| Level 1 | 缺少 GSC/Analytics 数据 | 使用手动多平台查询测试（ChatGPT + Perplexity + Google AIO），基于竞品对比进行定性分析 |
+| Level 2 | 缺少目标地区搜索数据或竞品信息 | 仅提供通用 GEO 优化模板（定义块、对比表、FAQ 结构），引导用户先在主市场完成基础内容重构 |
+| Level 3 | 缺少产品核心规格或权威背书 | 优先部署基础 Schema 标记（FAQPage + Product），确保页面结构清晰无技术拦截，建议后续补充真实评价或第三方评测 |
+
+降级时必须在输出中明确标注「当前为降级版本」并列出待补充项。
 
 ## 4. Completion Protocol
 

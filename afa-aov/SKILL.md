@@ -1,6 +1,11 @@
+---
+name: afa-aov
+description: "DTC 客单价提升与利润优化引擎——捆绑策略、Upsell/Cross-sell、定价心理学、产品组合优化、订单价值分析。Use when user mentions: 客单价, AOV, 提升客单价, average order value, upsell, cross-sell, 捆绑, bundle, 定价, pricing, 利润, profit margin, 订单价值, 折扣策略, discount strategy, 免邮门槛."
+---
+
 # afa-aov: DTC 客单价提升与利润优化引擎
 
-> **上层承接**：变现统筹层 · **版本**：v2.4.6
+> **上层承接**：变现统筹层 · **版本**：v2.4.7
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -58,25 +63,76 @@
 
 ## 3. Core Workflow
 
-### 3.1 策略与框架加载 (Strategy & Frameworks)
-- 加载 `references/core-frameworks.md` 获取 2026 AOV 优化新范式（5大范式转变）、订阅模式与 AOV 锁定、增强版利润模拟工作流、客户细分个性化推荐和公开价格测试方法论。
-- 加载 `references/threshold-engineering.md` 获取免邮/赠品门槛设定法则、阶梯式激励架构和凑单品矩阵。
-- 加载 `references/bundle-strategy.md` 获取三大核心捆绑模型、BYOB 策略和混合利润率计算。
-- 加载 `references/upsell-cross-sell.md` 获取全链路追加销售触点矩阵和购后一键追加 (OCU) 深度解析。
+### Phase 1 — 边界检查与意图路由
 
-### 3.2 诊断与反模式检查 (Diagnosis & Anti-Patterns)
-- 加载 `references/diagnostic-system.md` 获取 5 大诊断模式（AOV 停滞、促销利润、追加销售转化率低、订阅 AOV、捆绑包表现）及 ICE 优先级排序框架。
-- 加载 `references/anti-patterns.md` 获取禁止操作（4条）、边界规则（毛利率底线/价格倒挂）、Dropshipping 适配、降级策略和危机模式止血。
+1. 检查用户请求是否属于本模块职责：
+   - 若属于产品线扩展、广告投放、客户复购留存、邮件自动化、全局利润诊断 → 通过 `completion.out_of_scope` 回交上层。
+   - 若匹配本模块职责 → 进入 Phase 2。
+2. 根据用户意图信号选择工作模式：
 
-### 3.3 运营与执行体系 (Operations & Execution)
-- 加载 `references/promotion-strategy.md` 获取折扣类型选择矩阵、闪购剧本和盈亏平衡模拟器。
-- 加载 `references/dynamic-pricing.md` 获取价格弹性分析、公开价格测试方法论，以及基于库存与促销节奏的统一价格治理。
-- 加载 `references/cart-abandonment-recovery.md` 获取邮件挽回序列、动态折扣阶梯和折扣码防滥用机制。
+| 用户意图信号 | 工作模式 | 主加载 Reference |
+|:---|:---|:---|
+| 免邮门槛、赠品门槛、凑单策略 | Mode 1: 门槛架构设计 | `work-modes-and-templates.md` §2 Mode 1 + `threshold-engineering.md` |
+| 捆绑包、套装、BYOB | Mode 2: 捆绑包构建 | `work-modes-and-templates.md` §2 Mode 2 + `bundle-strategy.md` |
+| 促销活动、折扣策略、盈亏平衡 | Mode 3: 促销利润模拟 | `work-modes-and-templates.md` §2 Mode 3 + `promotion-strategy.md` + `dynamic-pricing.md` |
+| Upsell、Cross-sell、购后追加 | Mode 4: 全链路 Upsell 规划 | `work-modes-and-templates.md` §2 Mode 4 + `upsell-cross-sell.md` |
+| 订阅 AOV、Subscribe & Save | Mode 5: 订阅 AOV 优化 | `work-modes-and-templates.md` §2 Mode 5 + `core-frameworks.md`（订阅模式与 AOV 锁定） |
+| AOV 停滞/下降、指标异常（诊断类） | 诊断模式 | `diagnostic-system.md`（见 Phase 3） |
 
-### 3.4 衡量与输出 (Measurement & Output)
-- 加载 `references/aov-kpi-dashboard.md` 获取核心 AOV 指标定义、健康标准和监控频率。
-- 加载 `references/benchmark-data.md` 获取各品类 AOV 基准、促销转化率和盈亏平衡参考表。
-- 加载 `references/work-modes-and-templates.md` 获取 5 大工作模式（门槛设计、捆绑包构建、促销利润模拟、全链路 Upsell、订阅 AOV 优化）、KPI 体系、淡季 AOV 策略及对应输出模板。
+### Phase 2 — 数据收集与基线建立
+
+1. 按所选工作模式的输入要求（`work-modes-and-templates.md` §2）收集必要数据（产品目录/定价/COGS/当前 AOV/订单分布）。
+2. 加载 `references/benchmark-data.md` 建立品类 AOV 基准对照。
+3. 加载 `references/aov-kpi-dashboard.md` 确定核心监控指标。
+4. 若 `supply_chain_mode = dropshipping` → 调整门槛和捆绑建议的库存可行性约束。
+
+⟐ **用户确认点**：
+- Mode 1（门槛架构）：门槛数值和分层策略确定后展示给用户确认，再进入实施方案
+- Mode 3（促销利润模拟）：盈亏平衡计算结果展示给用户确认，再输出最终促销方案
+
+### Phase 3 — 诊断（当用户描述 AOV 指标异常时触发）
+
+加载 `references/diagnostic-system.md`，按症状进入对应诊断模式：
+
+```
+症状 → 诊断模式路由：
+├── AOV 停滞/下降 → 模式一：订单分布分析 → 客群结构变化 → 产品组合漂移
+├── 促销后利润下降 → 模式二：折扣深度审计 → 盈亏平衡模拟 → 折扣护栏检查
+├── 追加销售转化率低 → 模式三：触点位置审计 → Offer 匹配度 → 时机与体验检查
+├── 订阅 AOV 下滑 → 模式四：订阅组合分析 → 降级/取消模式 → 锁定策略评估
+└── 捆绑包表现差 → 模式五：组合逻辑审计 → 定价感知 → 展示位置与时机
+```
+
+诊断完成后 → 使用 ICE 框架对发现的问题排序 → 输出优先行动清单。
+
+### Phase 4 — 框架应用与执行
+
+1. 加载 `references/core-frameworks.md` 获取执行所需的底层框架：
+   - 5 大范式转变（从全场折扣→智能门槛、从固定捆绑→BYOB、从单次追加→全链路、从固定定价→动态测试、从一次性→订阅锁定）
+   - 增强版利润模拟工作流：确保每个方案不侵蚀毛利
+   - 客户细分个性化推荐：不同客群不同策略
+2. 按所选工作模式执行其 SOP，按需加载对应深度参考：
+   - `threshold-engineering.md` → 门槛设计法则
+   - `bundle-strategy.md` → 捆绑模型与利润率计算
+   - `promotion-strategy.md` → 折扣矩阵与盈亏模拟
+   - `upsell-cross-sell.md` → 触点矩阵与 OCU 设计
+   - `dynamic-pricing.md` → 价格测试与治理
+   - `cart-abandonment-recovery.md` → 挽回序列与折扣防滥用
+3. 所有方案必须经过**利润模拟验证**（`core-frameworks.md` 增强版利润模拟工作流）：
+   - 每个方案必须计算：边际贡献利润率变化、客单数量影响、净收入影响
+   - 毛利率底线：任何方案不得使毛利率低于品牌设定的最低可接受线
+   - 若用户未提供 COGS：标注“利润模拟待验证”，先给策略框架，不给具体数值承诺
+4. 若 `seasonal_mode = off_season` → 加载 `work-modes-and-templates.md` 淡季 AOV 策略章节。
+   若 `crisis_mode = cash_crisis` → 优先低成本快速见效的 AOV 提升动作。
+
+### Phase 5 — 防护与质量检查
+
+加载 `references/anti-patterns.md` 进行最终检查：
+- 4 条禁止操作交叉验证
+- 毛利率底线检查：确保无任何方案突破利润护栏
+- 价格倒挂检查：确保捆绑/门槛不产生价格矛盾
+- Dropshipping 适配：供应链模式下的特殊约束
+- 降级策略（Level 1-3）：信息不足时的保守输出规则
 
 ## 4. Completion Protocol
 

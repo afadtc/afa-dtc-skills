@@ -1,6 +1,11 @@
+---
+name: afa-monetize
+description: "变现与留存 Supervisor——统筹转化优化、客户体验、用户留存、客单价提升、邮件营销、SMS 营销的全流程路由与协同。Use when user mentions: 变现, monetization, 留存, retention, 转化+留存, 提升收入, revenue growth, 客户价值, customer value, LTV提升, 复购+转化, 变现策略."
+---
+
 # afa-monetize — 变现与留存 Supervisor
 
-> **层级**：Supervisor（中层路由器）· **版本**：v2.4.6
+> **层级**：Supervisor（中层路由器）· **版本**：v2.4.7
 > **管辖 Worker**：afa-convert · afa-cx · afa-retain · afa-aov · afa-email · afa-sms
 
 ---
@@ -140,6 +145,26 @@ completion:
   └── 不确定 → 建议先看数据（回传 Hub → afa-dashboard）
 ```
 
+### 诊断路由（当用户描述变现/留存异常时）
+
+当用户描述的是异常现象而非明确任务时，按以下症状快速路由到对应 Worker 的诊断模式：
+
+```
+症状 → 诊断路由：
+├── 转化率下降 / 弹出率高 / 加购率低 → afa-convert（微转化漏斗诊断）
+├── 复购率下降 / LTV 下滑 / 流失率升高 → afa-retain（RFM 诊断 + 生命周期分析）
+├── 客单价下降 / 捆绑无人买 / 追加销售失败 → afa-aov（阈值/捆绑/促销利润诊断）
+├── 邮件打开率低 / 点击率低 / Flow 收入下降 → afa-email（三棵诊断决策树）
+├── SMS 回复率低 / 退订率高 → afa-sms（诊断模式）
+├── NPS 下降 / 工单飙升 / 退货率异常 → afa-cx（6 棵诊断决策树）
+└── 多个指标同时异常 / 不确定根因 → 回传 Hub → afa-diagnose（全局诊断）
+```
+
+诊断路由原则：
+- 单一指标异常 → 直接路由到对应 Worker。
+- 多指标交叉异常 → 优先路由到漏斗最上游的 Worker（convert → cx → retain → aov）。
+- 无法判断根因 → 回传 Hub 进入全局诊断。
+
 ---
 
 ## 4. 多 Worker 协调工作流
@@ -152,6 +177,8 @@ completion:
 执行链：
   Step 1 → afa-retain（留存策略制定）
     输出：RFM 分层方案 + 留存策略蓝图
+    ↓
+  ⟐ 用户确认点：展示留存策略蓝图和渠道优先级排序，确认执行范围后再继续
     ↓
   Step 2 → afa-email（核心邮件流搭建）
     输出：欢迎序列 + 弃购挽回 + 购后培育 + Win-back
