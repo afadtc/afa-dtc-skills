@@ -1,0 +1,11 @@
+{
+  "name": "afa",
+  "version": "2.4.7",
+  "description": "AFA DTC 全链路独立站操盘系统完整包。/afa 入口自动路由到品牌基建、付费获客、有机增长、变现留存、运营扩张五大业务线，共 30 个 Skill。",
+  "author": {
+    "name": "afadtc"
+  },
+  "repository": "https://github.com/afadtc/afa-dtc-skills",
+  "license": "CC-BY-NC-4.0",
+  "keywords": ["dtc", "ecommerce", "shopify", "meta-ads", "google-ads", "tiktok", "growth", "chinese"]
+}

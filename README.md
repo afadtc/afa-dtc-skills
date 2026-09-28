@@ -537,25 +537,44 @@ core-frameworks.md / benchmark-database.md / nsm-playbook.md / diagnostic-system
 
 ## 如何安装
 
-### npx 一键安装（推荐）
+### 方式一：Claude 插件安装（claude.ai / Claude 桌面版 / Cowork，推荐）
+
+本仓库自带 `.claude-plugin/marketplace.json`，可以直接作为 Claude 插件市场添加，30 个 Skill 打包成一个插件 `afa`，之后在 Claude 里一键更新。
+
+1. 打开 Claude 左侧 **Customize → Plugins**
+2. 点 **Add → Add marketplace → Add from a repository**，填 `afadtc/afa-dtc-skills`
+3. 在市场里找到 **afa** 插件，点 **Add**
+
+安装后，插件里的 30 个 Skill 会同时出现在 claude.ai 网页、Claude 桌面版、Cowork 和登录同一账号的 Claude Code 中。
+
+### 方式二：Claude Code 命令行
+
+```shell
+claude plugin marketplace add afadtc/afa-dtc-skills
+claude plugin install afa@afa-dtc-skills
+```
+
+### 方式三：npx 一键安装（Cursor / Codex / Cline 等其他 Agent）
 
 ```shell
 npx skills add afadtc/afa-dtc-skills
 ```
 
-### 手动安装
+### 方式四：手动安装
 
 ```shell
 git clone https://github.com/afadtc/afa-dtc-skills.git
 ```
 
-将模块目录复制到 `~/.claude/skills/` 或项目的 `.claude/skills/` 目录下即可。
+将 `skills/` 下的模块目录复制到 `~/.claude/skills/` 或项目的 `.claude/skills/` 目录下即可。
 
 ---
 
 ## 如何更新
 
-重新运行安装命令即可，安装和更新用同一条命令：
+- **Claude 插件方式**：仓库更新后，在 **Customize → Plugins** 里对 `afa` 插件执行一次更新即可
+- **Claude Code 命令行**：`claude plugin marketplace update afa-dtc-skills`，然后 `claude plugin update afa@afa-dtc-skills`
+- **npx 方式**：重新运行安装命令即可，安装和更新用同一条命令：
 
 ```shell
 npx skills add afadtc/afa-dtc-skills
@@ -567,50 +586,55 @@ npx skills add afadtc/afa-dtc-skills
 
 ```
 afa-dtc-skills/
-├── afa/                        # Hub — 系统入口与工作流编排
-│   ├── SKILL.md
-│   ├── _system/                # 系统级规则（路由、交接、铁律等）
-│   └── references/             # 路由清单、诊断规则、案例库等
+├── .claude-plugin/
+│   ├── marketplace.json        # Claude 插件市场清单（发版时改 version，plugin.json 同步改）
+│   └── plugin.json             # 插件 afa 的元数据
 │
-├── afa-diagnose/               # 全局诊断引擎
-├── afa-dashboard/              # 全局数据中枢
-│
-├── afa-foundation/             # Supervisor: 品牌与产品基建
-│   └── Workers:
-│       ├── afa-explore/        #   市场探索
-│       ├── afa-compete/        #   竞争情报
-│       ├── afa-brand/          #   品牌定位
-│       ├── afa-product/        #   产品策略
-│       └── afa-launch/         #   产品上市
-│
-├── afa-paid/                   # Supervisor: 付费获客
-│   └── Workers:
-│       ├── afa-creative/       #   创意生产
-│       ├── afa-fb/             #   Meta 广告
-│       ├── afa-gg/             #   Google Ads
-│       └── afa-tt/             #   TikTok 广告
-│
-├── afa-organic/                # Supervisor: 有机增长
-│   └── Workers:
-│       ├── afa-seo/            #   SEO
-│       ├── afa-social/         #   社交内容
-│       ├── afa-influencer/     #   网红营销
-│       ├── afa-pr/             #   品牌公关
-│       └── afa-geo/            #   AI 搜索可见度
-│
-├── afa-monetize/               # Supervisor: 变现与留存
-│   └── Workers:
-│       ├── afa-convert/        #   转化率优化
-│       ├── afa-cx/             #   客户体验
-│       ├── afa-retain/         #   用户留存
-│       ├── afa-aov/            #   客单价提升
-│       ├── afa-email/          #   邮件营销
-│       └── afa-sms/            #   SMS 营销
-│
-├── afa-scale/                  # Supervisor: 运营与扩张
-│   └── Workers:
-│       ├── afa-ops/            #   运营优化
-│       └── afa-expand/         #   渠道扩张
+├── skills/                     # 全部 30 个 Skill
+│   ├── afa/                    # Hub — 系统入口与工作流编排
+│   │   ├── SKILL.md
+│   │   ├── _system/            # 系统级规则（路由、交接、铁律等）
+│   │   └── references/         # 路由清单、诊断规则、案例库等
+│   │
+│   ├── afa-diagnose/           # 全局诊断引擎
+│   ├── afa-dashboard/          # 全局数据中枢
+│   │
+│   ├── afa-foundation/         # Supervisor: 品牌与产品基建
+│   │   └── Workers:
+│   │       ├── afa-explore/    #   市场探索
+│   │       ├── afa-compete/    #   竞争情报
+│   │       ├── afa-brand/      #   品牌定位
+│   │       ├── afa-product/    #   产品策略
+│   │       └── afa-launch/     #   产品上市
+│   │
+│   ├── afa-paid/               # Supervisor: 付费获客
+│   │   └── Workers:
+│   │       ├── afa-creative/   #   创意生产
+│   │       ├── afa-fb/         #   Meta 广告
+│   │       ├── afa-gg/         #   Google Ads
+│   │       └── afa-tt/         #   TikTok 广告
+│   │
+│   ├── afa-organic/            # Supervisor: 有机增长
+│   │   └── Workers:
+│   │       ├── afa-seo/        #   SEO
+│   │       ├── afa-social/     #   社交内容
+│   │       ├── afa-influencer/ #   网红营销
+│   │       ├── afa-pr/         #   品牌公关
+│   │       └── afa-geo/        #   AI 搜索可见度
+│   │
+│   ├── afa-monetize/           # Supervisor: 变现与留存
+│   │   └── Workers:
+│   │       ├── afa-convert/    #   转化率优化
+│   │       ├── afa-cx/         #   客户体验
+│   │       ├── afa-retain/     #   用户留存
+│   │       ├── afa-aov/        #   客单价提升
+│   │       ├── afa-email/      #   邮件营销
+│   │       └── afa-sms/        #   SMS 营销
+│   │
+│   └── afa-scale/              # Supervisor: 运营与扩张
+│       └── Workers:
+│           ├── afa-ops/        #   运营优化
+│           └── afa-expand/     #   渠道扩张
 │
 ├── LICENSE
 └── README.md

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "afa-dtc-skills",
+  "owner": {
+    "name": "afadtc"
+  },
+  "metadata": {
+    "description": "AFA DTC 全链路独立站操盘系统 — 1 个 Hub + 5 个 Supervisor + 2 个全局引擎 + 22 个 Worker，共 30 个 Skill",
+    "version": "2.4.7"
+  },
+  "plugins": [
+    {
+      "name": "afa",
+      "description": "AFA DTC 全链路独立站操盘系统完整包。/afa 入口自动路由到品牌基建、付费获客、有机增长、变现留存、运营扩张五大业务线，共 30 个 Skill。",
+      "source": "./",
+      "version": "2.4.7",
+      "category": "business",
+      "keywords": ["dtc", "ecommerce", "shopify", "meta-ads", "google-ads", "tiktok", "growth", "chinese"]
+    }
+  ]
+}
