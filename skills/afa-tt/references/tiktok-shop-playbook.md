@@ -2,7 +2,7 @@
 
 > 本文件为 TikTok 广告模块的内部参考文件，用于 TikTok Shop US/UK/SEA 场景下的开店、运营、流量与双轨协同策略整理。
 > 如需整理为用户可见交付物，必须删除内部路由标签、模块代号和系统字段，只保留自然语言、业务角色与行动建议。
-> 如需追溯职责边界、最终裁决或与其他协议冲突时的优先级，以当前模块 `SKILL.md` 与 `_system/` 全局协议为准。
+> 如需追溯职责边界、最终裁决或与其他协议冲突时的优先级，以当前模块 `SKILL.md` 与 `../../afa/_system/` 全局协议为准。
 
 ---
 
@@ -143,6 +143,15 @@ GMV Max 是 TikTok Shop 的 AI 驱动广告系统，类似 Meta 的 ASC：
 - **自动优化**：AI 自动选择最佳受众、出价和版位
 - **目标**：最大化 GMV（商品交易总额）
 - **素材来源**：自动抓取店铺视频 + 直播片段
+
+**2026 现状（必读）：**
+
+- **GMV Max 自 2026 年 7 月起成为所有 TikTok Shop 广告的默认类型**——迁移当月生效，最高优先级。操盘默认从 GMV Max 起步，手动系列仅在有明确理由时保留。
+- **ROI 口径已改为"综合口径"**：GMV Max 的 ROI/成本已把**联盟（Affiliate）佣金、优惠券、平台费**计入，读数天然低于只算广告费的旧口径——设定 ROI 目标与跨期对比时必须用同一口径，不要拿新口径的 GMV Max 去比旧口径的手动系列。
+- **Smart+ 统一投放流**：TikTok 把投放收敛为 Smart+ 三档——**全自动 / 半自动 / 全手动**，配 **Auto Selection**（自动分析创作者内容、商品目录与 AI 素材）与 Music Autofix。半自动是"AI 监督者"的甜点：保留关键约束，其余交给算法。
+- **Creative Hub 与 TikTok World 2026 新工具**：GMV Max Creative Hub（集中管理供 AI 调用的素材池）、Symphony（AI 创意）、TopReach、Search Hubs、Spillover Reporting（跨系列外溢归因）——素材侧的核心动作从"逐条投放"转向"喂饱素材池 + 监督裁决"。
+
+> **来源**：[TikTok 官方：GMV Max 迁移文档](https://ads.tiktok.com/help/article/gmv-max-migration-tiktok-shop-ads)；[TheKeyword：GMV Max ROI 口径含佣金/优惠券/平台费](https://www.thekeyword.co/news/tiktok-gmv-max-update-seller-costs)；[TikTok Newsroom：Smart+ 自动化更新](https://newsroom.tiktok.com/tiktok-announces-new-automation-updates-for-advertisers?lang=en)；[ALM：TikTok World 2026 新工具汇总](https://almcorp.com/blog/tiktok-world-2026-ad-tool-announcements/)。核实于 2026-07。
 
 ### 3.2 GMV Max 启动 SOP
 

@@ -1,7 +1,7 @@
 # AFA DTC 模块全局字典
 > **协议层级**：全局参考 · Supervisor 越界路由时查阅
 >
-> **版本**：v2.4.7
+> **版本**：v2.6
 > 本文件为 Supervisor 和 Hub 提供全局拓扑视野。当 Worker 通过 `completion.out_of_scope` 结构化回交时，Supervisor 根据本字典判断应将用户引导至哪个方向，并默认沿主问题给出最自然的下一步；只有在出现真实方向分叉、资源投入差异或高风险执行动作时，才请求用户拍板。
 >
 > **display_name 规范**：`display_name` 是面向用户输出时使用的模块显示名称。根据铁律 2，所有面向用户的输出（包括 Visible Loading、WHAT'S NEXT、Header、话术模板、越界转向说明）必须使用 `display_name`，严禁暴露 `afa-` 前缀的内部代号。
@@ -63,7 +63,7 @@
 | **afa-retain** | 用户留存引擎 | 用户留存与 LTV 增长：RFM 分层、Cohort 分析、复购策略、会员体系和流失预警。 |
 | **afa-aov** | 客单价优化引擎 | 客单价优化：门槛设计、捆绑策略、追加销售和交叉销售的科学化提升。 |
 | **afa-email** | 邮件营销引擎 | 邮件营销引擎：自动化流设计、Campaign 文案、可交付性诊断和列表健康度管理。 |
-| **afa-sms** | SMS 营销引擎 | SMS 营销引擎：短信营销策略、自动化流架构、文案撰写和跨渠道协同。 |
+| **afa-sms** | SMS 营销引擎 | SMS 营销引擎：短信营销策略、自动化流架构、文案撰写和跨渠道协同；含 WhatsApp/RCS 富媒体分册（whatsapp-rcs-playbook）。 |
 
 ## Scale 组（运营与扩张引擎）
 
@@ -71,3 +71,17 @@
 |:---|:---|:---|
 | **afa-ops** | 运营效率引擎 | 运营效率与供应链优化：库存管理、履约优化、客服效率和运营成本控制。 |
 | **afa-expand** | 全渠道扩张引擎 | 全渠道扩张策略：通过 MEURO 框架评估渠道时机，支持亚马逊、批发、跨国等多元化扩展决策。 |
+| **afa-payments** | 支付风控引擎 | 支付风控与争议率管理：VAMP 自查、chargeback 反驳、Stripe/PayPal 冻结应对、支付组合与欺诈过滤。 |
+
+
+## 跨模块协同映射（内部路由，仅供系统使用）
+
+### PR × UGC
+> 由 afa-pr `../../afa-pr/references/ugc-community-flywheel.md` §3.2 上移至此，避免在 references 正文暴露内部代号。
+
+| 步骤 | 动作 | 协同方 |
+|:---|:---|:---|
+| 素材发现 | 从 UGC 资产库筛选适合 PR 的高质量素材 | afa-social（资产库管理） |
+| 授权确认 | 确认素材授权范围是否覆盖媒体使用 | afa-social（权利管理） |
+| 媒体包制作 / Pitch 嵌入 | 整合进 Media Kit、作为社会证明引用 | afa-pr（本模块执行） |
+| 效果追踪 | 追踪含 UGC 的 Pitch 媒体采纳率 | afa-dashboard（数据追踪） |

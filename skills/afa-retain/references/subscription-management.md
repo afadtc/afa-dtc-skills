@@ -5,6 +5,29 @@
 
 ---
 
+## 0. 订阅合规现状事实卡（2025-2026，必读）
+
+> 事实卡，非法律意见。以下为截至 2026-07 的公开监管动态，具体适用以法务意见与支付/订阅服务商最新政策为准。
+
+**别误读"联邦规则没了就自由了"——州法与卡组织标准仍在管你。**
+
+| 项 | 现状 |
+|---|---|
+| FTC「Click-to-Cancel」规则 | **2025-07-08 被第八巡回法院整体废除**，理由是程序瑕疵（FTC 未做法定的初步监管分析），**未否定其实体要求** |
+| FTC 重启 | **2026-01-30 向 OMB/OIRA 递交 ANPRM 草案，2026-03-11 正式发布 ANPRM** 重启订阅/负选项规则制定；后续还要经提案规则→听证→终稿，**成文尚需数年** |
+| 仍然有效（不受废除影响） | ROSCA 联邦法、FTC 法第 5 条执法、**约 30 个州的自动续费法**（CA/NY/CO/DC 明确：线上开通的订阅必须可**线上取消**）、Visa/Mastercard 订阅商户标准 |
+
+**可执行动作（无论联邦规则是否成文，都建议照做）：**
+
+- 开通前**清晰披露**续费条款 + 取得**针对订阅的明确同意**；
+- 提供与开通**同样简单的线上取消**路径（尤其面向 CA/NY/CO/DC 客户）；
+- 保留同意、扣款、取消的可追溯记录；
+- 取消流程不设"暗黑模式"障碍（多步挽留、强制客服电话等易触州法与卡组织标准）。
+
+> **专业升级触发器**：收到 AG/FTC 问询、集体诉讼威胁、或进入受严管州时，交由消费者保护律师评估。
+
+> **来源**：[DLA Piper：第八巡回法院废除 Click-to-Cancel（2025-07）](https://www.dlapiper.com/en-us/insights/publications/2025/07/ftcs-click-to-cancel-rule-voided)；[Crowell：FTC 重启规则制定](https://www.crowell.com/en/insights/client-alerts/clicking-all-the-right-boxes-ftc-moves-to-revive-click-to-cancel-rule-following-eighth-circuit-vacatur)；[Kirkland：2026-03 FTC 重启订阅规则](https://www.kirkland.com/publications/kirkland-alert/2026/03/ftc-restarts-subscription-rulemaking)；[Holland & Knight：订阅执法与州法](https://www.hklaw.com/en/insights/publications/2025/09/ftc-steps-up-subscription-enforcement-after-click-to-cancel-rule)。核实于 2026-07。
+
 ## 1. 订阅双轮防流失模型 (Dual-Wheel Churn Prevention)
 
 订阅流失分为两类：主动流失（Voluntary Churn，客户主动取消）和被动流失（Involuntary Churn，支付失败）。通常应双管齐下。
@@ -33,7 +56,7 @@
 
 **核心策略：智能重试与多渠道触达**
 
-**Dunning (催款) 序列最佳实践：**
+**Dunning (催款) 序列最佳实践：**（本节管挽留/沟通序列；扣款失败的**通道侧**杠杆——卡账户自动更新、智能重试窗口、网关配置——归支付风控引擎，内部：afa-payments）
 
 | 阶段 | 时间点 | 动作 | 渠道 | 沟通基调 |
 |------|--------|------|------|----------|

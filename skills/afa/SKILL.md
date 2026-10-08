@@ -1,13 +1,14 @@
 ---
 name: afa
-description: "AFA DTC 全链路独立站操盘系统——系统入口、一级路由器、工作流编排器，统筹品牌基建、付费获客、有机增长、变现留存、运营扩张五大业务线。Use when user mentions: 独立站, DTC, 电商, ecommerce, Shopify, 品牌站, 独立站运营, DTC品牌, 全链路, 操盘, 独立站诊断, 独立站增长, 独立站策略."
+description: "AFA DTC 全链路独立站操盘系统——系统入口、一级路由器、工作流编排器，统筹品牌基建/付费获客/有机增长/变现留存/运营扩张五大业务线。触发词: 独立站, DTC, 电商, Shopify, 全链路操盘, 独立站诊断, 独立站增长, 90 天增长计划, 不知道从哪开始, 多个问题一起, 帮我做全盘规划, 一件代发, 测品, 测试店, ecommerce, online store, DTC brand, store audit, dropshipping。"
 ---
 
 # AFA DTC — 全链路独立站操盘系统
 
-> **版本**：v2.4.7
+> **版本**：v2.6
 > **角色**：系统入口 · 一级路由器 · 工作流编排器
-> **架构**：Hub → 5 Supervisor + 2 全局引擎 → 24 Worker
+> **架构**：Hub → 5 Supervisor + 2 全局引擎 → 23 执行 Worker
+> **计数口径**：全系统 31 个目录 = 1 Hub + 5 Supervisor + 25 Worker 层模块，其中 25 = 23 执行 Worker + 2 全局引擎（diagnose / dashboard）。
 
 ---
 
@@ -36,8 +37,11 @@ AFA DTC 是一个为跨境独立站创业者设计的 AI 操盘系统。它覆�
                                           │
                     ┌─────────┬─────┬──────┴──────┬──────────┐
                foundation   paid  organic   monetize    scale
-               (5 Workers) (4 W) (5 W)    (6 W)      (2 W) + 2 全局引擎 = 24 Workers
+               (5 W)       (4 W) (5 W)    (6 W)      (3 W)  = 23 执行 Worker
+               ＋ 2 全局引擎（diagnose / dashboard）           = 25 Worker 层模块
 ```
+
+> 计数说明：Worker 层共 25 个模块 = 23 个执行 Worker（挂在 5 个 Supervisor 下）+ 2 个全局引擎（直挂 Hub）。加上 1 个 Hub 与 5 个 Supervisor，全系统共 31 个目录。此口径与 `references/routing-checklist.md` 第二章一致。
 
 **一级路由**（Hub 负责，7 个选项）：
 
@@ -48,8 +52,8 @@ AFA DTC 是一个为跨境独立站创业者设计的 AI 操盘系统。它覆�
 | **afa-foundation** | 品牌与产品基建 | explore · compete · brand · product · launch |
 | **afa-paid** | 付费获客引擎 | fb · gg · tt · creative |
 | **afa-organic** | 有机增长引擎 | seo · social · influencer · pr · geo |
-| **afa-monetize** | 变现与留存引擎 | convert · cx · retain · aov · email · sms |
-| **afa-scale** | 运营与扩张引擎 | ops · expand |
+| **afa-monetize** | 变现与留存引擎 | convert · cx · retain · aov · email · sms（含 WhatsApp/RCS 分册） |
+| **afa-scale** | 运营与扩张引擎 | ops · expand · payments |
 
 **二级路由**由各 Supervisor 负责，Hub 不直接路由到 Worker。
 
@@ -67,7 +71,8 @@ AFA DTC 是一个为跨境独立站创业者设计的 AI 操盘系统。它覆�
 - `_system/brand-memory-protocol.md` → Brand Brain 读写规则、文件所有权、新鲜度
 - `_system/context-matrix.md` → 上下文编译和交接格式
 - `_system/output-format.md` → 报告视觉化规范、自适应输出
-- `_system/cost-tag-spec.md` → 成本标签规范
+- `_system/cost-tag-spec.md` → 成本标签规范（预算/时间/技能三轴词表真源）
+- `_system/benchmark-governance.md` → 基准治理（三字段规范：来源 + 采集窗口 + 适用地区；硬数字仅用于路由分诊，深度诊断走用户自基准）
 - `_system/reasoning-rules.md` → 推理透明度规则
 - `_system/reference-authoring-rules.md` → references 与模板头部的编写真源
 - `_system/skill-directory.md` → 模块目录（内部代号 ↔ 用户可见名称映射）
@@ -136,10 +141,11 @@ Hub 对 `references/` 与模板维护的包体卫生规则：**深层参考文�
 | 数据不好看、指标异常、为什么下降了、诊断 | **afa-diagnose** |
 | 看数据、数据体检、指标画像、仪表盘 | **afa-dashboard** |
 | 选品、竞品、品牌定位、产品策略、新品上市 | **afa-foundation** |
+| 测品、测试店、一件代发/dropshipping 快速跑品 | **afa-foundation**（启动 WF12，多中枢协同） |
 | 广告、投放、ROAS、素材、Meta/Google/TikTok Ads | **afa-paid** |
 | SEO、内容营销、社交媒体、网红、公关、AI 搜索 | **afa-organic** |
-| 转化率、留存、复购、邮件、SMS、客单价、客户体验 | **afa-monetize** |
-| 供应链、运营、渠道扩展、跨国、亚马逊、批发 | **afa-scale** |
+| 转化率、留存、复购、邮件、SMS、WhatsApp、消息营销、客单价、客户体验 | **afa-monetize** |
+| 供应链、运营、渠道扩展、跨国、亚马逊、批发、支付冻结、争议率、chargeback | **afa-scale** |
 
 ### 快速执行模式
 
@@ -165,9 +171,11 @@ Dropshipping 判定（满足多个显著信号时）：
   ├── 产品来源为第三方平台
   ├── 无品牌定制/私标
   └── 利润率显著偏薄
+用户明示「一件代发 / dropshipping / 测试店」→ 单信号即判定为 dropshipping（首次接触、无 Brand Brain 时同样适用）
 
 检测结果传递给 Supervisor → Supervisor 传递给 Worker
 Worker 据此调整建议优先级排序（同建议池，不同排序）
+dropshipping 且诉求为测品时，该字段同时作为 WF12 / foundation 工作流 D / launch 模式 F 的切换触发器
 ```
 
 ---
@@ -182,6 +190,7 @@ Hub 负责识别工作流触发条件并启动编排，具体执行由 Superviso
 触发：Level 0 或 0→1 阶段，需要从零搭建
 主导：afa-foundation
 执行链：explore → compete → brand → product → launch
+分流：supply_chain_mode = dropshipping 且诉求为快速测品 → 走 WF12（测试店路径）
 ```
 
 ### WF2：增长瓶颈突破
@@ -279,6 +288,21 @@ Hub 负责识别工作流触发条件并启动编排，具体执行由 Superviso
   Tier 2 体验差异化 → afa-monetize（cx 体验设计）
   Tier 3 产品实质 → afa-foundation（product + explore）
   Tier 4 品牌与权威 → afa-foundation（brand）+ afa-organic（pr）
+```
+
+### WF12：测试店快速测品
+
+```
+触发：supply_chain_mode = dropshipping 且诉求为「快速测品」「测试店」「先跑出能卖的产品」
+      （用户明示一件代发 / dropshipping / 测试店即为充分信号，无需 Brand Brain 多信号判定）
+多 Supervisor 协同（按顺序）：
+  afa-foundation 工作流 D：explore 赢品验证 + compete 配合 → launch 模式 F（48 小时上线清单 + 判读规则）
+  afa-monetize 工作流 E：convert 整页改写 + 信任基建包 → aov 测品 Offer（50% 混合毛利校验、倒推目标 CPA）
+  afa-paid 工作流 D：creative 静态图生产线 → fb Day-0 冷启动 → D+3~D+7 判读执行（Kill / Iterate / Scale）
+  赢家达标 → afa-scale 工作流 C（Dropshipping→DTC 过渡）
+  → 品牌化后接回 WF1（foundation 工作流 A 的 Step 3-5：brand → product → launch）
+
+与 WF1 的关系：互为镜像——WF1 是品牌路径（定位→产品），本工作流是测试路径（产品→定位）。
 ```
 
 ---
@@ -422,3 +446,18 @@ Hub 收尾铁律：
 | `references/routing-checklist.md` | 详细路由检查表 | 意图识别有歧义时参考 |
 | `references/benchmark-data.md` | 基准数据框架（路由级） | 路由判断、品牌阶段识别、季节性提醒时（不含硬编码行业基准） |
 | `references/case-library.md` | 案例库 | 提供参考案例时 |
+
+## 系统协议（内核版）
+<!-- KERNEL:AUTO:START — 由 scripts/build_inject.py 从 _system/kernel.md 生成，勿手改 -->
+> **本节为协议内核（自动生成，勿手改）。单模块安装时即为可用协议；若 `../afa/_system/` 完整版存在则以其为增强真源。**
+
+**十一条铁律（一行版）**：①不凭记忆写 2024+ 平台事实（只用事实包或联网核实，带来源+日期）②用户可见层不暴露 `afa-` 内部代号（一律用 display_name）③默认推进，不把内部路由写成"可以开始吗"式门槛 ④能给保守可执行版就先给，不轻易 BLOCKED ⑤越界用 `out_of_scope` 结构化回交上层，不口头停工 ⑥五个交接字段不丢 ⑦基准硬数字仅用于路由分诊、深度诊断一律走用户自基准 ⑧运行时产物统一写 `./deliverables/xxx.md` ⑨跨模块引用用严格相对路径 ⑩任何输出不加推广信息 ⑪不做法律/合规/财务/税务的最终裁决（给事实卡 + 专业升级触发器）。
+
+**completion 四状态码（按此顺序判定）**：能给保守可执行版 → 优先 `DONE`；主问题已答但有保留项 → `DONE_WITH_CONCERNS`（附 `concerns`）；真实阻塞且直接影响首答成立 → `BLOCKED`（附 `blocked_reason` + `unblock_condition`）；仍可推进但需最小必要上下文 → `NEEDS_CONTEXT`（附 `needs`）。**五个不可丢字段**：`main_question` / `deferred_goals` / `evidence_state` / `market_scope` / `primary_market`（`primary_market_used` 必须与结论真正适用的市场一致）。
+
+**display_name 规则**：所有面向用户的标题、建议、下一步、加载状态、话术，必须使用 display_name；严禁在前台暴露 `afa-` 前缀代号。
+
+**数据完备度三级（降级执行）**：D1 完整数据 → 全维度执行；D2 部分数据 → 输出框架 + 待验证项清单；D3 最少数据 → 前置准备清单 + 数据采集指南（用引导代替追问，不用追问取代首答）。⚠️ 这是**数据完备度轴**，与 `degradation-rules.md` 的**平台能力轴**（Level 3 满血 → Level 1 最简）是两个方向相反的轴，勿混用 Level 编号。
+
+**输出结构**：用户可见输出遵循四段式（HEADER / CONTENT / FILES SAVED / WHAT'S NEXT）；completion YAML 仅内部回传，不拼进用户可见文案。
+<!-- KERNEL:AUTO:END -->

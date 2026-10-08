@@ -1,6 +1,6 @@
 # 邮件 Campaign 类型手册
 
-> **来源说明**：本文件为当前生效的模块参考资料，供执行时按需加载；用于指导单次发送类邮件 Campaign（如 Newsletter、Sale、Announcement）的常见类型选择、节奏设计与结构搭建。若与当前模块 `SKILL.md` 或 `_system/` 全局协议冲突，以系统级规则为准。
+> **来源说明**：本文件为当前生效的模块参考资料，供执行时按需加载；用于指导单次发送类邮件 Campaign（如 Newsletter、Sale、Announcement）的常见类型选择、节奏设计与结构搭建。若与当前模块 `SKILL.md` 或 `../../afa/_system/` 全局协议冲突，以系统级规则为准。
 
 ---
 

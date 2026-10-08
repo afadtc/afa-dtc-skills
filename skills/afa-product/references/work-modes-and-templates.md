@@ -100,7 +100,7 @@
 2. 构建机会解决方案树 (OST)。
 3. 提取并映射核心假设（Desirability, Viability, Feasibility）。
 4. 设计低成本的验证实验（如概念测试落地页）。
-**输出**：`Product_Discovery_Brief.md`
+**输出**：`./deliverables/Product_Discovery_Brief.md`
 
 ### 3.2 模式 2：四维溢价阶梯构建 (4-Tier Premium Building)
 **目标**：为利润率低下或同质化严重的产品构建系统性溢价护城河。
@@ -109,7 +109,7 @@
 2. 评估四个 Tier 的可行性和见效速度。
 3. 制定认知重构、体验升级、产品微创新或品牌权威建设的具体方案。
 4. 呼叫协同模块落地执行。
-**输出**：`Premium_Staircase_Strategy.md`
+**输出**：`./deliverables/Premium_Staircase_Strategy.md`
 
 ### 3.3 模式 3：COGS 与定价优化 (COGS & Pricing Optimization)
 **目标**：建立精确的成本模型，制定利润最大化的定价策略。
@@ -126,7 +126,7 @@
 1. 评估现有产品线的表现（销量、利润率、复购率）。
 2. 识别引流款、利润款、复购款的角色缺失。
 3. 提出互补产品、配件或捆绑销售 (Bundling) 的建议。
-**输出**：`Product_Matrix_Plan.md`
+**输出**：`./deliverables/Product_Matrix_Plan.md`
 
 ### 3.5 模式 5：供应链健康审计 (Supply Chain Audit)
 **目标**：评估现有供应链的健康状况，识别风险并优化。
@@ -134,7 +134,7 @@
 1. 评估供应商集中度风险（是否过度依赖单一供应商）。
 2. 检查质量控制体系（PPI, DPI, PSI 的执行情况）。
 3. 优化交货期和安全库存模型。
-**输出**：`Supply_Chain_Audit_Report.md`
+**输出**：`./deliverables/Supply_Chain_Audit_Report.md`
 
 ---
 
@@ -259,4 +259,4 @@
 | **数据基础（Data Basis）** | 基于数据和验证的成功把握 | 高分代表证据更充分，低分代表更多依赖假设 |
 | **Ease（易实施度）** | 实施所需的时间和供应链调整 | 高分代表更易用现有资源落地，低分代表需要较多供应链调整 |
 
-**排序规则**：ICE 总分 = I × C × E / 10，按总分降序排列。产品策略优先选择 Confidence 最高的方案（数据验证优先）。
+**排序规则**：ICE 总分 = I × C × E / 10，按总分降序排列。产品策略优先选择数据基础最强的方案（数据验证优先）。

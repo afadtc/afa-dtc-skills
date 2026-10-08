@@ -1,0 +1,8 @@
+{"id":"mon-01","business_line":"monetize","user_input":"弃单太多，结账转化率低","expect_route":"afa-convert","expected_visible":"我先定位结账流失点，再给弃单挽回和信任元素方案。","cost_tag":"medium"}
+{"id":"mon-02","business_line":"monetize","user_input":"退货和客服客户体验差，NPS 低","expect_route":"afa-cx","expected_visible":"我梳理客户旅程里的摩擦点，优化退货和客服流程。","cost_tag":"medium"}
+{"id":"mon-03","business_line":"monetize","user_input":"复购低，想做会员和 RFM分层 提升 LTV","expect_route":"afa-retain","expected_visible":"我按 RFM 给你分层，再设计会员和召回体系提升 LTV。","cost_tag":"high"}
+{"id":"mon-04","business_line":"monetize","user_input":"客单价上不去，想做捆绑和 upsell","expect_route":"afa-aov","expected_visible":"我给你一组捆绑和 upsell 组合，并算免邮门槛。","cost_tag":"low"}
+{"id":"mon-05","business_line":"monetize","user_input":"邮件营销弃单挽回自动化，打开率低","expect_route":"afa-email","expected_visible":"我先修可交付性，再重排弃单挽回自动化流。","cost_tag":"medium"}
+{"id":"mon-06","business_line":"monetize","user_input":"短信营销想搞，TCPA 合规怎么弄","expect_route":"afa-sms","expected_visible":"我先把合规底座搭好，再设计短信自动化流。","cost_tag":"medium"}
+{"id":"mon-07","business_line":"monetize","user_input":"主市场在东南亚，想上 WhatsApp 做会话营销","expect_route":"afa-sms","expected_visible":"你的市场适合 WhatsApp，我先把模板和会话窗口合规搭好。","cost_tag":"medium"}
+{"id":"mon-08","business_line":"monetize","user_input":"想系统提升变现和留存","expect_route":"afa-monetize","expected_visible":"我把转化、客单价、留存三块一起排优先级。","cost_tag":"high"}

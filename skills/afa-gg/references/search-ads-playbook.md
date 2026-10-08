@@ -70,6 +70,26 @@ Google Ads 账户
 
 ---
 
+## 一-B、AI Max for Search 与 DSA→AI Max 迁移（2026-2027）
+
+**AI Max for Search** 已走出 beta：它在标准搜索系列上叠加一层 AI——广泛匹配 + 关键词无关的意图匹配 + 自动生成的资产与落地页路径。Google 官方口径：启用全套件的系列，在同等 CPA/ROAS 下平均**转化 +7%**。
+
+- **AI Brief（Gemini 驱动）**：可给 AI Max 设定品牌语气与红线约束，例如"我们是高端品牌，禁用折扣话术"，让自动生成的资产不跑偏品牌调性。
+- **AI Max 已扩展到标准 Shopping 系列**：用 Merchant Center feed 动态生成，匹配对话式长尾查询——Shopping 侧也进入"喂 feed + 监督"模式（见 `feed-optimization.md`）。
+
+**DSA → AI Max 迁移时间线（务必按此规划，已延期）：**
+
+| 时间 | 事件 |
+|------|------|
+| 2026-06-15 | DSA 系列的新建与编辑恢复（此前一度受限） |
+| 2026-09 | Automatically Created Assets 与 campaign 级广泛匹配设置按原计划迁入 AI Max |
+| 2027-01 | **永久停止新建 DSA 系列** |
+| 2027-02 | 剩余在投 DSA 自动升级为 AI 驱动的 Search / PMax（与上行 2026-09 为不同子项；本项原定 2026-09，因广告主反馈延期至此） |
+
+操盘建议：现在起新系列优先用 AI Max（配 AI Brief 守住品牌调性），存量 DSA 在 2027-01 前完成主动迁移与再校准，不要坐等 2027-02 的自动升级。
+
+> **来源**：[Google 官方博客：AI Max 新功能（出 beta、+7% 转化）](https://blog.google/products/ads-commerce/ai-max-new-features/)；[Google 官方博客：DSA 升级 AI Max](https://blog.google/products/ads-commerce/dsa-upgrade-to-ai-max-2026/)；[Search Engine Land：DSA→AI Max 迁移延至 2027-02](https://searchengineland.com/google-delays-dynamic-search-ads-migration-to-ai-max-480049)；[On Tap：AI Max 扩展至 Shopping](https://www.ontapgroup.com/blog/google-ai-max)；[Google Marketing Live 2026：AI Brief](https://www.cyberlicious.com/google-marketing-live-2026/)。核实于 2026-07。
+
 ## 二、RSA（响应式搜索广告）撰写指南
 
 ### 2.1 标题撰写框架
@@ -79,11 +99,11 @@ Google Ads 账户
 
 标题 1-3（固定位置候选）：
 ├── 标题 1：品牌名 + 核心卖点
-│   └── 示例："Glossier | Clean Beauty That Works"
+│   └── 示例："Glossier Clean Beauty"
 ├── 标题 2：核心产品/服务
-│   └── 示例："Award-Winning Skincare Essentials"
+│   └── 示例："Award-Winning Skincare"
 └── 标题 3：行动号召 + 促销
-    └── 示例："Shop Now - Free Shipping Over $30"
+    └── 示例："Free Shipping Over $30"
 
 标题 4-8（价值主张变体）：
 ├── 差异化优势
@@ -95,7 +115,7 @@ Google Ads 账户
 ├── 用户利益
 │   └── 示例："Get Your Best Skin in 30 Days"
 └── 紧迫感
-    └── 示例："Limited Edition - While Supplies Last"
+    └── 示例："Limited Edition Drop"
 
 标题 9-12（关键词变体）：
 ├── 包含目标关键词的自然表达
@@ -123,30 +143,22 @@ Google Ads 账户
 
 描述 1（核心价值主张）：
 ├── 完整的价值主张 + 信任信号 + CTA
-├── 示例："Discover clean, effective skincare backed by science. 
-│   Dermatologist-tested, vegan formulas loved by 2M+ customers. 
-│   Free shipping on orders over $30. Shop now."
+├── 示例："Clean, science-backed skincare loved by 2M+ customers. Free shipping over $30."
 └── 长度：尽量用满 90 字符
 
 描述 2（产品特性 + 保障）：
 ├── 核心产品特性 + 购买保障
-├── 示例："Our bestselling Cloud Paint blush delivers a natural, 
-│   dewy finish in seconds. 100% satisfaction guaranteed with 
-│   free returns within 30 days."
+├── 示例："Bestselling Cloud Paint blush for a natural dewy look. Free 30-day returns."
 └── 长度：尽量用满 90 字符
 
 描述 3（社会证明 + 差异化）：
 ├── 评论/媒体/奖项 + 竞争优势
-├── 示例："Rated #1 by Allure Best of Beauty 2024. Made with 
-│   clean ingredients you can trust. Join millions who've 
-│   simplified their skincare routine."
+├── 示例："Rated #1 by Allure 2024. Clean ingredients, simple routine - join millions."
 └── 长度：尽量用满 90 字符
 
 描述 4（促销/紧迫感）：
 ├── 当前促销 + 限时信息
-├── 示例："Spring Sale: 20% off sitewide with code SPRING20. 
-│   Plus free deluxe samples with every order. Limited time 
-│   only - don't miss out!"
+├── 示例："Spring Sale: 20% off sitewide with code SPRING20. Shop today."
 └── 长度：尽量用满 90 字符
 ```
 

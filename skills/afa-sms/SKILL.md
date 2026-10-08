@@ -1,11 +1,11 @@
 ---
 name: afa-sms
-description: "DTC SMS 营销引擎——短信自动化流、合规建设、列表增长、BFCM 短信策略、短信文案。Use when user mentions: SMS, 短信营销, text message, 短信自动化, SMS flow, TCPA, 短信合规, SMS compliance, 短信列表, 短信文案, SMS copy, MMS, 短信推送, BFCM短信."
+description: "DTC 消息营销（SMS 主线 + WhatsApp/RCS 分册）——短信自动化流、10DLC/TCPA 合规、列表增长、文案；WhatsApp 模板与 24h 会话、RCS。触发词: SMS, 短信营销, TCPA, 10DLC, 短信文案, MMS, WhatsApp, 模板消息, RCS, 消息营销, sms marketing, text marketing, whatsapp marketing, opt-in。复杂问题先经 afa。"
 ---
 
-# afa-sms — SMS 营销引擎
+# SMS 营销引擎
 
-> **Supervisor**: afa-monetize · **版本**：v2.4.7
+> **Supervisor**: afa-monetize · **版本**：v2.6
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -36,7 +36,7 @@ description: "DTC SMS 营销引擎——短信自动化流、合规建设、列�
 | `crisis_mode` | Hub / Supervisor / User | 危机场景触发器；用于优先调用止血型短信编排，而不是常规活动脚本。 |
 | `consent_risk` | Hub / Supervisor / User | 合规风险触发器；决定优先做权限、频率和退订治理，而不是直接扩量发送。 |
 
-如果上游未显式提供这些字段，先按 `_system/context-matrix.md` 与 `_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
+如果上游未显式提供这些字段，先按 `../afa/_system/context-matrix.md` 与 `../afa/_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
 
 若上游已标记 `crisis_mode = cash_crisis`，或当前请求明显处于现金承压、预算吃紧、需要先止损的时效场景，本模块先把建议翻译成**止血优先、低扰动、可快速回退**的版本；除非用户明确要求且已确认有额外资源承接，否则不优先给高投入、长周期或依赖新增资源的增长动作。
 
@@ -48,7 +48,7 @@ description: "DTC SMS 营销引擎——短信自动化流、合规建设、列�
 | `crisis_mode` | `pr_crisis` | SMS 非主渠道，按 Supervisor 指令执行（可能被暂缓） |
 | `seasonal_mode` | `off_season` | 从"促销驱动"转向"关系维护+列表建设"；降频+对话式内容 |
 | `seasonal_mode` | `pre_season` | 列表增长冲刺 + 预热序列设计 |
-| `seasonal_mode` | `peak` / `bfcm` | BFCM 频率豁免规则生效；5 阶段作战模板 |
+| `seasonal_mode` | `peak_season` / `peak_season` | BFCM 频率豁免规则生效；5 阶段作战模板 |
 | `consent_risk` | `high` | 优先执行合规审计（加载 compliance-checklist.md）；先治理再扩量 |
 | `supply_chain_mode` | `dropshipping` | 订单状态通知优先级提升；弃购 SMS 最高优先；复购周期延长 |
 | `supply_chain_mode` | `wholesale` | B2B 视角：订单通知+补货提醒为主；降低冲动购买型 SMS |
@@ -56,13 +56,13 @@ description: "DTC SMS 营销引擎——短信自动化流、合规建设、列�
 
 ## 2. Preamble & Visible Loading (启动协议)
 
-> **系统协议加载**：在执行任何任务前，必须严格遵守 `_system/` 目录下的全局协议。
-> - 遵循 `_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
-> - 遵循 `_system/output-format.md` 进行四段式输出和报告视觉化。
-> - 遵循 `_system/degradation-rules.md` 处理信息不足或无联网环境。
-> - 遵循 `_system/localization-rules.md` 进行目标市场本地化适配。
-> - 遵循 `_system/edge-cases.md` 处理边界情况和 Level 0 需求。
-> - 遵循 `_system/preamble.md` 进行初始化检查和规则优先级判定。
+> **系统协议加载**：在执行任何任务前，必须严格遵守 `../afa/_system/` 目录下的全局协议。
+> - 遵循 `../afa/_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
+> - 遵循 `../afa/_system/output-format.md` 进行四段式输出和报告视觉化。
+> - 遵循 `../afa/_system/degradation-rules.md` 处理信息不足或无联网环境。
+> - 遵循 `../afa/_system/localization-rules.md` 进行目标市场本地化适配。
+> - 遵循 `../afa/_system/edge-cases.md` 处理边界情况和 Level 0 需求。
+> - 遵循 `../afa/_system/preamble.md` 进行初始化检查和规则优先级判定。
 
 当用户首次唤醒 SMS 营销流程时，必须输出以下可见的加载状态：
 
@@ -179,7 +179,7 @@ description: "DTC SMS 营销引擎——短信自动化流、合规建设、列�
 │   └── KPIs & Benchmarks
 ├── 关键规则内联：
 │   ├── 欢迎序列：opt-in 后 5 分钟内发送；折扣与弹窗承诺一致；最多 3 条
-│   ├── 弃购挽回：SMS T+1h → Email T+4h；第一条不给折扣；最多 2 条
+│   ├── 弃购挽回：Email T+1h 先行、未打开再 SMS T+4h（全局瀑布）；第一条不给折扣；最多 2 条
 │   ├── 浏览放弃：每用户每 7 天最多 1 条；绝不给折扣；优先级低于弃购
 │   ├── 购后跟进：评价请求至少送达后 3 天；不推销其他产品
 │   └── 流失召回：折扣渐进递增；间隔≥15 天；VIP 独立序列
@@ -190,7 +190,7 @@ description: "DTC SMS 营销引擎——短信自动化流、合规建设、列�
 ├── Step A：确认 Campaign 类型（闪购/新品/补货/VIP/BFCM/对话式）
 ├── Step B：应用文案结构公式 [Brand] + [Hook] + [Value] + [CTA] + [Opt-out]
 │   ├── 字符预算：Brand 10-15 | Hook 20-40 | Value 40-60 | CTA 30-40 | Opt-out 20-25
-│   └── 总计 ≤ 160 字符
+│   └── 总计 ≤ 160 字符（各段不可同时取上限，以总控为准）
 ├── Step C：输出多版本文案（安全版 + 强驱动版 + 对话版如适用）
 ├── Step D：每版标注字符数 + 推荐发送时间 + 目标受众分层
 └── 输出物：文案版本集 + A/B 测试建议 + 发送时间推荐
@@ -272,7 +272,7 @@ Crisis Mode 检查：
 
 ## 4. Completion Protocol
 
-每次输出必须遵循 `_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
+每次输出必须遵循 `../afa/_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
 
 ```markdown
 ---
@@ -283,12 +283,12 @@ Crisis Mode 检查：
 └── 当前状态：{本轮主问题已完成 / 主问题已完成但仍有保留项 / 当前被真实阻塞需先补齐关键前提 / 可继续推进但补充最小必要上下文后会更准确}
 ```
 
-如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `_system/output-format.md` 第 3.5 节）。
+如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `../afa/_system/output-format.md` 第 3.5 节）。
 
 
 ### 4.1 Internal Completion Handoff（内部完成回传）
 
-除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
+除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `../afa/_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
 
 ```yaml
 completion:
@@ -333,7 +333,7 @@ completion:
 - **ICE-ranked action list** (if optimisation suggestions exist)
 - **Cross-module recommendations** (if issues outside SMS scope are detected)
 - **Legal reminder**: "SMS 相关法规因地区而异，建议咨询专业律师确认目标市场的具体要求。"
-- **Learnings Write-Back** — Append new learnings to `learnings.jsonl` in JSONL format following `_system/brand-memory-protocol.md` Chapter 9 data structure. Follow the silent capture protocol in `_system/interaction-protocol.md` Chapter 5.
+- **Learnings Write-Back** — Append new learnings to `learnings.jsonl` in JSONL format following `../afa/_system/brand-memory-protocol.md` Chapter 9 data structure. Follow the silent capture protocol in `../afa/_system/interaction-protocol.md` Chapter 5.
 
 ## 5. 边界与越界处理
 
@@ -351,3 +351,22 @@ completion:
 | 落地页转化率低 | SMS 点击正常但页面不转化 | 回交上层 → afa-convert |
 | 客单价策略 | 客单价策略先行，SMS 是执行工具 | 回交上层 → afa-aov |
 | 不知道问题在哪 | 需要全局诊断 | 回交上层 → afa-diagnose |
+
+## 富媒体分册：WhatsApp / RCS
+
+触发信号：WhatsApp、模板消息、24h 会话窗口、RCS、富媒体消息。进入后**先判市场适用性**（LatAm/东南亚/中东/南欧强，纯美国弱——不适配则回 SMS 主线）。主加载 `references/whatsapp-rcs-playbook.md`。⚠️ WhatsApp（Meta 商业政策/模板审核/24h 窗口）与 SMS（TCPA/10DLC）为两套合规体系，勿互相套用；三渠道瀑布抑制沿用本模块 `omnichannel-orchestration.md` 唯一真源。
+
+## 系统协议（内核版）
+<!-- KERNEL:AUTO:START — 由 scripts/build_inject.py 从 _system/kernel.md 生成，勿手改 -->
+> **本节为协议内核（自动生成，勿手改）。单模块安装时即为可用协议；若 `../afa/_system/` 完整版存在则以其为增强真源。**
+
+**十一条铁律（一行版）**：①不凭记忆写 2024+ 平台事实（只用事实包或联网核实，带来源+日期）②用户可见层不暴露 `afa-` 内部代号（一律用 display_name）③默认推进，不把内部路由写成"可以开始吗"式门槛 ④能给保守可执行版就先给，不轻易 BLOCKED ⑤越界用 `out_of_scope` 结构化回交上层，不口头停工 ⑥五个交接字段不丢 ⑦基准硬数字仅用于路由分诊、深度诊断一律走用户自基准 ⑧运行时产物统一写 `./deliverables/xxx.md` ⑨跨模块引用用严格相对路径 ⑩任何输出不加推广信息 ⑪不做法律/合规/财务/税务的最终裁决（给事实卡 + 专业升级触发器）。
+
+**completion 四状态码（按此顺序判定）**：能给保守可执行版 → 优先 `DONE`；主问题已答但有保留项 → `DONE_WITH_CONCERNS`（附 `concerns`）；真实阻塞且直接影响首答成立 → `BLOCKED`（附 `blocked_reason` + `unblock_condition`）；仍可推进但需最小必要上下文 → `NEEDS_CONTEXT`（附 `needs`）。**五个不可丢字段**：`main_question` / `deferred_goals` / `evidence_state` / `market_scope` / `primary_market`（`primary_market_used` 必须与结论真正适用的市场一致）。
+
+**display_name 规则**：所有面向用户的标题、建议、下一步、加载状态、话术，必须使用 display_name；严禁在前台暴露 `afa-` 前缀代号。
+
+**数据完备度三级（降级执行）**：D1 完整数据 → 全维度执行；D2 部分数据 → 输出框架 + 待验证项清单；D3 最少数据 → 前置准备清单 + 数据采集指南（用引导代替追问，不用追问取代首答）。⚠️ 这是**数据完备度轴**，与 `degradation-rules.md` 的**平台能力轴**（Level 3 满血 → Level 1 最简）是两个方向相反的轴，勿混用 Level 编号。
+
+**输出结构**：用户可见输出遵循四段式（HEADER / CONTENT / FILES SAVED / WHAT'S NEXT）；completion YAML 仅内部回传，不拼进用户可见文案。
+<!-- KERNEL:AUTO:END -->

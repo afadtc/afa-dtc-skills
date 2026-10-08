@@ -269,10 +269,12 @@ Churn Risk Score = w1 × (Days Since Last Purchase / Expected Purchase Interval)
                  + w4 × (Discount Dependency Score)
                  + w5 × (Support Ticket Sentiment Score)
 
-参考权重示例：
-- w1 可设为最高权重，用于反映购买间隔偏离程度
-- w2 与 w3 可作为中等权重，用于反映互动与访问活跃度
-- w4 与 w5 可作为补充权重，用于刻画折扣依赖和服务情绪风险
+默认权重（与 core-frameworks.md §2.4 流失风险评分模型一致，为唯一定义源；可按品类微调）：
+- w1 = 0.35（购买间隔偏离程度，最高权重）
+- w2 = 0.25（邮件互动衰减）
+- w3 = 0.20（网站访问下降）
+- w4 = 0.10（折扣依赖度）
+- w5 = 0.10（客服工单情绪风险）
 ```
 
 #### 风险等级解释

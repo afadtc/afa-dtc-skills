@@ -61,7 +61,7 @@ SEO 投入成本包括：
 └── 工具：Ahrefs Traffic Value
 
 时间维度：
-├── SEO 投资回报通常需要 6-12 个月才能显现
+├── SEO **投资回报**通常需要 6-12 个月才能显现（**初步见效**为 3-6 个月，两个里程碑口径见 `benchmark-data.md` §4.2）
 ├── 但一旦建立，流量成本趋近于零（复利效应）
 ├── 对比 PPC：停止投放即停止流量
 └── 建议：用 12-24 个月的时间窗口计算 ROI
@@ -124,7 +124,7 @@ DTC 电商 SEO 基准数据（2025-2026）：
 └── 可选：当前关注的关键词
 
 执行流程：
-├── 1. 技术 SEO 审计（参考 references/technical-seo-checklist.md）
+├── 1. 技术 SEO 审计（参考 technical-seo-checklist.md）
 │   ├── 爬取与索引检查
 │   ├── Core Web Vitals 检查
 │   ├── 结构化数据检查
@@ -565,7 +565,7 @@ A: [Direct, concise answer...]
 
 ## 四、淡季 SEO 优化策略
 
-> **激活条件**：当 Hub 传入 `seasonal_mode = off_season` 时，本模块自动激活。淡季是低成本建设 SEO 资产的最佳窗口——SEO 的效果需要 3-6 个月才能显现，淡季投入的 SEO 工作会在旺季开花结果。
+> **激活条件**：当 Hub 传入 `seasonal_mode = off_season` 时，本模块自动激活。淡季是低成本建设 SEO 资产的最佳窗口——SEO 的**初步效果**需要 3-6 个月才能显现（完整投资回报为 6-12 个月，见 `benchmark-data.md` §4.2），淡季投入的 SEO 工作会在旺季开花结果。
 
 ### 4.1 淡季 SEO 核心策略
 

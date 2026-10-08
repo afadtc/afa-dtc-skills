@@ -1,11 +1,11 @@
 ---
 name: afa-foundation
-description: "品牌与产品基建 Supervisor——统筹市场探索、竞争情报、品牌定位、产品策略、产品上市的全流程路由与协同。Use when user mentions: 品牌建设, brand building, 产品规划, product planning, 从零开始, from scratch, 品牌基建, foundation, 市场调研, market research, 品牌定位, brand positioning, 产品上市, product launch."
+description: "品牌与产品基建 Supervisor——统筹市场探索、竞品、品牌、产品、上市的路由与协同。触发词: 品牌基建, foundation, 从零开始, from scratch, 品牌规划, 产品上市, brand building, market validation, go-to-market。"
 ---
 
-# afa-foundation — 品牌与产品基建 Supervisor
+# 品牌与产品基建 Supervisor
 
-> **层级**：Supervisor（中层路由器）· **版本**：v2.4.7
+> **层级**：Supervisor（中层路由器）· **版本**：v2.6
 > **管辖 Worker**：afa-explore · afa-compete · afa-brand · afa-product · afa-launch
 
 ---
@@ -28,6 +28,7 @@ afa-foundation 是 AFA DTC 系统的品牌与产品基建中枢。它不执行�
 | 字段 | 说明 |
 |:---|:---|
 | `user_request` | 用户原始需求描述（完整传递，不摘要） |
+| `goal` | 用户本次的具体目标定义；用于约束建议范围与完成标准 |
 | `main_question` | 本轮必须优先回答的主问题 |
 | `deferred_goals` | 暂不抢占首答主体的次问题列表 |
 | `evidence_state` | 证据状态：sufficient / partial / minimal |
@@ -98,7 +99,7 @@ completion:
 
 ### 用户可见输出协议
 
-除上述 completion YAML 外，所有面向用户的输出必须显式遵循 `_system/output-format.md` 的四段式结构。任何标题、建议、下一步、加载状态和摘要都必须使用人类可读名称，不得直接暴露 `afa-*` 内部代号。若内部编排需要保留 module_id，必须先映射为 `display_name` 后才能进入前台文案。
+除上述 completion YAML 外，所有面向用户的输出必须显式遵循 `../afa/_system/output-format.md` 的四段式结构。任何标题、建议、下一步、加载状态和摘要都必须使用人类可读名称，不得直接暴露 `afa-*` 内部代号。若内部编排需要保留 module_id，必须先映射为 `display_name` 后才能进入前台文案。
 
 ```markdown
 # HEADER
@@ -115,7 +116,7 @@ completion:
 └── 当前状态：{本轮主问题已完成 / 主问题已完成但仍有保留项 / 当前被真实阻塞需先补齐关键前提 / 可继续推进但补充最小必要上下文后会更准确}
 ```
 
-如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `_system/output-format.md` 第 3.5 节）。
+如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `../afa/_system/output-format.md` 第 3.5 节）。
 
 仅当当前收尾本质上是职责回交、真实阻塞或最小必要补充上下文时，才可不追加自然语言升级出口。
 
@@ -164,6 +165,7 @@ completion:
 | `products.md` 不存在 | afa-product / afa-launch | afa-product 可从零构建；afa-launch 必须等 products.md 就绪，降级为先路由到 afa-product |
 | `voice-and-tone.md` 不存在 | afa-launch | 降级为先路由到 afa-brand 完成品牌调性定义 |
 | 多个文件同时缺失 | 多个 Worker | 自动进入工作流 A（从零起步），按顺序补齐 |
+| **例外：工作流 D / launch 模式 F（测品场景）** | afa-launch / afa-creative | `products.md` 以 afa-explore 写入的最小测品档案（候选品条目）为准即可；`voice-and-tone.md` 降为可选——两者缺失均不触发改道 afa-product / afa-brand，不自动切回工作流 A |
 
 ### 模糊意图引导流程
 
@@ -220,6 +222,8 @@ completion:
 
 ```
 触发：Level 0 或 0→1 阶段用户，需要从零搭建品牌基建
+中途入口（WF12 赢家品牌化）：测试店赢家经 afa-scale 工作流 C 评估后，从 Step 3 品牌定位进入；
+      Step 1-2 以测品期积累的 products.md / competitors.md 为输入，不重跑
 
 执行链：
   Step 1 → afa-explore（市场验证）
@@ -277,6 +281,33 @@ completion:
     → afa-pr（媒体背书）via afa-organic
 ```
 
+### 工作流 D：测试店快速测品（对应 Hub WF12，foundation 负责部分）
+
+```
+触发：supply_chain_mode = dropshipping 且诉求为「快速测品」「测试店」「先跑出能卖的产品」
+      （用户明示一件代发 / dropshipping / 测试店即为充分信号，无需 Brand Brain 多信号判定）
+定位：与工作流 A 互为镜像——A 是品牌路径（定位→产品），D 是测试路径（产品→定位）
+
+执行链：
+  Step 1 → afa-explore（赢品验证：测试店范式 + 赢品五标准 + 三层验证漏斗）
+           + afa-compete 并行配合（单店广告信号 + 竞对执行质量评估 + 赢家版式收集）
+    输出：通过验证的候选产品 + 竞对可超越判断 + 5 个可复用版式 + 快速客户语言摘要
+          → 写入最小测品档案：products.md（候选品条目 / 履约成本口径 / 目标售价）、audience.md（客户语言摘要）
+    ↓ 未通过验证 → 回到选品，不进入上线
+  ⟐ 用户确认点：候选产品确认后再进入 Step 2
+  Step 2 → afa-launch（模式 F 测品快速通道：48 小时上线清单核对 + 判读规则定义）
+    输出：上线清单 + 判读规则（页面/Offer 项由变现留存组执行，投放与判读执行由付费获客组负责）
+    ↓
+  完成后回传 Hub，建议后续路由（按顺序）：
+    → afa-monetize 工作流 E（convert 整页改写 + 信任基建包；aov 测品 Offer 并过 50% 混合毛利校验）
+    → afa-paid 工作流 D（creative 静态图生产线 + fb Day-0 冷启动；预算档位在该步由用户拍板；D+3~D+7 判读执行与回传）
+    → 赢家达标 → afa-scale 工作流 C（Dropshipping→DTC 过渡）→ 品牌化后接回本工作流 A 的 Step 3-5（brand → product → launch）
+
+跳过项（测试店场景不成立，不是遗漏）：工作流 A 的 Step 3 品牌定位与 Step 4 产品矩阵——
+由"先跑出赢家再定位"的顺序替代；前置文件表中 products.md / voice-and-tone.md 的缺失规则对本工作流不触发改道（见该表例外行）。
+用户明确要求品牌级完整流程则尊重其选择，走工作流 A。
+```
+
 ---
 
 ## 5. Worker 间数据流转规则
@@ -296,8 +327,8 @@ afa-launch 输入 → 基于产品+品牌做上市计划
 **关键规则**：
 - 每个 Worker 只读取自己 Context Matrix 声明的文件
 - 上游 Worker 的输出文件自动成为下游 Worker 的输入
-- 如果上游文件不存在，不阻断执行，按 `_system/degradation-rules.md` 降级处理
-- 多步骤工作流执行时，每个 Step 完成后同步更新 todo.md（遵守 `_system/interaction-protocol.md` 第七章）
+- 如果上游文件不存在，不阻断执行，按 `../afa/_system/degradation-rules.md` 降级处理
+- 多步骤工作流执行时，每个 Step 完成后同步更新 todo.md（遵守 `../afa/_system/interaction-protocol.md` 第七章）
 
 ---
 
@@ -306,7 +337,7 @@ afa-launch 输入 → 基于产品+品牌做上市计划
 当 `crisis_mode ≠ none` 时：
 
 **当 `crisis_mode = cash_crisis` 时：**
-- afa-product 优先：紧急审计产品矩阵盈利能力，识别低利润/负利润 SKU，建议码洁或清仓策略
+- afa-product 优先：紧急审计产品矩阵盈利能力，识别低利润/负利润 SKU，建议停产或清仓策略
 - afa-brand 调整：暂停品牌升级/重塑项目，保留核心品牌资产维护
 - afa-explore 暂缓：暂停新赛道探索，避免分散资源
 - afa-launch 暂缓：暂停新品上市计划，除非已到不可取消的阶段
@@ -341,12 +372,12 @@ afa-launch 输入 → 基于产品+品牌做上市计划
 
 ## 8. Preamble & Visible Loading (启动协议)
 
-> **系统协议加载**：在执行任何路由或协调任务前，必须严格遵守 `_system/` 目录下的全局协议。
-> - 遵循 `_system/preamble.md` 进行初始化检查和规则优先级判定。
-> - 遵循 `_system/iron-rules.md` 中的全局强制铁律（所有模块必须遵守）。
-> - 遵循 `_system/interaction-protocol.md` 进行默认推进、必要确认与跨 Skill 协同。
-> - 遵循 `_system/brand-memory-protocol.md` 进行 Brand Brain 读写规则。
-> - 遵循 `_system/skill-directory.md` 获取全局模块拓扑视野。
+> **系统协议加载**：在执行任何路由或协调任务前，必须严格遵守 `../afa/_system/` 目录下的全局协议。
+> - 遵循 `../afa/_system/preamble.md` 进行初始化检查和规则优先级判定。
+> - 遵循 `../afa/_system/iron-rules.md` 中的全局强制铁律（所有模块必须遵守）。
+> - 遵循 `../afa/_system/interaction-protocol.md` 进行默认推进、必要确认与跨 Skill 协同。
+> - 遵循 `../afa/_system/brand-memory-protocol.md` 进行 Brand Brain 读写规则。
+> - 遵循 `../afa/_system/skill-directory.md` 获取全局模块拓扑视野。
 
 当 Hub 将任务路由到 afa-foundation 时，必须输出以下可见的加载状态：
 
@@ -358,3 +389,18 @@ afa-launch 输入 → 基于产品+品牌做上市计划
 ├── 可用引擎：市场探索 · 竞争情报 · 品牌策略 · 产品策略 · 产品上市
 └── 路由决策就绪
 ```
+
+## 系统协议（内核版）
+<!-- KERNEL:AUTO:START — 由 scripts/build_inject.py 从 _system/kernel.md 生成，勿手改 -->
+> **本节为协议内核（自动生成，勿手改）。单模块安装时即为可用协议；若 `../afa/_system/` 完整版存在则以其为增强真源。**
+
+**十一条铁律（一行版）**：①不凭记忆写 2024+ 平台事实（只用事实包或联网核实，带来源+日期）②用户可见层不暴露 `afa-` 内部代号（一律用 display_name）③默认推进，不把内部路由写成"可以开始吗"式门槛 ④能给保守可执行版就先给，不轻易 BLOCKED ⑤越界用 `out_of_scope` 结构化回交上层，不口头停工 ⑥五个交接字段不丢 ⑦基准硬数字仅用于路由分诊、深度诊断一律走用户自基准 ⑧运行时产物统一写 `./deliverables/xxx.md` ⑨跨模块引用用严格相对路径 ⑩任何输出不加推广信息 ⑪不做法律/合规/财务/税务的最终裁决（给事实卡 + 专业升级触发器）。
+
+**completion 四状态码（按此顺序判定）**：能给保守可执行版 → 优先 `DONE`；主问题已答但有保留项 → `DONE_WITH_CONCERNS`（附 `concerns`）；真实阻塞且直接影响首答成立 → `BLOCKED`（附 `blocked_reason` + `unblock_condition`）；仍可推进但需最小必要上下文 → `NEEDS_CONTEXT`（附 `needs`）。**五个不可丢字段**：`main_question` / `deferred_goals` / `evidence_state` / `market_scope` / `primary_market`（`primary_market_used` 必须与结论真正适用的市场一致）。
+
+**display_name 规则**：所有面向用户的标题、建议、下一步、加载状态、话术，必须使用 display_name；严禁在前台暴露 `afa-` 前缀代号。
+
+**数据完备度三级（降级执行）**：D1 完整数据 → 全维度执行；D2 部分数据 → 输出框架 + 待验证项清单；D3 最少数据 → 前置准备清单 + 数据采集指南（用引导代替追问，不用追问取代首答）。⚠️ 这是**数据完备度轴**，与 `degradation-rules.md` 的**平台能力轴**（Level 3 满血 → Level 1 最简）是两个方向相反的轴，勿混用 Level 编号。
+
+**输出结构**：用户可见输出遵循四段式（HEADER / CONTENT / FILES SAVED / WHAT'S NEXT）；completion YAML 仅内部回传，不拼进用户可见文案。
+<!-- KERNEL:AUTO:END -->

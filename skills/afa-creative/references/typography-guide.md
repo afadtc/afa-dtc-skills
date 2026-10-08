@@ -119,9 +119,11 @@
 
 ### 6.1 Meta (Instagram / Facebook)
 
-- Feed 广告：文本面积 < 20%，否则分发受限
+- Feed 广告：**「图片内文字 > 20% 就限流」这条规则已经不存在了**。Meta 于 2020 年下半年取消了 20% 文字比例的投放惩罚，明确表示"不再因文字过多而在竞价和投放中惩罚广告"；此后官方只把"文字少一点通常表现更好"作为**创意建议**保留。所以 20% 是**经验参考线，不是平台硬规则**——素材因文字多而效果差是创意问题，不是审核/分发处罚。
 - Stories/Reels：使用 Instagram 原生字体样式
 - 轮播图：每张卡片文本位置必须一致
+
+> **来源**：[Search Engine Journal：Facebook Removes the 20% Text Limit on Ad Images](https://www.searchenginejournal.com/facebook-removes-the-20-text-limit-on-ad-images/381844/)；[Adweek：Facebook Quietly Scraps Rule That Limited Text in Ad Images to 20%](https://www.adweek.com/programmatic/facebook-quietly-scraps-rule-that-limited-text-in-ad-images-to-20/)。核实于 2026-07。（同包 `content-policy.md` 的"文本覆盖尽量低于 20%"是软性建议写法，与此一致。）
 
 ### 6.2 TikTok
 

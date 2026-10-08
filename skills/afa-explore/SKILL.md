@@ -1,12 +1,12 @@
 ---
 name: afa-explore
-description: "DTC 用户洞察与市场探索引擎——VOC 深度挖掘、市场规模评估、用户画像、赛道分析、竞争格局映射。Use when user mentions: 市场调研, market research, 用户洞察, user insight, VOC, 用户画像, persona, 市场规模, TAM SAM SOM, 赛道分析, 品类分析, category analysis, 需求挖掘, 空白市场, 用户研究."
+description: "DTC 用户洞察与市场探索——VOC、市场规模、用户画像、赛道分析。触发词: 市场调研, market research, VOC, 用户画像, persona, TAM, 赛道分析, 选品方向, market size, user persona, customer insights, niche analysis。复杂问题先经 afa。"
 ---
 
-# afa-explore — 用户洞察与市场探索引擎
+# 用户洞察与市场探索引擎
 
 > **定位**：AFA DTC 系统的用户洞察与市场探索引擎——通过深度挖掘 VOC、分析竞争格局、评估市场规模，为品牌的定位、选品、内容策略和渠道扩张提供数据驱动的底层支撑。
-> **上层承接**：基础战略统筹层 · **版本**：v2.4.7
+> **上层承接**：基础战略统筹层 · **版本**：v2.6
 
 ---
 
@@ -32,18 +32,19 @@ description: "DTC 用户洞察与市场探索引擎——VOC 深度挖掘、市�
 | `research_mode` | Hub / Supervisor / User | 研究模式触发器；用于区分 VOC、角度生成、竞品评估与诊断模式。 |
 | `awareness_stage` | Hub / Supervisor / User | 意识层级触发器；用于限制 Angle、信息结构和洞察输出深度。 |
 | `data_availability` | Hub / Supervisor / User | 数据可得性触发器；用于决定优先做真实数据分析、替代性估算还是框架诊断。 |
+| `supply_chain_mode` | Hub / Supervisor | 供应链模式触发器；`dropshipping` 且处于测品阶段时进入模式 G 赢品验证（手册见 `references/winning-product-playbook.md`）；其余取值按本文件 3.0 节的供应链适配表调序。 |
 
-如果上游未显式提供这些字段，先按 `_system/context-matrix.md` 与 `_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
+如果上游未显式提供这些字段，先按 `../afa/_system/context-matrix.md` 与 `../afa/_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
 
 ## 2. Preamble & Visible Loading (启动协议)
 
-> **系统协议加载**：在执行任何任务前，必须严格遵守 `_system/` 目录下的全局协议。
-> - 遵循 `_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
-> - 遵循 `_system/output-format.md` 进行报告视觉化和自适应输出。
-> - 遵循 `_system/degradation-rules.md` 处理信息不足或无联网环境。
-> - 遵循 `_system/localization-rules.md` 进行目标市场本地化适配。
-> - 遵循 `_system/edge-cases.md` 处理边界情况和 Level 0 需求。
-> - 遵循 `_system/preamble.md` 进行初始化检查和规则优先级判定。
+> **系统协议加载**：在执行任何任务前，必须严格遵守 `../afa/_system/` 目录下的全局协议。
+> - 遵循 `../afa/_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
+> - 遵循 `../afa/_system/output-format.md` 进行报告视觉化和自适应输出。
+> - 遵循 `../afa/_system/degradation-rules.md` 处理信息不足或无联网环境。
+> - 遵循 `../afa/_system/localization-rules.md` 进行目标市场本地化适配。
+> - 遵循 `../afa/_system/edge-cases.md` 处理边界情况和 Level 0 需求。
+> - 遵循 `../afa/_system/preamble.md` 进行初始化检查和规则优先级判定。
 
 当用户首次唤醒市场探索流程时，必须输出以下可见的加载状态：
 ```markdown
@@ -62,7 +63,7 @@ description: "DTC 用户洞察与市场探索引擎——VOC 深度挖掘、市�
 
 | supply_chain_mode | 提升优先级 | 降低优先级 |
 |:---|:---|:---|
-| `dropshipping` | 产品验证（Winning Product 筛选）、供应商可靠性评估、竞品广告研究 | 深度市场研究报告、长期赛道规划、复杂客户画像 |
+| `dropshipping` | 产品验证（Winning Product 筛选）、供应商可靠性评估、竞品广告研究——**处于测品阶段**（Hub WF12 / 用户自述测品）时进入模式 G，加载 `references/winning-product-playbook.md` 作为主执行手册（测试店范式 + 五标准 + 三层验证漏斗）；成熟代发店的常规研究仍按本行左列调序 | 深度市场研究报告、长期赛道规划、复杂客户画像 |
 | `wholesale` | B2B 市场规模评估、竞品批发策略研究、行业展会/采购平台研究 | C2C 消费者画像、社交媒体趋势分析 |
 | `manufacturing` | 供应链差异化研究、垂直整合机会评估、产品线扩展研究 | 快速测品型研究、低价市场研究 |
 | `dtc`（默认） | 保持所有策略和优先级不变 | — |
@@ -88,16 +89,17 @@ description: "DTC 用户洞察与市场探索引擎——VOC 深度挖掘、市�
 
 ### 3.1 意图路由表
 
-根据用户意图，进入对应的工作模式（详见 `references/work-modes-and-templates.md` 六大工作模式）：
+根据用户意图，进入对应的工作模式（模式 A-F 详见 `references/work-modes-and-templates.md` 六大工作模式；模式 G 为测试店专用，详见 `references/winning-product-playbook.md`）：
 
 | 用户意图信号 | 工作模式 | 核心 Reference |
 |:---|:---|:---|
 | 挖掘客户声音、提取客户语言、分析评论/反馈 | **模式 A：VOC 挖掘** | `voc-mining-playbook.md` |
 | 新广告创意方向、Angle 矩阵、Mini-VSL 脚本 | **模式 B：角度生成** | `spherical-scaling-system.md` + `awareness-mapping-guide.md` + `scamper-innovation-model.md` |
-| 市场规模评伌、新市场可行性、品类竞争格局概览 | **模式 C：市场机会评估** | `market-sizing-framework.md` + `advanced-models.md` |
+| 市场规模评估、新市场可行性、品类竞争格局概览 | **模式 C：市场机会评估** | `market-sizing-framework.md` + `advanced-models.md` |
 | 增长瓶颈、ROAS 下降、创意疲劳、高流失率 | **模式 D：诊断** | `diagnostic-system.md` |
 | 季度扫描、行业趋势、新兴话题、技术变革 | **模式 E：趋势与信号监控** | `advanced-strategies.md` |
 | 深度理解客户 JTBD、高流失率排查、概念验证 | **模式 F：客户深度访谈** | `voc-mining-playbook.md` + `advanced-strategies.md` |
+| 测试店选品、赢品验证、一件代发测品（`supply_chain_mode = dropshipping` 且测品阶段） | **模式 G：赢品验证（测试店）** | `winning-product-playbook.md`（输出：通过验证的候选产品 + 最小测品档案写入 `products.md` / `audience.md`） |
 
 ### 3.2 诊断决策树（模式 D 详细路由）
 
@@ -145,9 +147,9 @@ description: "DTC 用户洞察与市场探索引擎——VOC 深度挖掘、市�
 ### 模式 A：VOC 挖掘模式 (VOC Mining Mode)
 **触发条件**：用户要求挖掘客户声音、提取客户语言、分析评论/反馈。
 1. **确认范围**：确认品类、竞品列表和数据源。
-2. **加载知识**：读取 `references/voc-mining-playbook.md` 获取 7 大数据源矩阵和提取法则。
+2. **加载知识**：读取 `references/voc-mining-playbook.md` 获取六大数据源矩阵和提取法则。
 3. **执行挖掘**（SOP 骨架）：
-   - 从 7 大数据源逐一挖掘（Amazon评论 / Reddit / 社媒评论 / 客服记录 / 调查问卷 / 竞品评论 / 行业论坛）
+   - 从六大数据源逐一挖掘（Reddit / Amazon 竞品评论 / YouTube 评测评论区 / 购后问卷 / 客户深度访谈 / 客服工单与退换货数据）
    - 清洗：去除无效评论、机器人评论、过于笼统的评论
    - 分类：按痛点/渴望/使用场景/购买动机/反对意见分类
    - 提取原话：保留客户原始表达，不翻译为营销语言
@@ -172,7 +174,7 @@ description: "DTC 用户洞察与市场探索引擎——VOC 深度挖掘、市�
 5. **输出交付物**：使用 `references/work-modes-and-templates.md` 中的模板输出《球形扩展角度矩阵》。
 
 ### 模式 C：市场机会评估模式 (Market Opportunity Assessment Mode)
-**触发条件**：用户要求市场规模评伌、新市场/新品类可行性研究、品类竞争格局概览（Go/No-Go 决策）。
+**触发条件**：用户要求市场规模评估、新市场/新品类可行性研究、品类竞争格局概览（Go/No-Go 决策）。
 1. **确认范围**：确认竞品列表、目标市场和分析维度。
 2. **加载知识**：读取 `references/market-sizing-framework.md` 获取 TAM/SAM/SOM 和市场吸引力矩阵，读取 `references/advanced-models.md` 获取高级分析模型，读取 `references/advanced-strategies.md` 获取高级策略框架，读取 `references/core-paradigms.md` 获取核心范式定义。
 3. **执行分析**（SOP 骨架）：
@@ -210,7 +212,7 @@ description: "DTC 用户洞察与市场探索引擎——VOC 深度挖掘、市�
 
 ## 4. Completion Protocol
 
-每次输出必须遵循 `_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
+每次输出必须遵循 `../afa/_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
 
 ```markdown
 ---
@@ -221,12 +223,12 @@ description: "DTC 用户洞察与市场探索引擎——VOC 深度挖掘、市�
 └── 当前状态：{本轮主问题已完成 / 主问题已完成但仍有保留项 / 当前被真实阻塞需先补齐关键前提 / 可继续推进但补充最小必要上下文后会更准确}
 ```
 
-如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `_system/output-format.md` 第 3.5 节）。
+如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `../afa/_system/output-format.md` 第 3.5 节）。
 
 
 ### 4.1 Internal Completion Handoff（内部完成回传）
 
-除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
+除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `../afa/_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
 
 ```yaml
 completion:
@@ -268,7 +270,7 @@ completion:
 - `primary_market_used` 必须与本次结论真正适用的市场一致，不得机械复写输入字段。
 
 完成前检查清单：
-- 将本次执行中发现的新教训以 JSONL 格式追加到 `learnings.jsonl`，遵守 `_system/brand-memory-protocol.md` 第九章的数据结构定义。写入时遵循 `_system/interaction-protocol.md` 第五章的静默捕获协议。
+- 将本次执行中发现的新教训以 JSONL 格式追加到 `learnings.jsonl`，遵守 `../afa/_system/brand-memory-protocol.md` 第九章的数据结构定义。写入时遵循 `../afa/_system/interaction-protocol.md` 第五章的静默捕获协议。
 
 ## 5. 边界、降级与防护
 
@@ -331,3 +333,18 @@ Level 0 边界：
   ✓ 做 VOC 挖掘（基于公开数据）
   ✓ 做趋势与信号监控
 ```
+
+## 系统协议（内核版）
+<!-- KERNEL:AUTO:START — 由 scripts/build_inject.py 从 _system/kernel.md 生成，勿手改 -->
+> **本节为协议内核（自动生成，勿手改）。单模块安装时即为可用协议；若 `../afa/_system/` 完整版存在则以其为增强真源。**
+
+**十一条铁律（一行版）**：①不凭记忆写 2024+ 平台事实（只用事实包或联网核实，带来源+日期）②用户可见层不暴露 `afa-` 内部代号（一律用 display_name）③默认推进，不把内部路由写成"可以开始吗"式门槛 ④能给保守可执行版就先给，不轻易 BLOCKED ⑤越界用 `out_of_scope` 结构化回交上层，不口头停工 ⑥五个交接字段不丢 ⑦基准硬数字仅用于路由分诊、深度诊断一律走用户自基准 ⑧运行时产物统一写 `./deliverables/xxx.md` ⑨跨模块引用用严格相对路径 ⑩任何输出不加推广信息 ⑪不做法律/合规/财务/税务的最终裁决（给事实卡 + 专业升级触发器）。
+
+**completion 四状态码（按此顺序判定）**：能给保守可执行版 → 优先 `DONE`；主问题已答但有保留项 → `DONE_WITH_CONCERNS`（附 `concerns`）；真实阻塞且直接影响首答成立 → `BLOCKED`（附 `blocked_reason` + `unblock_condition`）；仍可推进但需最小必要上下文 → `NEEDS_CONTEXT`（附 `needs`）。**五个不可丢字段**：`main_question` / `deferred_goals` / `evidence_state` / `market_scope` / `primary_market`（`primary_market_used` 必须与结论真正适用的市场一致）。
+
+**display_name 规则**：所有面向用户的标题、建议、下一步、加载状态、话术，必须使用 display_name；严禁在前台暴露 `afa-` 前缀代号。
+
+**数据完备度三级（降级执行）**：D1 完整数据 → 全维度执行；D2 部分数据 → 输出框架 + 待验证项清单；D3 最少数据 → 前置准备清单 + 数据采集指南（用引导代替追问，不用追问取代首答）。⚠️ 这是**数据完备度轴**，与 `degradation-rules.md` 的**平台能力轴**（Level 3 满血 → Level 1 最简）是两个方向相反的轴，勿混用 Level 编号。
+
+**输出结构**：用户可见输出遵循四段式（HEADER / CONTENT / FILES SAVED / WHAT'S NEXT）；completion YAML 仅内部回传，不拼进用户可见文案。
+<!-- KERNEL:AUTO:END -->

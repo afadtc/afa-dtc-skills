@@ -138,7 +138,7 @@ Step 4: 后续追踪
 ```md
 - 当专项分析发现问题已超出常规数据体检范围时：建议内部承接到 `afa-diagnose` 做深度诊断。
 - 当异常响应确认问题复杂、跨维度或持续存在时：建议内部承接到 `afa-diagnose` 做专项深诊。
-- learnings.jsonl 记录时如需保留系统标签，使用统一格式：`- [日期] [afa-dashboard] 具体发现（含量化数据）`。
+- learnings.jsonl 是 JSONL 结构化记忆（每行一条单行 JSON，见 `../../afa/_system/brand-memory-protocol.md` 第九章）；本模块写入时 `worker` 字段填 `afa-dashboard`——该字段本身即系统标签，无需在 `insight` 正文里再写代号。
 ```
 
 ---
@@ -182,7 +182,7 @@ Step 4: 后续追踪
 
 **⑤ 衡量学习**：
 - 评估实验结果，验证或推翻假设
-- 将学到的知识记录到 learnings.jsonl（必须使用 Hub 统一四分类格式：有效的做法 / 无效的做法 / 用户洞察 / 行业变化；如需保留系统标签，参见上方 internal-only 区块）
+- 将学到的知识以**单行 JSON** 追加写入 learnings.jsonl（遵循 `../../afa/_system/brand-memory-protocol.md` 第九章八字段）；`type` 按协议枚举取值：`pattern`（有效做法）/ `pitfall`（无效做法）/ `preference`（用户洞察）/ `error`（执行失败）/ `correction`（用户纠正）
 - 用于指导下一轮的目标设定
 
 ### 2.2 假设驱动分析模板

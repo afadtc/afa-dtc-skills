@@ -229,16 +229,16 @@ Questions? Please DM us anytime.
 ### Version A: Problem-Solution
 ```
 ┌─────────────────────┐
-│  [Bold headline —    │
-│   the problem]       │
-│                      │
-│  [Product image      │
-│   in context]        │
-│                      │
-│  [Key benefit text]  │
-│                      │
-│  [CTA button]        │
-│  [Offer / urgency]   │
+│  [Bold headline —   │
+│   the problem]      │
+│                     │
+│  [Product image     │
+│   in context]       │
+│                     │
+│  [Key benefit text] │
+│                     │
+│  [CTA button]       │
+│  [Offer / urgency]  │
 └─────────────────────┘
 ```
 
@@ -246,12 +246,12 @@ Questions? Please DM us anytime.
 ```
 ┌─────────────────────┐
 │  ★★★★★ [Rating]     │
-│  "[Customer quote]"  │
-│                      │
-│  [Product image]     │
-│                      │
-│  [Brand logo small]  │
-│  [CTA button]        │
+│  "[Customer quote]" │
+│                     │
+│  [Product image]    │
+│                     │
+│  [Brand logo small] │
+│  [CTA button]       │
 └─────────────────────┘
 ```
 

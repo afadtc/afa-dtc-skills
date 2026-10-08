@@ -2,7 +2,7 @@
 
 > **协议层级**：全局强制 · 所有模块必须遵守
 >
-> **版本**：v2.4.7
+> **版本**：v2.6
 >
 > **来源说明**：本文件为当前生效的全局协议，供 Hub、Supervisor 与 Worker 统一遵守。
 
@@ -58,7 +58,7 @@ Brand Brain 的 20 个文件按写入行为分为三类，每类有不同的管�
 
 ---
 
-## 三、子目录扩展协议（v1.7 新增）
+## 三、子目录扩展协议
 
 ```
 部分专业模块需要存储超出核心 20 个文件范围的专属数据。
@@ -88,9 +88,7 @@ Brand Brain 的 20 个文件按写入行为分为三类，每类有不同的管�
 ```
 模块                 读取的文件（以各模块 SKILL.md 的 Requires + Optional 为准）
 ──────────────────────────────────────────────────────────────
-afa                  ALL（管家需要全局视图）
-afa-diagnose         ALL（诊断需要全局数据）
-afa-ops              ALL（运营需要全局视图）
+afa                  ALL（Hub 需要全局视图；仅 Hub 拥有 ALL 权限）
 afa-aov              products + offers + learnings + brand-master + audience
 afa-brand            products + voice-and-tone + positioning + brand-story + visual-identity + learnings
 afa-compete          competitors + products + learnings
@@ -98,6 +96,7 @@ afa-convert          products + objections + guardrails + audience + learnings
 afa-creative         voice-and-tone + products + creative-kit + brand-master + learnings + audience + store
 afa-cx               products + objections + learnings + voice-and-tone + audience
 afa-dashboard        products + learnings + stack + metrics
+afa-diagnose         products + brand-master + learnings + metrics + audience + offers
 afa-email            voice-and-tone + products + audience + learnings
 afa-expand           brand-master + products + competitors + stack + learnings
 afa-explore          products + audience + competitors + learnings
@@ -106,6 +105,8 @@ afa-geo              products + brand-master + learnings + audience
 afa-gg               products + audience + learnings + offers + brand-master + store
 afa-influencer       products + voice-and-tone + audience + learnings + brand-master
 afa-launch           voice-and-tone + products + learnings
+afa-ops              products + learnings + stack + brand-master
+afa-payments         products + stack + learnings + metrics
 afa-pr               products + voice-and-tone + brand-master + learnings + audience
 afa-product          voice-and-tone + products + learnings
 afa-retain           products + audience + learnings + offers + brand-master
@@ -114,6 +115,8 @@ afa-sms              products + voice-and-tone + audience + learnings + offers
 afa-social           products + voice-and-tone + audience + learnings + creative-kit
 afa-tt               products + audience + learnings + creative-kit + offers + store
 ```
+
+> 注：`afa-diagnose` 与 `afa-ops` 曾被标为 ALL，与其 SKILL.md 的 Requires / Optional 声明不符，现按各自 SKILL.md 收敛为显式清单。诊断引擎读取 `learnings.jsonl` 时仍按第 9.5 节「加载所有 worker 的记录」执行——这是**记忆条目的 worker 过滤范围**，与本表的 **Brand Brain 文件读取范围**是两回事，不得互相扩权。
 
 ---
 
@@ -149,7 +152,7 @@ learnings.jsonl：
 
 ---
 
-## 六、缺失文件处理（v1.8 重构——数据缺口清单）
+## 六、缺失文件处理（数据缺口清单）
 
 ```
 如果模块需要的文件不存在：
@@ -200,7 +203,7 @@ learnings.jsonl：
 
 ---
 
-## 八、冲突检测与处理规则（v2.0.9 新增）
+## 八、冲突检测与处理规则
 
 当用户在当前会话中提供的信息与 Brand Brain 中已有记录存在逻辑矛盾时，系统必须主动检测并处理，而不是静默覆盖。
 
@@ -399,20 +402,15 @@ learnings.jsonl：
 
 ## 十、Assets 格式
 
-```markdown
-# 资产登记
+> **真源指向**：`assets.md` 的文件模板与表头定义，统一以 `../references/brand-brain-template.md` 第十二章为准，本节不再重复定义（历史上本节与该模板各自定义过一套表头，已废止本节的那一套）。
 
-> 由 AFA DTC 系统自动维护。新条目追加在活跃资产表底部。
+本协议对 `assets.md` 只规定**写入语义**：
 
-## 活跃资产
-
-| 资产名称 | 类型 | 创建日期 | 关联活动 | 状态 | 备注 |
-|---------|------|---------|---------|------|------|
-| welcome-sequence | 邮件序列(6封) | 2026-03-15 | 品牌上线 | 已上线 | 打开率 42% |
-| hero-banner-v2 | 图片 | 2026-03-18 | 品牌上线 | 已上线 | 1200x630 深色版 |
-
-## 已退役资产
-
-| 资产名称 | 类型 | 退役日期 | 原因 |
-|---------|------|---------|------|
+```
+① Append-only（见第二章「文件所有权规则」）：
+   所有模块都可以追加写入；任何模块不得删除、截断或覆盖已有条目。
+② 追加位置（见第五章「追加写入」）：
+   先读取现有文件 → 在对应表格底部追加新条目 → 告知用户「已添加 {n} 条新记录到 assets.md」。
+③ 资产退役：
+   不删除原行，改为在「已退役资产」表追加一行并注明退役日期与原因。
 ```

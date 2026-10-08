@@ -107,8 +107,8 @@ references 文件标题下方应紧接一段简短说明，说明本文件的用
 
 | 主题 | 上位真源 |
 |---|---|
-| frontstage / backstage / mixed 裁决 | `_system/iron-rules.md` |
+| frontstage / backstage / mixed 裁决 | `iron-rules.md` |
 | references 的头部、语言与抬头规范 | 本文件 |
-| 用户最终输出格式 | `_system/output-format.md` |
+| 用户最终输出格式 | `output-format.md` |
 
-凡与 `_system/iron-rules.md` 冲突时，以 `iron-rules.md` 为最高位规则；本文件仅负责把这些规则落实到 references 的编写方式。
+凡与 `iron-rules.md` 冲突时，以 `iron-rules.md` 为最高位规则；本文件仅负责把这些规则落实到 references 的编写方式。

@@ -2,15 +2,13 @@
 
 > **协议层级**：Hub 路由参考 · 路由前强制检查
 >
-> **版本**：v2.4.7
+> **版本**：v2.6
 >
 > **说明**：本文件是 afa 智能路由的完整决策参考，确保每次路由都精准、高效、不遗漏。
->
-> **v2.0.9 变更**：第二章所有模块的「传递上下文」从描述性文本升级为声明式 Context Matrix（Requires/Optional/Never），与各 Worker SKILL.md 内部声明严格对齐。
 
 ---
 
-## 一、路由前检查清单（v1.8 升级）
+## 一、路由前检查清单
 
 每次路由到任何模块之前，必须完成以下检查：
 
@@ -26,7 +24,7 @@
      如果用户描述的是症状而非具体需求 → 先走诊断流程
      如果用户描述的是具体任务 → 可以直接路由
 
-□ 4. 是否是复合任务？（v2.4.1 重写）
+□ 4. 是否是复合任务？
      如果用户需求涉及 2+ 个领域 → 先判断当前最优第一步是否清晰
      如果第一步清晰且无高风险动作 → 直接推进第一步，并用自然语言说明后续大致路径
      只有存在真实方向分叉、额外资源投入或用户明确要求先看全流程时 → 再展示完整计划供用户拍板
@@ -37,7 +35,7 @@
      如果匹配 → 走工作流链
      如果不匹配 → 单模块路由
 
-□ 6. 是否已经到达必须确认的节点？（v2.4.1 重写——必检）
+□ 6. 是否已经到达必须确认的节点？（必检）
      单模块路由 → 默认直接推进，不把内部路由写成「可以开始吗」式门槛
      多模块工作流 → 默认先推进第一步，不把完整计划展示设为前置门票
      只有出现真实方向分叉、预算/资源投入、高风险外部动作、不可逆影响，或用户明确要求自己选择时 → 才请求确认
@@ -54,7 +52,7 @@
      诊断结论（如有）是否已准备好传递
      main_question / deferred_goals / evidence_state 是否已显式写入
 
-□ 9. 目标市场是否已确认？（v1.8 新增）
+□ 9. 目标市场是否已确认？
      如果任务涉及内容生成、属地化、定价 → 确认目标市场
      如果未知 → 允许先给粗颗粒度保守版，但必须标适用范围
      如果是跨国市场 → 强制加入本地化提醒（语言、支付、物流、属地化要求）
@@ -62,7 +60,10 @@
 
 ---
 
-## 二、24 模块完整路由规则
+## 二、25 模块完整路由规则
+
+> 注：此处「25 模块」指 **Worker 层**——不含 Hub（afa）与 5 个 Supervisor；全系统共 31 个目录 = 1 Hub + 5 Supervisor + 25 Worker。
+> 其中 25 Worker = **23 个执行 Worker**（foundation 5 + paid 4 + organic 5 + monetize 6 + scale 3，挂在 Supervisor 下）+ **2 个全局引擎**（afa-diagnose / afa-dashboard，直挂 Hub）。此口径与 `../SKILL.md` 第 1 节一致。
 
 ### afa-diagnose（全链路诊断中心）
 
@@ -123,7 +124,8 @@ Context Matrix：
   ├── 用户说「我想做新品牌/新产品」
   ├── 用户说「帮我选品」「什么赛道好」
   ├── 用户说「这个市场怎么样」
-  └── 从零起步工作流的 Step 1
+  ├── 从零起步工作流的 Step 1
+  └── 测试店快速测品工作流（WF12）的 Step 1：模式 G 赢品验证（supply_chain_mode = dropshipping）
 
 前置要求：
   ├── 用户的兴趣方向或品类偏好
@@ -137,11 +139,13 @@ Context Matrix：
 预期输出：
   ├── 市场机会评估报告
   ├── 选品推荐清单
-  └── 竞争格局概览
+  ├── 竞争格局概览
+  └── WF12：通过验证的候选产品 + 最小测品档案（写入 products.md / audience.md）
 
 后续路由：
   → afa-compete（深入分析竞品）
   → afa-product（确定产品策略）
+  → afa-launch 模式 F（WF12：验证通过后进入测品快速通道，不经 brand / product）
 ```
 
 ### afa-compete（竞品分析）
@@ -151,7 +155,8 @@ Context Matrix：
   ├── 用户说「帮我分析竞品」
   ├── 用户提供了具体竞品名称/URL
   ├── afa-explore 完成后的自然衔接
-  └── 品牌升级工作流的 Step 1
+  ├── 品牌升级工作流的 Step 1
+  └── 测试店快速测品工作流（WF12）Step 1 配合：单店广告信号 + 竞对执行质量 + 赢家版式收集
 
 前置要求：
   ├── 竞品名称或 URL（至少 1 个）
@@ -240,7 +245,8 @@ Context Matrix：
   ├── 用户说「转化率太低」
   ├── 诊断发现转化漏斗问题
   ├── 从零起步工作流的 Step 4
-  └── 广告体系搭建工作流的 Step 3
+  ├── 广告体系搭建工作流的 Step 3
+  └── 测试店快速测品工作流（WF12）变现部分 Step 1：AI 整页改写 + 信任基建包（ai-page-rewrite-sop）
 
 前置要求：
   ├── 产品信息
@@ -268,7 +274,8 @@ Context Matrix：
   ├── 用户说「我要开始投广告」
   ├── 用户说「冷启动怎么做」
   ├── 从零起步工作流的 Step 5
-  └── 首次投放，还没有广告历史数据
+  ├── 首次投放，还没有广告历史数据
+  └── 测试店快速测品工作流（WF12）：模式 F 测品快速通道（supply_chain_mode = dropshipping 且诉求为测品）
 
 前置要求：
   ├── 产品信息 + 定价
@@ -277,6 +284,7 @@ Context Matrix：
 
 Context Matrix：
   Requires : voice-and-tone.md, products.md
+             （模式 F 例外：products.md 以 explore 写入的最小测品档案为准；voice-and-tone.md 降为 Optional，缺失不改道）
   Optional : learnings.jsonl
   Never    : 竞品机密数据
 
@@ -284,11 +292,14 @@ Context Matrix：
   ├── 首批广告计划
   ├── 预算分配方案
   ├── 测试矩阵
-  └── 冷启动 SOP
+  ├── 冷启动 SOP
+  └── 模式 F：48 小时上线清单 + 测品判读规则（执行归 afa-paid 工作流 D）
 
 后续路由：
   → afa-fb / afa-gg / afa-tt（进入具体渠道优化）
   → afa-creative（如果需要更多素材）
+  → afa-monetize 工作流 E → afa-paid 工作流 D（WF12：页面/Offer 执行后投放）
+  → afa-scale 工作流 C（WF12 赢家品牌化入口）
 ```
 
 ### afa-fb（Facebook 广告）
@@ -298,11 +309,12 @@ Context Matrix：
   ├── 用户说「Facebook 广告怎么优化」
   ├── 用户说「Meta 广告 ROAS 太低」
   ├── 诊断发现 Facebook 渠道问题
-  └── 用户说「账号被封了」（账户健康部分）
+  ├── 用户说「账号被封了」（账户健康部分）
+  └── 测试店快速测品工作流（WF12）付费部分 Step 2-3：Day-0 冷启动结构 + D+3~D+7 判读执行（day-zero-testing）
 
 Context Matrix：
   Requires : products.md, audience.md
-  Optional : learnings.jsonl, creative-kit.md, offers.md
+  Optional : learnings.jsonl, creative-kit.md, offers.md, store.md
   Never    : 竞品广告账户后台数据、未经授权的 Pixel 数据
   额外传递 : 用户当前广告数据（如有）
 
@@ -324,7 +336,7 @@ Context Matrix：
 
 Context Matrix：
   Requires : products.md, audience.md
-  Optional : learnings.jsonl, offers.md, brand-master.md
+  Optional : learnings.jsonl, offers.md, brand-master.md, store.md
   Never    : 竞品 Google Ads 后台数据、未经授权的搜索词报告
   额外传递 : 用户当前广告数据（如有）
 
@@ -346,7 +358,7 @@ Context Matrix：
 
 Context Matrix：
   Requires : products.md, audience.md
-  Optional : learnings.jsonl, creative-kit.md, offers.md
+  Optional : learnings.jsonl, creative-kit.md, offers.md, store.md
   Never    : 竞品 TikTok 广告后台数据、未经授权的 Pixel 数据
 
 预期输出：
@@ -367,7 +379,7 @@ Context Matrix：
 
 Context Matrix：
   Requires : products.md
-  Optional : brand-master.md, learnings.jsonl, audience.md
+  Optional : brand-master.md, learnings.jsonl, audience.md, store.md
   Never    : 竞品 GSC 后台数据、未经授权的外链操作
 
 预期输出：
@@ -470,7 +482,8 @@ Context Matrix：
 触发条件：
   ├── 用户说「怎么提高客单价」
   ├── 诊断发现 AOV 低于基准
-  └── 留存体系搭建工作流的 Step 4
+  ├── 留存体系搭建工作流的 Step 4
+  └── 测试店快速测品工作流（WF12）变现部分 Step 2：测品 Offer 工程（bundle-strategy §4，50% 混合毛利校验）
 
 Context Matrix：
   Requires : products.md, offers.md
@@ -615,11 +628,13 @@ Context Matrix：
   ├── 用户说「帮我做广告素材/视频」
   ├── 用户说「创意枯竭了」
   ├── 广告体系搭建工作流的 Step 2
-  └── 大促备战工作流的 Step 2
+  ├── 大促备战工作流的 Step 2
+  └── 测试店快速测品工作流（WF12）付费部分 Step 1：静态图生产线（dropshipping-ads-playbook，豁免 creative-kit 前置）
 
 Context Matrix：
   Requires : voice-and-tone.md, products.md
-  Optional : creative-kit.md, brand-master.md, learnings.jsonl, audience.md
+             （WF12 测品例外：voice-and-tone.md 降为 Optional，products.md 以最小测品档案为准）
+  Optional : creative-kit.md, brand-master.md, learnings.jsonl, audience.md, store.md
   Never    : 竞品未公开素材、未经授权的用户生成内容
 
 预期输出：
@@ -632,9 +647,29 @@ Context Matrix：
 
 ---
 
-## 三、多模块协同规则（v2.4.1 重写）
+### afa-payments（支付风控引擎，挂 scale）
 
-### 用户确认节点（v2.4.1 重写——最高优先级）
+```
+触发条件：
+  ├── 「Stripe/PayPal 把货款冻结了」
+  ├── 「争议率/拒付率快到阈值」「VAMP」「怕被封号」
+  └── 支付方式选型 / BNPL / 欺诈过滤
+
+前置要求：近期争议率或 TC40/TC15/TC05 事件数（模块内可引导收集）
+
+预期输出：VAMP 自查结论 + 争议率健康评估 + chargeback/冻结应对清单 + 现金流预案
+
+后续路由：
+  → 根因是物流 → afa-ops；根因是客服情绪 → afa-cx（通过 out_of_scope 回交）
+```
+
+### （已并入 afa-sms）WhatsApp / RCS 富媒体消息
+
+WhatsApp/RCS 能力已并入 afa-sms 的富媒体分册（`../../afa-sms/references/whatsapp-rcs-playbook.md`）：触发信号（WhatsApp、模板消息、24h 会话窗口、RCS）路由至 afa-sms，进入后先判市场适用性（LatAm/东南亚/欧洲强、纯美弱）。两套合规体系互斥警示见分册头部。
+
+## 三、执行与协同规则
+
+### 用户确认节点（最高优先级）
 
 ```
 核心原则：默认沿主问题连续推进；只有遇到真实分叉、资源投入差异或高风险动作时，才请求用户确认。
@@ -655,7 +690,7 @@ Context Matrix：
   命中 P0 时可先给止损方案，但涉及真实外部执行前仍需说明风险并征得确认。
 ```
 
-### 角色边界规则（v1.8 新增）
+### 角色边界规则
 
 ```
 每个 Skill 只做自己职责范围内的事：
@@ -676,7 +711,7 @@ Context Matrix：
 
 不能并行的组合（有依赖关系）：
   ├── afa-brand → afa-convert（品牌定位必须先于页面优化）
-  ├── afa-convert → afa-launch（页面必须先于广告投放）
+  ├── afa-convert → afa-launch（页面必须先于广告投放；WF12 中 launch 模式 F 先定义上线清单、页面由 monetize 执行后再由 paid 投放，顺序不变）
   ├── afa-retain → afa-email（留存策略必须先于邮件执行）
   └── afa-explore → afa-compete（市场探索必须先于竞品分析）
 ```
@@ -688,13 +723,13 @@ Context Matrix：
   1. 将输出写入 Brand Brain 对应文件
   2. 更新 assets.md（如有新资产）
   3. 更新 learnings.jsonl（如有新教训）
-  4. 向用户展示结果，确认是否继续下一步（v1.8 新增）
+  4. 向用户展示结果，确认是否继续下一步
   5. 用户同意后才返回 afa 进行下一步路由
 
 下游模块启动时，必须：
   1. 读取 Brand Brain 中的最新数据
   2. 确认上游输出是否满足需求
-  3. 如果不满足，向用户说明缺什么、在哪里获取（v1.8 修改）
+  3. 如果不满足，向用户说明缺什么、在哪里获取
 ```
 
 ---

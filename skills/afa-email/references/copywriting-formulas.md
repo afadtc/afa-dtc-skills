@@ -84,6 +84,16 @@ Preview Text 是主题行之外的第二钩子。它的作用不是把主题行�
 | 放系统默认语句，如 “View this email in your browser” | 完全没有销售与阅读价值 |
 | 写得太长太复杂 | 用户在收件箱里只会看到截断版本 |
 
+### 4.2 Apple Intelligence 邮件摘要（2026）——首屏策略要重写
+
+自 Apple Intelligence 起，iOS 邮件默认用 **AI 生成的两行摘要**取代传统 Preview Text 展示，收件箱按类别分 Tab，并对高互动发件人优先展示；随换机周期，2026 年已覆盖主流 iPhone 用户。对文案的直接影响：
+
+- **Preview Text 的掌控权下降**：你写的 preheader 可能被 AI 摘要覆盖——AI 会读正文首屏生成摘要。因此**正文前 1-2 句必须自带完整卖点**（把过去藏在中段的利益前置），让 AI 摘出来的两行正是你想让用户看到的。
+- **主题行仍是第一杠杆**：摘要影响的是"打开前的第二行"，主题行开启权重不降反升——继续按 §3 打磨主题行。
+- **互动即分发**：高互动发件人获优先展示，等于把"名单健康 + 内容相关性"直接变成曝光——与送达率治理（见 `deliverability-checklist.md`）同源。
+
+> **来源**：[Oracle：AI 邮件摘要对营销的影响](https://blogs.oracle.com/marketingcloud/ai-summaries-for-email-design-impacts-on-marketers)；[MarTech：Apple/Google 2025 更新对 2026 email+SMS 的影响](https://martech.org/what-apple-and-googles-2025-updates-mean-for-email-and-sms-in-2026/)。核实于 2026-07。
+
 ---
 
 ## 5. 邮件正文框架

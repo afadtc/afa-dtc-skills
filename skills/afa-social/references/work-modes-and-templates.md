@@ -15,7 +15,7 @@
 3. **平台矩阵**：确定主攻平台和次要平台。
 4. **原型匹配**：从原型库中挑选足够覆盖当前目标与测试范围的格式组合。
 5. **日历规划**：输出 4 周滚动运营板（格式严格遵循 `content-calendar-template.md` 第 4 章标准，包含排期区、配额校验区和复盘区）。
-**输出**：`Social_Strategy_Blueprint.md`（其中第 6 章「初始 4 周运营板」必须包含配额校验和 O2P Flag 列）
+**输出**：`./deliverables/Social_Strategy_Blueprint.md`（其中第 6 章「初始 4 周运营板」必须包含配额校验和 O2P Flag 列）
 
 ### 模式 2：UGC 项目启动与管理 (UGC Program Launch)
 **触发**：用户需要获取高质量的 UGC 内容。
@@ -25,7 +25,7 @@
 3. **简报制作**：编写包含 Do's/Don'ts 和足够支持当前拍摄决策的脚本选项的 Creator Brief。
 4. **外联策略**：提供 DM/邮件触达模板和跟进序列。
 5. **权利与合同**：提供使用权 (Usage Rights) 和白名单 (Whitelisting) 指南。
-**输出**：`UGC_Campaign_Kit.md`
+**输出**：`./deliverables/UGC_Campaign_Kit.md`
 
 ### 模式 3：爆款脚本工程 (Viral Script Engineering)
 **触发**：用户需要具体的视频拍摄脚本。
@@ -34,7 +34,7 @@
 2. **Hook 构思**：生成足够支持测试决策的不同角度 Hook（如痛点、好奇、对比、利益、争议等）。
 3. **结构选择**：选择最适合的脚本框架（PAS、Storytime、对比等）。
 4. **脚本编写**：提供包含时间轴、视觉指示、口播词和屏幕文本的完整脚本。
-**输出**：`Video_Script_Pack.md`
+**输出**：`./deliverables/Video_Script_Pack.md`
 
 ### 模式 4：有机转付费管道搭建 (Organic-to-Paid Setup)
 **触发**：用户希望将社交内容转化为广告素材。
@@ -43,7 +43,7 @@
 2. **测试矩阵**：设计 Hook 测试和 Body 测试的 A/B 计划。
 3. **放大策略**：提供 Spark Ads / Partnership Ads 的设置指南。
 4. **迭代循环**：建立从广告数据反哺有机内容创作的反馈机制。
-**输出**：`Organic_to_Paid_Pipeline.md`
+**输出**：`./deliverables/Organic_to_Paid_Pipeline.md`
 
 ### 模式 5：大促/季节性内容日历 (Tentpole Campaign Planning)
 **触发**：用户需要为 BFCM、情人节、母亲节等规划内容。
@@ -51,7 +51,7 @@
 1. **时间轴倒推**：从活动日按准备复杂度、库存节奏和内容产能倒推。
 2. **阶段划分**：预热期 (Tease) -> 建立列表 (Lead Gen) -> 揭晓 (Reveal) -> 紧迫感 (Urgency)。
 3. **内容映射**：为每个阶段分配具体的内容原型和脚本。
-**输出**：`Campaign_Content_Calendar.md`
+**输出**：`./deliverables/Campaign_Content_Calendar.md`
 
 ### 模式 6：社区飞轮构建 (Community Flywheel Build)
 **触发**：用户希望建立品牌社区或提高客户倡导度。
@@ -59,7 +59,7 @@
 1. **触点分析**：梳理购后体验和社区互动触点。
 2. **激励设计**：设计鼓励客户分享和生成 UGC 的机制。
 3. **大使计划**：构建分层的品牌大使/联盟计划（Brand Friend -> Partner -> Ambassador）。
-**输出**：`Community_Growth_Playbook.md`
+**输出**：`./deliverables/Community_Growth_Playbook.md`
 
 ---
 

@@ -1,6 +1,6 @@
 # 权威链接获取手册（数字公关 + HARO + 可链接资产）
 
-> **用途**：afa-seo 在需要提升域名权威度 (DR)、规划外链活动时的标准操作程序 (SOP)。
+> **用途**：SEO 引擎 在需要提升域名权威度 (DR)、规划外链活动时的标准操作程序 (SOP)。
 
 ---
 
@@ -29,9 +29,23 @@
 
 ---
 
-## 三、HARO (Help A Reporter Out) 与媒体请求
+## 三、记者来源请求平台（HARO 生态）与媒体请求
 
-HARO（现为 Connectively）及类似平台是获取高质量媒体链接的高效途径。
+**先更正一个过时说法**：本节旧版写的"HARO 现为 Connectively"已经不成立。Cision 把 HARO 改名为 **Connectively** 后，**Connectively 已于 2024-12-09 正式关停**（Cision 转向 CisionOne）。2025-04 起 **Featured.com 接手并重启了 "HARO" 这个品牌**，服务仍在运行，但生态已经分散，且被大量 AI 生成的应答稀释、回复质量参差。
+
+**因此不要把宝押在单一平台上。当前可用的记者来源请求渠道（核实于 2026-07）：**
+
+| 平台 | 说明 |
+| :--- | :--- |
+| **HARO（由 Featured.com 运营）** | 2025-04 重启的老品牌，仍是体量较大的入口 |
+| **Source of Sources (SOS)** | HARO 原创始人另起的免费邮件通讯，形式最接近老 HARO |
+| **Qwoted** | 记者/公关双边平台，质量筛选相对严格 |
+| **SourceBottle** | 老牌来源请求平台，英联邦/澳洲媒体覆盖较好 |
+| **ResponseSource / ProfNet** | 付费的记者询问服务，适合有预算的品牌 |
+
+> **来源**：[Octiv Digital：Connectively（原 HARO）将于 2024-12-09 关停](https://www.octivdigital.com/ideas-and-advice/connectively-formerly-haro-to-shut-down-on-december-9-2024/)；[Prezly：Connectively (HARO) 替代方案（2026）](https://www.prezly.com/academy/the-best-haro-alternatives)；[Medialyst：Connectively 已关停，替代方案（2026）](https://medialyst.ai/alternatives/connectively-alternatives)。核实于 2026-07。
+
+**执行建议**：同时订阅 2-3 个来源（HARO + SOS + Qwoted 是常见组合），把它们当作"机会流"，用下面的响应策略统一处理。
 
 ### 3.1 响应策略
 - **速度**：记者通常有严格的截稿时间，必须在请求发布后几小时内回复。

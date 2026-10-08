@@ -27,4 +27,4 @@ GEO 搜索引擎专注于 **AI 搜索可见性优化（Generative Engine Optimiz
 
 ---
 
-*完整内容参见：../../afa-expand/references/tariff-arbitrage-strategies.md*
+*完整内容参见：../../afa-expand/references/trend-timing-arbitrage.md*

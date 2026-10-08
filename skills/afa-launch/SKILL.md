@@ -1,12 +1,12 @@
 ---
 name: afa-launch
-description: "DTC 产品上市与冷启动引擎——四阶段启动计划、MVP 广告测试、PMF 判定、新品冷启动策略、市场验证。Use when user mentions: 上市, launch, 冷启动, cold start, 新品, new product, PMF, product-market fit, MVP, 市场验证, validation, 启动计划, go-to-market, 新品上架, 首发."
+description: "DTC 产品上市与冷启动——四阶段启动、MVP 测试、PMF 判定、市场验证。触发词: 上市, launch, 冷启动, cold start, 新品, PMF, MVP, go-to-market, 首发, product launch, MVP test, first sale, market validation。复杂问题先经 afa。"
 ---
 
-# afa-launch — 产品上市与冷启动引擎
+# 产品上市与冷启动引擎
 
 > **定位**：AFA DTC 系统的产品上市专家——从市场验证到四阶段启动执行，从 MVP 广告测试到 PMF 判定，提供 2026 年最前沿的 DTC 新品冷启动策略、诊断和决策能力。
-> **上层承接**：基础战略统筹层 · **版本**：v2.4.7
+> **上层承接**：基础战略统筹层 · **版本**：v2.6
 
 ---
 
@@ -16,6 +16,7 @@ description: "DTC 产品上市与冷启动引擎——四阶段启动计划、MV
 - **Requires**: `voice-and-tone.md`, `products.md`
 - **Optional**: `learnings.jsonl` (如果有历史启动数据)
 - **Never**: 竞品机密数据
+- **模式 F 例外**（`supply_chain_mode = dropshipping` 测品场景）：`products.md` 以市场探索引擎写入的"最小测品档案"（候选品条目 + 履约成本口径 + 目标售价）为准即可；`voice-and-tone.md` 降为 Optional，缺失不触发改道品牌定位。
 
 ### 1.1 Shared Inherited Context（共享继承上下文）
 
@@ -32,18 +33,19 @@ description: "DTC 产品上市与冷启动引擎——四阶段启动计划、MV
 | `launch_stage` | Hub / Supervisor / User | 上市阶段触发器；用于区分验证、预热、引爆、优化等不同执行段。 |
 | `budget_band` | Hub / Supervisor / User | 预算带宽触发器；用于限定测试强度、渠道组合与里程碑节奏。 |
 | `validation_need` | Hub / Supervisor / User | 验证需求触发器；用于区分 Go/No-Go、PMF 评估与创意测试优先级。 |
+| `supply_chain_mode` | Hub / Supervisor | 供应链模式触发器；`dropshipping` 且诉求为测品时改走模式 F 测品快速通道（分诊树与特殊触发器同步）。 |
 
-如果上游未显式提供这些字段，先按 `_system/context-matrix.md` 与 `_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
+如果上游未显式提供这些字段，先按 `../afa/_system/context-matrix.md` 与 `../afa/_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
 
 ## 2. Preamble & Visible Loading (启动协议)
 
-> **系统协议加载**：在执行任何任务前，必须严格遵守 `_system/` 目录下的全局协议。
-> - 遵循 `_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
-> - 遵循 `_system/output-format.md` 进行四段式输出和报告视觉化。
-> - 遵循 `_system/degradation-rules.md` 处理信息不足或无联网环境。
-> - 遵循 `_system/localization-rules.md` 进行目标市场本地化适配。
-> - 遵循 `_system/edge-cases.md` 处理边界情况和 Level 0 需求。
-> - 遵循 `_system/preamble.md` 进行初始化检查和规则优先级判定。
+> **系统协议加载**：在执行任何任务前，必须严格遵守 `../afa/_system/` 目录下的全局协议。
+> - 遵循 `../afa/_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
+> - 遵循 `../afa/_system/output-format.md` 进行四段式输出和报告视觉化。
+> - 遵循 `../afa/_system/degradation-rules.md` 处理信息不足或无联网环境。
+> - 遵循 `../afa/_system/localization-rules.md` 进行目标市场本地化适配。
+> - 遵循 `../afa/_system/edge-cases.md` 处理边界情况和 Level 0 需求。
+> - 遵循 `../afa/_system/preamble.md` 进行初始化检查和规则优先级判定。
 
 当用户首次唤醒产品上市流程时，必须输出以下可见的加载状态：
 
@@ -81,6 +83,9 @@ description: "DTC 产品上市与冷启动引擎——四阶段启动计划、MV
   ├── "预算怎么分配" / "$X怎么花" / 聚焦预算问题
   │   → 模式 E：预算规划
   │
+  ├── supply_chain_mode = dropshipping 且诉求为"测品" / "测试店上新" / "快速上线"
+  │   → 模式 F：测品快速通道
+  │
   └── 意图模糊 / 多重意图叠加
       → 先确认用户当前最紧迫的问题是什么，再路由
       → 若用户同时有诊断需求和规划需求，优先诊断（先止血再规划）
@@ -90,6 +95,9 @@ description: "DTC 产品上市与冷启动引擎——四阶段启动计划、MV
 - `crisis_mode ≠ none` → 温和提醒用户当前处于危机期，启动新项目是"投资未来"，建议优先处理止血事项；用户坚持则正常执行
 - `seasonal_mode = pre_season` → 自动激活季节性发布框架（详见 §5.1）
 - `launch_stage` 已明确 → 直接跳到对应阶段执行，不重复前置步骤
+- `supply_chain_mode = dropshipping` 且诉求为测品/测试店/快速上线 → 模式 F（此触发优先级高于 `launch_stage` 触发）
+- `supply_chain_mode = dropshipping` 且用户请求完整启动规划 → 提示存在测品快速通道并询问；用户未明确选择时默认仍走模式 A
+- 模式 F 进行中的后续请求（要不要继续投 / 怎么测素材 / 预算怎么分）→ 回到模式 F Step 3-4 处理，不改走模式 C/D/E
 
 ---
 
@@ -159,8 +167,8 @@ description: "DTC 产品上市与冷启动引擎——四阶段启动计划、MV
   ├── Week 4：输出完整 PMF 评估报告
   └── 🚦 最终决策（Scale / Pivot / Kill）
        Scale 条件：PMF≥75 + 连续2周CPA≤目标 + ≥2渠道盈利 + 创意可复制 + 复购>15%
-       Pivot 条件：PMF 40-74 / 仅1渠道有效 / CPA不稳定 / 复购弱
-       Kill 条件：PMF<40 / 全渠道CPA>目标200% / CVR持续<1% / 无复购无有机增长
+       Pivot 条件：PMF 25-49（50-74 为 Optimize：先优化后复评，分档真源见 pmf-assessment-template.md） / 仅1渠道有效 / CPA不稳定 / 复购弱
+       Kill 条件：PMF<25 / 全渠道CPA>目标200% / CVR持续<1% / 无复购无有机增长
 ```
 
 **Step 4 — 跨渠道协同**：读取 `references/cross-channel-launch-playbook.md` 设计渠道协同方案与预算分配。
@@ -258,7 +266,7 @@ description: "DTC 产品上市与冷启动引擎——四阶段启动计划、MV
 
 **Step 2 — 构建 PMF 仪表盘**：
 
-读取 `references/pmf-assessment-template.md` 获取五维评分体系：
+读取 `references/pmf-assessment-template.md` 获取四维评分体系：
 
 ```text
 PMF Score = 加权平均分，满分 10 分
@@ -318,7 +326,7 @@ PMF Score = 加权平均分，满分 10 分
 
 ```text
 三级裁决时间线：
-  D+3 首次裁决：关停明显失败的创意（CPA > 目标 200%）
+  D+3 首次裁决：关停明显失败的创意（CPA > 目标 150% 为**默认关停线**；高客单价 / 长决策周期等高容忍场景可放宽至 200%，须在启动前明确选定并全程一致，见 `references/launch-timeline-template.md`）
   D+5 二次裁决：确认趋势，集中预算到前 50% 创意
   D+7 最终裁决：确认胜出者，输出胜出者画像
 ```
@@ -349,13 +357,63 @@ PMF Score = 加权平均分，满分 10 分
 
 ```text
 预算调整规则（不可违反）：
-├── 每次加预算不超过 20%
+├── 每次加预算不超过 20%（默认纪律线；30% 为触发平台重新学习的绝对红线，见 `references/budget-calculator.md`）
 ├── 加预算后等待 3 天再评估
 ├── CPA > 目标 150% 时不加预算，先诊断
 └── 优先横向扩展（新广告组/新渠道）而非纵向加码
 ```
 
 **Step 5 — 输出预算分配方案 + 调整规则 + ROI 预测模型**。
+
+---
+
+### 模式 F：测品快速通道 (Dropshipping Test Sprint)
+
+**触发条件**：`supply_chain_mode = dropshipping` 且诉求为测品/测试店上新/快速上线（Hub 工作流 12 / 品牌基建组工作流 D 交接，或用户自述测品）。**定位**：替代模式 A 的四阶段流程（阶段 0 验证访谈/Beta 与阶段 1 预热门槛为品牌新品设计，测试店场景不成立）。**判读口径**：三级裁决阈值与样本下限复用既有真源；**产品级出口为本模式新增规则（内部经验）**，数值与 mvp 真源的 D+7 口径对齐。前置文件例外见 §1。
+
+**Step 1 — 前置验证确认**：确认产品已通过市场探索引擎的三层验证漏斗（赢品五标准 + 广告持续性 + 跨平台需求 + AI 深研风险筛查，见 `../afa-explore/references/winning-product-playbook.md`）。未通过 → 回交验证，不进入上线。
+
+**Step 2 — 48 小时上线清单**（替代 D-90 时间线；页面与 Offer 项由变现留存组承接执行，本模式只做清单核对）：
+
+```text
+D-2 至 D-1（建站、Offer 与合规）：
+├── 产品页就位（转化率优化引擎 `../afa-convert/references/ai-page-rewrite-sop.md`，由变现留存组执行）
+├── Offer 就位（客单价优化引擎 `../afa-aov/references/bundle-strategy.md` §4：
+│   捆绑 + 赠品 + 毛利倒推目标 CPA，须过 50% 混合毛利校验）
+├── 信任基建包就位（政策页/物流查询页/时效组件——兼广告平台审查前置件）
+├── 履约确认（供应商可发目标市场；时效如实标注；测试单已下——代发测试单到货通常晚于上线，
+│   到货前按供应商承诺上限标注时效，到货不合格立即停投并处理已售订单）
+├── 账户卫生与追踪就位（业务组合/支付/验证/像素 Purchase 回传，Meta 广告引擎 day-zero §2）
+├── 3-5 张静态图素材就位（创意生产引擎测品手册）
+└── 测试订单跑通（支付/邮件/订单流转）
+
+D-Day：
+└── 按 Meta 广告引擎 Day-0 冷启动结构上广告（`../afa-fb/references/day-zero-testing.md`；
+    预算档位按用户预算宽松度选粗筛/验证档）
+```
+
+**Step 3 — 测品判读（D+3 / D+5 / D+7）**：复用 `references/mvp-testing-playbook.md` 三级裁决阈值与样本下限（展示 1,000+/创意、点击 100+/创意、转化 10+/假设、≥5 天）。口径注：D+3 钩子率指标仅适用于视频素材；测品默认的静态图素材无钩子率，D+3 以 CTR 为主判信号、D+5 以 CPA 为主判（静态图 CTR 参考单图基准）。粗筛档的"只判死"例外见 day-zero 双档表（须过累计展示 ≥1,000 的样本守卫）。
+
+**Step 4 — 产品级出口（本模式新增规则；执行与回传 Hub 由付费获客组工作流 D 负责）**：
+
+```text
+├── Kill：花费达 1.5 倍目标 CPA 仍 0 转化（创意基准口径）；
+│         或 D+7 CPA > 目标 200%（启动前若选定 150% 默认关停线则按 150%）且无结构性改进点
+│         → 停投，产品回选品池，复盘写入 learnings.jsonl
+├── Iterate：CPA 超目标但未超 200%，且能指出具体改进点（offer / 角度 / 落地页）
+│         → 修正后再测 1 轮（mvp 口径）；仍超标 → Kill（不允许第三轮，防止恋战）
+└── Scale：CPA ≤ 目标且满足胜出者确认（≥10 转化、连续 3 天波动 <20%）
+          → 先在 Day-0 结构内按 20% 阶梯、每次稳定 4-5 天加预算；
+            满足 Meta 广告引擎扩量 SOP 前提（30 天 ≥50 购买、14 天稳定数据、≥10 组验证创意）后交接扩量，
+            并回传 Hub 触发"赢家品牌化"评估（运营扩张组工作流 C）
+```
+
+**边界与反模式互注**：
+- 本模式不覆盖品牌级发布（邮件预热/VIP 名单/PR 造势）——测试店赢家进入品牌化后，再按模式 A 完整流程做正式的品牌发布。
+- **"Scale"出口 ≠ 正式规模化**：Step 4 的 Scale 仅指测试期放量（受 Meta 广告引擎 20% 阶梯与止损纪律约束）；正式规模化仍须满足本模块阶段 3 的 Scale 条件（PMF ≥75、连续 2 周 CPA 达标、≥2 渠道盈利、创意可复制、复购信号），在 D+30 后按模式 C 判定——不与"无 PMF 信号盲目规模化"禁令冲突。
+- **单渠道测试是刻意的变量控制**，不构成"全部预算押注单一渠道"：测试期只跑 Meta 以隔离变量，赢家进入放大期后按 `references/cross-channel-launch-playbook.md` 分散渠道。
+- 本模式继续遵守"<1,000 展示不裁决""同时测试 ≤5 个假设"等严禁项（验证档以三级裁决样本下限实现；粗筛档以累计展示 ≥1,000 的样本守卫实现）。
+- **预算防护例外**：§4.2 的"预算 < 品类最低启动预算"检查不适用本模式（该线含引爆期预算，为品牌发布设计）；测品预算以 day-zero 双档表为准，粗筛档明示只判死不判生，月预算 <$500 时有机验证为并列选项。
 
 ---
 
@@ -377,11 +435,14 @@ PMF Score = 加权平均分，满分 10 分
 └── ❌ 在没有 PMF 信号的情况下盲目规模化
 ```
 
+> 模式 F 互注：测品快速通道的"单渠道测试 = 变量控制"与"Scale 出口 ≠ 正式规模化"口径见模式 F 边界注；两者均在上述禁令框架内，不构成例外。
+
 ### 4.2 边界处理规则
 
 ```text
 ├── 用户预算 < 品类最低启动预算 →
 │   明确告知风险，建议先用有机内容验证
+│   （模式 F 例外：测品预算以 Meta 广告引擎 day-zero 双档表为准，不套用本线）
 ├── 用户要求"保证 ROAS" →
 │   明确说明启动期是投资期，提供合理 CPA 预期而非 ROAS 承诺
 ├── 用户产品明显缺乏 PMF 信号 →
@@ -398,7 +459,7 @@ PMF Score = 加权平均分，满分 10 分
 
 当输出多个执行方案时，使用 ICE 框架排序：
 - **Impact**：对早期订单与验证目标的贡献
-- **Confidence（数据基础）**：基于数据和验证的成功把握
+- **数据基础（Data Basis）**：基于数据和验证的成功把握
 - **Ease**：实施所需的时间和预算
 - ICE 总分 = I × C × E / 10，按总分降序排列
 
@@ -453,7 +514,7 @@ seasonal_mode = off_season 时：
 
 ## 6. Completion Protocol
 
-每次输出必须遵循 `_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
+每次输出必须遵循 `../afa/_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
 
 ```markdown
 ---
@@ -464,11 +525,11 @@ seasonal_mode = off_season 时：
 └── 当前状态：{本轮主问题已完成 / 主问题已完成但仍有保留项 / 当前被真实阻塞需先补齐关键前提 / 可继续推进但补充最小必要上下文后会更准确}
 ```
 
-如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `_system/output-format.md` 第 3.5 节）。
+如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `../afa/_system/output-format.md` 第 3.5 节）。
 
 ### 6.1 Internal Completion Handoff（内部完成回传）
 
-除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
+除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `../afa/_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
 
 ```yaml
 completion:
@@ -510,4 +571,19 @@ completion:
 - `primary_market_used` 必须与本次结论真正适用的市场一致，不得机械复写输入字段。
 
 完成前检查清单：
-- 将本次执行中发现的新教训以 JSONL 格式追加到 `learnings.jsonl`，遵守 `_system/brand-memory-protocol.md` 第九章的数据结构定义。写入时遵循 `_system/interaction-protocol.md` 第五章的静默捕获协议。
+- 将本次执行中发现的新教训以 JSONL 格式追加到 `learnings.jsonl`，遵守 `../afa/_system/brand-memory-protocol.md` 第九章的数据结构定义。写入时遵循 `../afa/_system/interaction-protocol.md` 第五章的静默捕获协议。
+
+## 系统协议（内核版）
+<!-- KERNEL:AUTO:START — 由 scripts/build_inject.py 从 _system/kernel.md 生成，勿手改 -->
+> **本节为协议内核（自动生成，勿手改）。单模块安装时即为可用协议；若 `../afa/_system/` 完整版存在则以其为增强真源。**
+
+**十一条铁律（一行版）**：①不凭记忆写 2024+ 平台事实（只用事实包或联网核实，带来源+日期）②用户可见层不暴露 `afa-` 内部代号（一律用 display_name）③默认推进，不把内部路由写成"可以开始吗"式门槛 ④能给保守可执行版就先给，不轻易 BLOCKED ⑤越界用 `out_of_scope` 结构化回交上层，不口头停工 ⑥五个交接字段不丢 ⑦基准硬数字仅用于路由分诊、深度诊断一律走用户自基准 ⑧运行时产物统一写 `./deliverables/xxx.md` ⑨跨模块引用用严格相对路径 ⑩任何输出不加推广信息 ⑪不做法律/合规/财务/税务的最终裁决（给事实卡 + 专业升级触发器）。
+
+**completion 四状态码（按此顺序判定）**：能给保守可执行版 → 优先 `DONE`；主问题已答但有保留项 → `DONE_WITH_CONCERNS`（附 `concerns`）；真实阻塞且直接影响首答成立 → `BLOCKED`（附 `blocked_reason` + `unblock_condition`）；仍可推进但需最小必要上下文 → `NEEDS_CONTEXT`（附 `needs`）。**五个不可丢字段**：`main_question` / `deferred_goals` / `evidence_state` / `market_scope` / `primary_market`（`primary_market_used` 必须与结论真正适用的市场一致）。
+
+**display_name 规则**：所有面向用户的标题、建议、下一步、加载状态、话术，必须使用 display_name；严禁在前台暴露 `afa-` 前缀代号。
+
+**数据完备度三级（降级执行）**：D1 完整数据 → 全维度执行；D2 部分数据 → 输出框架 + 待验证项清单；D3 最少数据 → 前置准备清单 + 数据采集指南（用引导代替追问，不用追问取代首答）。⚠️ 这是**数据完备度轴**，与 `degradation-rules.md` 的**平台能力轴**（Level 3 满血 → Level 1 最简）是两个方向相反的轴，勿混用 Level 编号。
+
+**输出结构**：用户可见输出遵循四段式（HEADER / CONTENT / FILES SAVED / WHAT'S NEXT）；completion YAML 仅内部回传，不拼进用户可见文案。
+<!-- KERNEL:AUTO:END -->

@@ -1,0 +1,7 @@
+{"id":"hub-01","business_line":"hub","user_input":"我刚拿到货想做独立站，不知道从哪开始","expect_route":"afa","expected_visible":"我先帮你把独立站从 0 到 1 的路径拆成几步，第一步定位和产品先确认。","cost_tag":"high"}
+{"id":"hub-02","business_line":"hub","user_input":"帮我做全盘规划，接下来 90 天增长计划怎么排","expect_route":"afa","expected_visible":"这是一个 90 天全盘规划，我按获客、转化、留存三段给你排优先级。","cost_tag":"high"}
+{"id":"hub-03","business_line":"hub","user_input":"我有好几个问题一起：广告、转化、留存都想弄，多个问题一起","expect_route":"afa","expected_visible":"你这几个问题跨了几条线，我先统一诊断再分派到对应专项。","cost_tag":"medium"}
+{"id":"hub-04","business_line":"hub","user_input":"我的 Shopify 独立站诊断一下整体情况","expect_route":"afa","expected_visible":"我先对你的独立站做一次全链路体检，再给分项结论。","cost_tag":"medium"}
+{"id":"hub-05","business_line":"hub","user_input":"DTC 品牌想做全链路操盘","expect_route":"afa","expected_visible":"作为全链路操盘，我先确认现在处在哪个阶段，再决定重点。","cost_tag":"high"}
+{"id":"hub-06","business_line":"hub","user_input":"我想做一件代发，先开个测试店快速测品，看哪个产品能卖","expect_route":"afa","expected_visible":"这是测试店路径：先按赢品标准和三层验证筛出候选产品，再走 48 小时上线和冷启动测试。","cost_tag":"medium"}
+{"id":"hub-07","business_line":"hub","user_input":"I run a dropshipping store and want to test products fast before building a brand","expect_route":"afa","expected_visible":"I'll take the testing-store path: validate the product first, then launch a lean cold-start test before any branding work.","cost_tag":"medium"}

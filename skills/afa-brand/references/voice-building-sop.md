@@ -211,7 +211,7 @@ Step 3：迭代限制
 声音档案的标准格式（voice-and-tone.md）：
 
 ## Last Updated
-{YYYY-MM-DD} by /afa-brand
+{YYYY-MM-DD} by 品牌策略引擎
 
 # {品牌名} 品牌声音档案
 
@@ -291,7 +291,7 @@ Step 3：迭代限制
   {
     "brand_name": "{name}",
     "last_updated": "{YYYY-MM-DD}",
-    "updated_by": "/afa-brand",
+    "updated_by": "品牌策略引擎",
     "tone": {
       "summary": "{一句话语调概要}",
       "spectrum": [

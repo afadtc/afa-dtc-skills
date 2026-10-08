@@ -22,7 +22,7 @@
 
 ---
 
-## 3. 五大致命反模式
+## 2. 五大致命反模式
 
 ### Anti-Pattern 1: Batch & Blast（全量群发）
 - **错误**：将同一封邮件发送给整个列表，不做任何分段。
@@ -51,7 +51,7 @@
 
 ---
 
-## 4. 降级策略 (Degradation Strategy)
+## 3. 降级策略 (Degradation Strategy)
 
 当用户提供的信息不足时，按以下层级降级：
 
@@ -71,7 +71,7 @@
 
 ---
 
-## 5. Dropshipping 适配
+## 4. Dropshipping 适配
 
 Dropshipping 模式的邮件策略需要特殊调整：
 
@@ -98,7 +98,7 @@ Dropshipping 模式的邮件策略需要特殊调整：
 
 ---
 
-## 6. 危机模式止血 (Crisis Mode)
+## 5. 危机模式止血 (Crisis Mode)
 
 当 `crisis_mode ≠ none` 时，afa-email 的策略切换到止血模式：
 

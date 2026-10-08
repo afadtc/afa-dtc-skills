@@ -9,15 +9,19 @@
 > **核心原则**：AFA 系统不使用硬编码的行业基准数值来判断用户的经营状态。所有诊断和监控基于用户自己的数据和目标。
 > 本文件提供的是**框架和方法论**——帮助 Hub 快速判断用户问题属于哪个领域，以便路由到正确的专项模块。
 >
+> **基准分层规则（三份基准文件统一，互相注明）**：本文件坚持「不使用硬编码行业基准」；Hub 路由层的三档分诊硬阈值在同目录 `diagnostic-rules.md`，且**仅限路由分诊**使用，不得带入深度诊断（数据看板层为快筛保留的少量阈值表，以其所在文件的口径注记为准，不属于路由分诊线，也不得当行业基准引用）。深度诊断一律走**用户自基准**，方法见 `../../afa-diagnose/references/industry-benchmarks.md`。
+>
 > 各领域深度基准引擎 → 见对应专项模块：
-> - 诊断基准引擎（用户数据画像 + 指标计算 + 自我基准） → afa-diagnose industry-benchmarks.md
-> - 仪表盘基准引擎（用户基准线生成 + 状态判断） → afa-dashboard benchmark-database.md
+> - 诊断基准引擎（用户数据画像 + 指标计算 + 自我基准） → `../../afa-diagnose/references/industry-benchmarks.md`
+> - 仪表盘基准引擎（用户基准线生成 + 状态判断） → `../../afa-dashboard/references/benchmark-database.md`
 > - 广告平台执行基准 → afa-fb / afa-gg / afa-tt
 > - 邮件序列基准 → afa-retain benchmark-data.md
 > - SEO 基准 → afa-seo benchmark-data.md
-> - 社交媒体基准 → afa-social social-commerce-kpis.md
+> - 社交媒体基准 → `../../afa-social/references/social-commerce-kpis.md`
 
 ---
+
+> **基准治理（三字段规范）**：本文件所有基准数字须遵守 `../../afa/_system/benchmark-governance.md` 的三字段规则——**来源 + 采集窗口 + 适用地区**；未逐项标注来源者，一律按"**内部经验估算，编制于 2026-07**"对待，使用时结合品牌自有数据校准，不得当作跨品牌统一硬阈值。**硬数字仅用于路由分诊，深度诊断改用用户自基准。**
 
 ## 一、路由判断框架
 

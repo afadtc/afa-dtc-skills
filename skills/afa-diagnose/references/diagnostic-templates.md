@@ -53,20 +53,20 @@
 
 ## 行动方案（ICE 排序 + 成本标签）
 
-### 本周必须做（ICE >7.0）
+### 本周必须做（ICE >70）
 
 | # | 行动项 | ICE | 成本标签 | 推算依据 | 建议承接方向 |
 |:---:|:---|:---:|:---|:---|:---:|
 | 1 | {action} | {score} | [{预算}] [{时间}] [{技能}] | {brief_calculation} | {owner_or_direction} |
 | 2 | {action} | {score} | [{预算}] [{时间}] [{技能}] | {brief_calculation} | {owner_or_direction} |
 
-### 本月应该做（ICE 4.0-7.0）
+### 本月应该做（ICE 40-70）
 
 | # | 行动项 | ICE | 成本标签 | 推算依据 | 建议承接方向 |
 |:---:|:---|:---:|:---|:---|:---:|
 | 3 | {action} | {score} | [{预算}] [{时间}] [{技能}] | {brief_calculation} | {owner_or_direction} |
 
-### 有空可以做（ICE 2.0-4.0）
+### 有空可以做（ICE 20-40）
 
 | # | 行动项 | ICE | 成本标签 | 推算依据 | 建议承接方向 |
 |:---:|:---|:---:|:---|:---|:---:|
@@ -289,33 +289,16 @@ D. {possible_cause_d}
 
 ## 模板五：learnings.jsonl 更新条目
 
-```markdown
-## {date} — AFA 全局诊断 — {diagnosis_topic}
+> ⚠️ learnings.jsonl 是 **JSONL 结构化记忆**（见 `../../afa/_system/brand-memory-protocol.md` 第九章），**每行一条完整的单行 JSON**，禁止 markdown 分节格式。诊断产出的教训按八字段追加写入，一条教训一行。
 
-### 诊断模式
-{mode}（全面体检 / 专项深诊 / 急诊 / 复诊）
+> 🔒 下方 JSONL 示例中的 `worker` 字段为**内部系统字段，仅供系统使用**——它只写入 learnings.jsonl 供模块过滤加载，**不出现在任何用户可见输出中**（铁律 2 仍然适用：前台一律用 display_name）。
 
-### 数据基础
-{data_sources_description}
-
-### 核心发现
-1. {finding_1}
-2. {finding_2}
-3. {finding_3}
-
-### 关键数据对比
-| 指标 | 实际值 | 基准值（参考） | 状态 |
-|:---|:---:|:---:|:---:|
-| {metric} | {actual} | {benchmark} | {status} |
-
-### 行动项
-- [ ] {action_1} → {direction_1}（ICE: {score}）[{成本标签}]
-- [ ] {action_2} → {direction_2}（ICE: {score}）[{成本标签}]
-
-### 下次复诊关注
-- {focus_1}
-- {focus_2}
+```jsonl
+{"ts":"{ISO8601}","worker":"afa-diagnose","type":"pattern","key":"{短标识}","insight":"{一句话教训，含可操作指导与关键量化}","confidence":{1-10},"source":"observed","related_files":["{关联文件}"]}
+{"ts":"{ISO8601}","worker":"afa-diagnose","type":"pitfall","key":"{短标识}","insight":"{一句话教训，含可操作指导}","confidence":{1-10},"source":"observed","related_files":[]}
 ```
+
+**写入纪律**：`type` 仅可取 `pitfall` / `pattern` / `preference` / `error` / `correction` / `promoted`；`source` 仅可取 `observed` / `user-stated` / `error-recovery`。诊断结论本体（诊断模式、核心发现、数据对比、行动项、复诊关注）写入 `./deliverables/` 下的诊断报告，**不要**以 markdown 分节塞进 learnings.jsonl。
 
 ---
 
@@ -350,7 +333,7 @@ D. {possible_cause_d}
 
 > **执行铁律**：
 > - 不主动推送长篇工具设置教程。用户问了再教。
-> - 不标注为行业参考（非用户实际数据）当作用户实际数据使用。
+> - 不把行业参考值（非用户实际数据）当作用户实际数据使用。
 > - 用户没给数据时不等待卡住；先基于现有信息给出保守判断，显式标注假设与最关键补证点，不编造。
 
 ---

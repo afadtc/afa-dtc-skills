@@ -125,19 +125,19 @@ Shopify 店铺
 
 ### 2.2 通过 Shopify App 部署追踪代码（推荐方式）
 
-> 推荐使用 **S Process Feed** 或 **Analyzify** 等专业追踪 App，而非手动安装代码
+> 推荐使用 **Simprosys Google Shopping Feed** 或 **Analyzify** 等专业追踪 App，而非手动安装代码
 
-**S Process Feed 部署 SOP：**
+**Simprosys Google Shopping Feed 部署 SOP：**
 
 1. **安装 App**：
-   - Shopify App Store → 搜索 "S Process Feed" 或 "Analyzify"
+   - Shopify App Store → 搜索 "Simprosys Google Shopping Feed" 或 "Analyzify"
    - 安装并授权
 2. **连接 Google Ads 账户**：
    - 在 App 中选择你的 Google Ads 账户
    - 如果有多个账户，确保选择正确的 Customer ID
 3. **嵌入追踪代码**：
    - 点击 "Active App Embed" → 进入 Theme Settings
-   - 确认 "S Process Tracking Tag" 已启用
+   - 确认 "Simprosys 追踪标签" 已启用
    - 保存设置
 4. **配置转化事件**：
    - 返回 App → 点击 "Update Conversion Tags"
@@ -194,7 +194,7 @@ Shopify 店铺
    > **注意**：在不同版本的 Google Ads UI 中，Enhanced Conversions 的位置可能不同。新版在标签详情页内，旧版在 Settings 标签页中。
 
 2. **Shopify App 端启用**：
-   - 返回追踪 App（S Process Feed / Analyzify）
+   - 返回追踪 App（Simprosys Google Shopping Feed / Analyzify）
    - 找到 Enhanced Conversions 选项并启用
    - 确认发送的数据字段：Email、Phone、Order ID、Name
    - 保存设置
@@ -484,7 +484,7 @@ Shopify 店铺
 5. 产品更新会自动同步（通常 24 小时内）
 
 **备选方式：通过第三方 Feed App**
-- **推荐 App**：S Process Feed、DataFeedWatch、Feedonomics
+- **推荐 App**：Simprosys Google Shopping Feed、DataFeedWatch、Feedonomics
 - 优势：更灵活的 Feed 定制、规则化标题优化、多渠道支持
 
 ### 6.2 标题优化（最重要的 Feed 字段）

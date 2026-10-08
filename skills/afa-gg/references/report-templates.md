@@ -260,7 +260,7 @@
 ## Brand Brain 更新建议
 
 - learnings.jsonl 新增：[具体学习]
-- metrics-history.md 更新：[具体数据]
+- ./deliverables/metrics-history.md 更新：[具体数据]
 ```
 
 ---

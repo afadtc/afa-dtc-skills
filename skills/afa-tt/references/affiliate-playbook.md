@@ -1,4 +1,4 @@
-# AFA-TT Affiliate Playbook — TikTok Affiliate 平台执行手册
+# TikTok Affiliate 平台执行手册（Affiliate Playbook）
 
 > **用途**：本文件仅覆盖 TikTok 平台特有的 Affiliate 执行细节，用于补充 TikTok Shop 场景下的计划设置、达人沟通、创作者 Brief 与 Spark Ads 联动方法。
 > **使用边界**：如需整理为用户可见交付物，只保留自然语言、业务角色与行动建议；涉及通用联盟增长体系、创作者筛选标准、冷启动拓展话术等跨模块协同内容时，仅在内部整理阶段调用相关参考文件，不在对用户的成品层直接暴露内部模块代号或内部文件指向。
@@ -159,4 +159,4 @@ TikTok Affiliate 的独特优势在于可以通过 Spark Ads 将表现好的联�
 5. 使用 Spark Ads 进行付费推广，放大优质内容的覆盖面
 6. 根据 Spark Ads 数据反馈，优化创作者 Brief 和选品策略
 
-> **注意**：Spark Ads 的投放策略和预算分配请参见本模块的 **ad-account-playbook.md** 和 **budget-scaling-playbook.md**。
+> **注意**：Spark Ads 的投放策略和预算分配请参见本模块的 **account-setup-sop.md** 和 **scaling-sop.md**。

@@ -1,6 +1,6 @@
 # 分类页 (Collection Page) SEO 优化手册
 
-> **用途**：afa-seo 在优化 Shopify Collection 页面时的标准操作程序 (SOP)。分类页是电商网站最具商业价值的页面，必须采用 3 层架构优化。
+> **用途**：SEO 引擎 在优化 Shopify Collection 页面时的标准操作程序 (SOP)。分类页是电商网站最具商业价值的页面，必须采用 3 层架构优化。
 
 ---
 

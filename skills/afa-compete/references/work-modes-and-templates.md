@@ -20,7 +20,7 @@
 ### 1.2 竞争情报 ROI
 - **情报转化率 (Intelligence to Action Rate)**：生成的竞品洞察中，有多少被实际转化为产品优化、广告测试或内容更新。
 - **对标成功率 (Benchmarking Success Rate)**：在早期验证阶段，通过高保真结构借鉴选定对标对象后，达到阶段性经营目标的比例。
-- **套利收益 (Arbitrage Revenue)**：通过地理套利策略在新市场获得的增量收入。
+- **时间差收益（Trend-Timing Revenue）**：通过趋势时间差策略（见 `../../afa-expand/references/trend-timing-arbitrage.md`）在新市场获得的增量收入。
 
 ---
 

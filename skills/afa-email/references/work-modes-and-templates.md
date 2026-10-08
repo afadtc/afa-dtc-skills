@@ -53,7 +53,7 @@
 **触发**：用户报告邮件进垃圾箱、打开率暴跌、被列入黑名单。
 
 **输出结构**：
-1. 12 步可交付性检查清单（逐项诊断）
+1. 13 项日常送达率检查清单（逐项诊断，见 `deliverability-checklist.md` §6）
 2. 问题根因分析
 3. 修复行动方案（按紧急度排序）
 4. 预热/恢复计划（如需要）
@@ -261,7 +261,7 @@
 
 ### 4. 冲突排除规则 (Suppression Rules)
 - 进入本 Flow 时，自动抑制：Browse Abandonment Flow, Win-Back Flow
-- 本 Flow 的抑制关系需结合当前生命周期价值和冲突规则判断，不默认绝对最高优先级
+- 本 Flow 不被任何其他 Flow 抑制（**优先级 1 = 最高**）——口径真源为 `core-flows-playbook.md` §6 Flow 优先级瀑布（Abandoned Cart > Post-Purchase > Welcome > Browse > Win-Back > Sunset）；模板落地时不得改写该排序，需要偏离时应在方案中显式标注并说明理由
 - 与 Campaign 的协调：本 Flow 活跃期间，抑制常规促销 Campaign（但不抑制交易类邮件）
 
 ### 5. SMS 层叠策略 (SMS Layering)

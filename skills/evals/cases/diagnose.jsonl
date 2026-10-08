@@ -1,0 +1,5 @@
+{"id":"dia-01","business_line":"diagnose","user_input":"转化掉了想做归因找根因","expect_route":"afa-diagnose","expected_visible":"我先做全链路归因，定位到底是流量、转化还是履约的问题。","cost_tag":"medium"}
+{"id":"dia-02","business_line":"diagnose","user_input":"ROAS 掉了，问题出在哪，帮我诊断","expect_route":"afa-diagnose","expected_visible":"我按漏斗逐段查，找出 ROAS 下滑的主因再排序。","cost_tag":"medium"}
+{"id":"dia-03","business_line":"diagnose","user_input":"为什么下降这么多，做个全链路归因","expect_route":"afa-diagnose","expected_visible":"我拉全链路指标做异常检测，给你根因和优先级。","cost_tag":"medium"}
+{"id":"dia-04","business_line":"diagnose","user_input":"想要一个仪表盘做数据体检追踪 KPI","expect_route":"afa-dashboard","expected_visible":"我帮你搭三层看板，把北极星和预警指标固定下来。","cost_tag":"medium"}
+{"id":"dia-05","business_line":"diagnose","user_input":"营收报表和异常预警想搭起来","expect_route":"afa-dashboard","expected_visible":"我把营收报表和异常预警做成可复用的看板。","cost_tag":"medium"}

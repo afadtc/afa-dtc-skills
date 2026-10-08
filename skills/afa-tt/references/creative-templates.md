@@ -1,11 +1,11 @@
 # TikTok 原生广告创意模板库
 
 > **版本**: 1.1 | **适用平台**: TikTok / TikTok Shop | **核心原则**: 原生感 > 制作感，真实 > 精致
-> **通用文案框架**：PAS/HSO/BAB/AIDA 等通用文案框架、CTA 变体库、UGC 全漏斗应用框架已统一归入 **afa-creative**（参见 `copywriting-frameworks.md`）。季节性创意日历参见 afa-creative 的 `seasonal-creative-calendar.md`。通用创意测试方法论参见 afa-creative 的 `ad-testing-matrix.md`。UGC 脚本法则参见 afa-creative 的 `reali-tea-scripting.md`。本文件仅保留 TikTok 平台特有的原生创意知识。
+> **通用文案框架**：PAS/HSO/BAB/AIDA 等通用文案框架、CTA 变体库、UGC 全漏斗应用框架已统一归入 创意引擎（参见 `../../afa-creative/references/copywriting-frameworks.md`）。季节性创意日历参见 创意引擎的 `../../afa-creative/references/seasonal-creative-calendar.md`。通用创意测试方法论参见 创意引擎的 `../../afa-creative/references/ad-testing-matrix.md`。UGC 脚本法则参见 创意引擎的 `../../afa-creative/references/reali-tea-scripting.md`。本文件仅保留 TikTok 平台特有的原生创意知识。
 
 ---
 
-## 一、20 大 TikTok Hook 公式（前 3 秒生死线）
+## 一、15 大 TikTok Hook 公式（前 3 秒生死线）
 
 > **Hook 是 TikTok 广告的生死线。前 1-3 秒决定 80% 的广告效果。**
 > 以下 Hook 公式均附带 TikTok 平台特有的拍摄指导（镜头、语气、适用场景）。
@@ -147,7 +147,7 @@
 ### 格式 1：UGC 开箱测评（15-30 秒）
 
 ```
-[0-3s] Hook（选择上方 20 个公式之一）
+[0-3s] Hook（选择上方 15 个公式之一）
 [3-5s] 产品开箱/首次展示
 [5-10s] 第一印象反应（真实表情 + 简短评价）
 [10-18s] 使用演示（关键功能展示 1-2 个）
@@ -547,7 +547,7 @@ Hi [创作者名]!
 
 > **在 TikTok 上，最好的广告看起来不像广告。**
 
-**Reali-TEA 真实感速查表**（完整版请参见 afa-creative 的 `reali-tea-scripting.md`）：
+**Reali-TEA 真实感速查表**（完整版请参见 创意引擎的 `../../afa-creative/references/reali-tea-scripting.md`）：
 
 | 维度 | 规则 | 示例 |
 |:---|:---|:---|
@@ -561,4 +561,4 @@ Hi [创作者名]!
 
 ---
 
-*本模板库为 afa-tt 提供 TikTok 平台特有的原生创意参考。通用文案框架请参见 afa-creative 的 `copywriting-frameworks.md`；通用创意测试方法论请参见 afa-creative 的 `ad-testing-matrix.md`；完整 UGC 脚本法则请参见 afa-creative 的 `reali-tea-scripting.md`；季节性创意日历请参见 afa-creative 的 `seasonal-creative-calendar.md`。*
+*本模板库为 afa-tt 提供 TikTok 平台特有的原生创意参考。通用文案框架请参见 创意引擎的 `../../afa-creative/references/copywriting-frameworks.md`；通用创意测试方法论请参见 创意引擎的 `../../afa-creative/references/ad-testing-matrix.md`；完整 UGC 脚本法则请参见 创意引擎的 `../../afa-creative/references/reali-tea-scripting.md`；季节性创意日历请参见 创意引擎的 `../../afa-creative/references/seasonal-creative-calendar.md`。*

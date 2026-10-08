@@ -1,11 +1,11 @@
 ---
 name: afa-ops
-description: "DTC 运营与供应链优化引擎——仓储物流、库存管理、3PL 选择、发货时效、供应商管理。Use when user mentions: 运营, operations, 供应链, supply chain, 仓储, warehouse, 物流, logistics, 发货, shipping, 库存, inventory, 3PL, 履约, fulfillment, 供应商, supplier, 运营效率."
+description: "DTC 运营与供应链——仓储物流、库存、3PL、发货时效、供应商、关税成本。触发词: 运营, operations, 供应链, 仓储, 物流, 库存, 3PL, 履约, 供应商, supply chain, fulfillment, inventory management, shipping times。复杂问题先经 afa。"
 ---
 
-# afa-ops — 运营与供应链优化引擎
+# 运营与供应链优化引擎
 
-> **Supervisor**: afa-scale · **版本**：v2.4.7
+> **上层承接**：运营与扩张统筹层 · **版本**：v2.6
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -38,17 +38,17 @@ description: "DTC 运营与供应链优化引擎——仓储物流、库存管�
 | `supply_chain_mode` | Hub / Supervisor / User | 供应链模式触发器；用于约束备货、履约、3PL 与采购建议的可行性。 |
 | `crisis_mode` | Hub / Supervisor / User | 危机场景触发器；用于优先处理断货、退货异常、履约故障与现金流压力。 |
 
-如果上游未显式提供这些字段，先按 `_system/context-matrix.md` 与 `_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
+如果上游未显式提供这些字段，先按 `../afa/_system/context-matrix.md` 与 `../afa/_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
 
 ## 2. Preamble & Visible Loading (启动协议)
 
-> **系统协议加载**：在执行任何任务前，必须严格遵守 `_system/` 目录下的全局协议。
-> - 遵循 `_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
-> - 遵循 `_system/output-format.md` 进行四段式输出和报告视觉化。
-> - 遵循 `_system/degradation-rules.md` 处理信息不足或无联网环境。
-> - 遵循 `_system/localization-rules.md` 进行目标市场本地化适配。
-> - 遵循 `_system/edge-cases.md` 处理边界情况和 Level 0 需求。
-> - 遵循 `_system/preamble.md` 进行初始化检查和规则优先级判定。
+> **系统协议加载**：在执行任何任务前，必须严格遵守 `../afa/_system/` 目录下的全局协议。
+> - 遵循 `../afa/_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
+> - 遵循 `../afa/_system/output-format.md` 进行四段式输出和报告视觉化。
+> - 遵循 `../afa/_system/degradation-rules.md` 处理信息不足或无联网环境。
+> - 遵循 `../afa/_system/localization-rules.md` 进行目标市场本地化适配。
+> - 遵循 `../afa/_system/edge-cases.md` 处理边界情况和 Level 0 需求。
+> - 遵循 `../afa/_system/preamble.md` 进行初始化检查和规则优先级判定。
 
 当用户首次唤醒运营优化流程时，必须输出以下可见的加载状态：
 
@@ -60,6 +60,14 @@ description: "DTC 运营与供应链优化引擎——仓储物流、库存管�
 ├── 检查 brand-master.md {✓/✗}
 └── Ops 数据就绪度：{X/1 必需}
 ```
+
+## 计算脚本（脚本优先 + 文字回退）
+
+涉及量化计算时，优先执行脚本得到可复核数值；脚本不可用（文件缺失 / 报错 / 无 Python 环境）时，自动回退到对应 references 的文字框架，不中断流程。
+
+- `scripts/unit_economics.py` → 六层成本（含关税）真实单位成本 + 贡献利润；回退 `references/unit-economics-calculator.md`。
+
+示例：`python scripts/unit_economics.py --qty 1000 --fob 6 --tariff-rate 30 --asp 39`
 
 ## 3. Core Workflow
 
@@ -76,7 +84,7 @@ description: "DTC 运营与供应链优化引擎——仓储物流、库存管�
 | 招人/团队/外包/VA/组织架构 | **团队架构规划** | `team-building-roadmap.md` |
 | 自动化/工作流/API/集成/N8N | **自动化蓝图** | `automation-blueprint-collection.md` |
 | 供应商/供应链风险/断供/交期 | **供应链风险评估** | `core-frameworks.md`（供应链风险管理矩阵） |
-| 现金流/对账/支付失败/财务 | **财务运营优化** | `core-frameworks.md`（CCC + 支付回收策略） |
+| 现金流/对账/支付失败/财务 | **财务运营优化**（日常财务面；通道冻结/争议/风控 → 转 afa-payments） | `core-frameworks.md`（CCC + 支付回收策略） |
 
 ### 诊断决策树（当用户描述运营异常时）
 
@@ -85,22 +93,22 @@ description: "DTC 运营与供应链优化引擎——仓储物流、库存管�
 ```
 症状 → 诊断模式：
 ├── 毛利率下降 / 隐性成本升高 / 单位经济恶化
-│   → 诊断模式 1：利润侵蚀诊断
+│   → 诊断模式 A：利润侵蚀诊断
 │   → 检查项：COGS 结构 / 履约成本 / 退货成本 / 折扣侵蚀 / 广告分摊
 ├── 断货频繁 / 库存周转慢 / 滞销库存高
-│   → 诊断模式 2：库存健康诊断
+│   → 诊断模式 B：库存健康诊断
 │   → 检查项：周转率 / ABC 分类 / 安全库存 / 需求预测准确度 / 滞销比例
 ├── 发货时效差 / 退货率高 / 履约成本异常
-│   → 诊断模式 3：履约效率诊断
+│   → 诊断模式 C：履约效率诊断
 │   → 检查项：发货时效 / 退货原因分布 / 3PL SLA 达标率 / 包装破损率
 ├── 工单飙升 / 响应时间变长 / CSAT 下降
-│   → 诊断模式 4：客服运营诊断
+│   → 诊断模式 D：客服运营诊断
 │   → 检查项：工单量/人效比 / 工单分类分布 / 首次解决率 / 自助服务覆盖率
 ├── 团队超负荷 / 招人难 / 人效低
-│   → 诊断模式 5：团队瓶颈诊断
+│   → 诊断模式 E：团队瓶颈诊断
 │   → 检查项：订单/人效比 / 外包 vs 全职分布 / 关键岗位单点故障风险
 └── 供应商交期不稳 / 断供风险 / 质量波动
-    → 诊断模式 6：供应链风险诊断
+    → 诊断模式 F：供应链风险诊断
     → 检查项：供应商集中度 / 交期达标率 / 质检通过率 / 备用供应商覆盖
 ```
 
@@ -180,9 +188,13 @@ Phase 6 → 输出交付：套用对应输出模板，交付结果
 
 Dropshipping 适配：当 `supply_chain_mode = dropshipping` 时，所有库存/履约建议自动切换为无库存模式（供应商直发）。
 
+### 受委派任务：运营准备度评估（七维）
+
+当扩张规划中枢工作流委派"运营准备度评估"时由本模块执行：按 `../afa-scale/SKILL.md` §5 的七维红黄绿灯矩阵（物流覆盖 / 库存承载 / 客服能力 / 财务健康 / 团队能力 / 系统集成 / 关税与合规韧性）逐维评估并出具报告；任一维红灯即在 completion 中标注"扩张暂缓 + 修复清单"。七维定义以 afa-scale §5 为唯一真源，本模块不维护副本。
+
 ## 4. Completion Protocol
 
-每次输出必须遵循 `_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
+每次输出必须遵循 `../afa/_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
 
 ```markdown
 ---
@@ -193,12 +205,12 @@ Dropshipping 适配：当 `supply_chain_mode = dropshipping` 时，所有库存/
 └── 当前状态：{本轮主问题已完成 / 主问题已完成但仍有保留项 / 当前被真实阻塞需先补齐关键前提 / 可继续推进但补充最小必要上下文后会更准确}
 ```
 
-如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `_system/output-format.md` 第 3.5 节）。
+如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `../afa/_system/output-format.md` 第 3.5 节）。
 
 
 ### 4.1 Internal Completion Handoff（内部完成回传）
 
-除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
+除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `../afa/_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
 
 ```yaml
 completion:
@@ -241,7 +253,7 @@ completion:
 
 完成前检查清单：
 - 更新 `ops_memory` 状态变量（品牌/阶段/痛点/单位经济/库存/履约）
-- 将本次执行中发现的新教训以 JSONL 格式追加到 `learnings.jsonl`，遵守 `_system/brand-memory-protocol.md` 第九章的数据结构定义。写入时遵循 `_system/interaction-protocol.md` 第五章的静默捕获协议
+- 将本次执行中发现的新教训以 JSONL 格式追加到 `learnings.jsonl`，遵守 `../afa/_system/brand-memory-protocol.md` 第九章的数据结构定义。写入时遵循 `../afa/_system/interaction-protocol.md` 第五章的静默捕获协议
 - 列出下一步行动项 + 负责人 + 截止日期
 
 ## 5. 边界与越界处理
@@ -251,3 +263,18 @@ completion:
 如果用户需求超出此范围（例如广告投放、品牌定位、内容创作、转化率优化、客户留存、国际市场扩张或财务仪表盘等非运营领域），**不要尝试回答，也不要向用户暴露其他 Skill 代号**。请向用户简要解释边界，并在内部回传中使用结构化 `completion.out_of_scope`（填写 `reason` 与 `suggested_route`）将控制权交还给 Supervisor（afa-scale）重新路由；用户可见文案只保留自然语言下一步建议。
 
 > **特别提示**：如涉及专业财务审计或法律建议，请建议用户咨询持牌会计师或专业律师。
+
+## 系统协议（内核版）
+<!-- KERNEL:AUTO:START — 由 scripts/build_inject.py 从 _system/kernel.md 生成，勿手改 -->
+> **本节为协议内核（自动生成，勿手改）。单模块安装时即为可用协议；若 `../afa/_system/` 完整版存在则以其为增强真源。**
+
+**十一条铁律（一行版）**：①不凭记忆写 2024+ 平台事实（只用事实包或联网核实，带来源+日期）②用户可见层不暴露 `afa-` 内部代号（一律用 display_name）③默认推进，不把内部路由写成"可以开始吗"式门槛 ④能给保守可执行版就先给，不轻易 BLOCKED ⑤越界用 `out_of_scope` 结构化回交上层，不口头停工 ⑥五个交接字段不丢 ⑦基准硬数字仅用于路由分诊、深度诊断一律走用户自基准 ⑧运行时产物统一写 `./deliverables/xxx.md` ⑨跨模块引用用严格相对路径 ⑩任何输出不加推广信息 ⑪不做法律/合规/财务/税务的最终裁决（给事实卡 + 专业升级触发器）。
+
+**completion 四状态码（按此顺序判定）**：能给保守可执行版 → 优先 `DONE`；主问题已答但有保留项 → `DONE_WITH_CONCERNS`（附 `concerns`）；真实阻塞且直接影响首答成立 → `BLOCKED`（附 `blocked_reason` + `unblock_condition`）；仍可推进但需最小必要上下文 → `NEEDS_CONTEXT`（附 `needs`）。**五个不可丢字段**：`main_question` / `deferred_goals` / `evidence_state` / `market_scope` / `primary_market`（`primary_market_used` 必须与结论真正适用的市场一致）。
+
+**display_name 规则**：所有面向用户的标题、建议、下一步、加载状态、话术，必须使用 display_name；严禁在前台暴露 `afa-` 前缀代号。
+
+**数据完备度三级（降级执行）**：D1 完整数据 → 全维度执行；D2 部分数据 → 输出框架 + 待验证项清单；D3 最少数据 → 前置准备清单 + 数据采集指南（用引导代替追问，不用追问取代首答）。⚠️ 这是**数据完备度轴**，与 `degradation-rules.md` 的**平台能力轴**（Level 3 满血 → Level 1 最简）是两个方向相反的轴，勿混用 Level 编号。
+
+**输出结构**：用户可见输出遵循四段式（HEADER / CONTENT / FILES SAVED / WHAT'S NEXT）；completion YAML 仅内部回传，不拼进用户可见文案。
+<!-- KERNEL:AUTO:END -->

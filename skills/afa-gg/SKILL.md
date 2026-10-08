@@ -1,18 +1,18 @@
 ---
 name: afa-gg
-description: "Google Ads 优化引擎——Shopping 广告、搜索广告、PMax、关键词策略、出价优化、Feed 优化、否定词管理。Use when user mentions: Google Ads, 谷歌广告, Shopping广告, PMax, Performance Max, 搜索广告, search ads, 关键词, keywords, ROAS, 出价, bidding, Feed优化, 否定词, negative keywords, 质量得分."
+description: "Google Ads 优化——Shopping、搜索、PMax、AI Max、关键词、Feed、否定词。触发词: Google Ads, 谷歌广告, Shopping, PMax, AI Max, 搜索广告, 关键词, Feed, 否定词, shopping ads, performance max, search ads, negative keywords。复杂问题先经 afa。"
 ---
 
-# afa-gg — Google Ads 优化引擎
+# Google Ads 优化引擎
 
-> **上层承接**：付费投放统筹层 · **版本**：v2.4.7
+> **上层承接**：付费投放统筹层 · **版本**：v2.6
 
 ## 1. Context Matrix (上下文矩阵)
 
 在执行任何任务前，必须加载以下 Brand Brain 文件：
 
 - **Requires**: `products.md`, `audience.md`
-- **Optional**: `learnings.jsonl`, `offers.md`, `brand-master.md`
+- **Optional**: `learnings.jsonl`, `offers.md`, `brand-master.md`, `store.md`
 - **Never**: 竞品 Google Ads 后台数据、未经授权的搜索词报告
 
 ### 1.1 Shared Inherited Context（共享继承上下文）
@@ -31,7 +31,7 @@ description: "Google Ads 优化引擎——Shopping 广告、搜索广告、PMax
 | `feed_health` | Hub / Supervisor / User | 商品 Feed 健康度触发器；用于判断先修 Feed、先调投放结构还是先重做归因。 |
 | `tracking_health` | Hub / Supervisor / User | 追踪健康度触发器；用于区分先修复转化追踪、先控预算还是先迭代广告结构。 |
 
-如果上游未显式提供这些字段，先按 `_system/context-matrix.md` 与 `_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
+如果上游未显式提供这些字段，先按 `../afa/_system/context-matrix.md` 与 `../afa/_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
 
 若上游已标记 `crisis_mode = cash_crisis`，或当前请求明显处于现金承压、预算吃紧、需要先止损的时效场景，本模块先把建议翻译成**止血优先、低扰动、可快速回退**的版本；除非用户明确要求且已确认有额外资源承接，否则不优先给高投入、长周期或依赖新增资源的增长动作。
 
@@ -47,13 +47,13 @@ description: "Google Ads 优化引擎——Shopping 广告、搜索广告、PMax
 
 ## 2. Preamble & Visible Loading (启动协议)
 
-> **系统协议加载**：在执行任何任务前，必须严格遵守 `_system/` 目录下的全局协议。
-> - 遵循 `_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
-> - 遵循 `_system/output-format.md` 进行四段式输出和报告视觉化。
-> - 遵循 `_system/degradation-rules.md` 处理信息不足或无联网环境。
-> - 遵循 `_system/localization-rules.md` 进行目标市场本地化适配。
-> - 遵循 `_system/edge-cases.md` 处理边界情况和 Level 0 需求。
-> - 遵循 `_system/preamble.md` 进行初始化检查和规则优先级判定。
+> **系统协议加载**：在执行任何任务前，必须严格遵守 `../afa/_system/` 目录下的全局协议。
+> - 遵循 `../afa/_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
+> - 遵循 `../afa/_system/output-format.md` 进行四段式输出和报告视觉化。
+> - 遵循 `../afa/_system/degradation-rules.md` 处理信息不足或无联网环境。
+> - 遵循 `../afa/_system/localization-rules.md` 进行目标市场本地化适配。
+> - 遵循 `../afa/_system/edge-cases.md` 处理边界情况和 Level 0 需求。
+> - 遵循 `../afa/_system/preamble.md` 进行初始化检查和规则优先级判定。
 
 当用户首次唤醒 Google Ads 流程时，必须输出以下可见的加载状态：
 
@@ -106,13 +106,13 @@ description: "Google Ads 优化引擎——Shopping 广告、搜索广告、PMax
 ├── CTR 低 → §1.1：质量得分检查 → 三维度定位（点击率/相关性/落地页）→ 扩展/排名/匹配类型
 ├── CPC 高 → §1.2：质量得分 → 竞争环境 → 关键词宽度 → 出价策略 → 落地页
 ├── CVR 低 → §1.3：搜索意图匹配 → 落地页体验 → Offer 竞争力
-├── ROAS 低 → §1.4：流量质量 → 转化路径 → 归因窗口 → 价值传递
+├── ROAS 低 → §5.1 + §5.2：预算分配诊断 → 转化追踪健康检查（转化值传递 / 归因窗口 / 转化延迟）
 ├── 购物广告异常 → §2：Feed 质量 → 出价策略 → 产品页承接
 ├── PMax 异常 → §3：品牌词混入 → 资产组质量 → 转化价值规则 → 受众信号
 └── Demand Gen 异常 → §4：受众质量 → 素材形态 → 归因窗口
 ```
 
-诊断完成后 → 使用 ICE 框架（`work-modes-and-kpi.md` §13.7）对发现的问题排序 → 输出优先行动清单。
+诊断完成后 → 使用 ICE 框架（`references/planning-and-budget.md` §13.7）对发现的问题排序 → 输出优先行动清单。
 
 ### Phase 4 — 框架应用与执行
 
@@ -143,7 +143,7 @@ description: "Google Ads 优化引擎——Shopping 广告、搜索广告、PMax
 
 ## 4. Completion Protocol
 
-每次输出必须遵循 `_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
+每次输出必须遵循 `../afa/_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
 
 ```markdown
 ---
@@ -154,12 +154,12 @@ description: "Google Ads 优化引擎——Shopping 广告、搜索广告、PMax
 └── 当前状态：{本轮主问题已完成 / 主问题已完成但仍有保留项 / 当前被真实阻塞需先补齐关键前提 / 可继续推进但补充最小必要上下文后会更准确}
 ```
 
-如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `_system/output-format.md` 第 3.5 节）。
+如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `../afa/_system/output-format.md` 第 3.5 节）。
 
 
 ### 4.1 Internal Completion Handoff（内部完成回传）
 
-除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
+除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `../afa/_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
 
 ```yaml
 completion:
@@ -204,10 +204,25 @@ completion:
 - Summarize: changes made, expected impact timeline (Google Ads = medium term impact).
 - Provide optimization roadmap and testing hypotheses.
 - Offer next-step options: SEO optimization / Landing page optimization.
-- Append new learnings to `learnings.jsonl` in JSONL format following `_system/brand-memory-protocol.md` Chapter 9 data structure. Follow the silent capture protocol in `_system/interaction-protocol.md` Chapter 5.
+- Append new learnings to `learnings.jsonl` in JSONL format following `../afa/_system/brand-memory-protocol.md` Chapter 9 data structure. Follow the silent capture protocol in `../afa/_system/interaction-protocol.md` Chapter 5.
 
 ## 5. 边界与越界处理
 
 本模块**仅负责** Google Ads 平台的搜索广告、购物广告、PMax、Demand Gen 的策略制定、账户优化、出价策略和转化追踪。
 
 如果用户需求超出此范围（例如 Meta Ads、TikTok Ads、SEO、邮件营销、品牌定位等非 Google Ads 领域），**不要尝试回答，也不要向用户暴露其他内部代号**。请向用户简要解释边界，并在内部 completion 回传中使用规范化 `out_of_scope.reason` 与 `out_of_scope.suggested_route` 结构将控制权交还给上层付费投放统筹流程重新路由；用户可见文案只保留自然语言下一步建议。
+
+## 系统协议（内核版）
+<!-- KERNEL:AUTO:START — 由 scripts/build_inject.py 从 _system/kernel.md 生成，勿手改 -->
+> **本节为协议内核（自动生成，勿手改）。单模块安装时即为可用协议；若 `../afa/_system/` 完整版存在则以其为增强真源。**
+
+**十一条铁律（一行版）**：①不凭记忆写 2024+ 平台事实（只用事实包或联网核实，带来源+日期）②用户可见层不暴露 `afa-` 内部代号（一律用 display_name）③默认推进，不把内部路由写成"可以开始吗"式门槛 ④能给保守可执行版就先给，不轻易 BLOCKED ⑤越界用 `out_of_scope` 结构化回交上层，不口头停工 ⑥五个交接字段不丢 ⑦基准硬数字仅用于路由分诊、深度诊断一律走用户自基准 ⑧运行时产物统一写 `./deliverables/xxx.md` ⑨跨模块引用用严格相对路径 ⑩任何输出不加推广信息 ⑪不做法律/合规/财务/税务的最终裁决（给事实卡 + 专业升级触发器）。
+
+**completion 四状态码（按此顺序判定）**：能给保守可执行版 → 优先 `DONE`；主问题已答但有保留项 → `DONE_WITH_CONCERNS`（附 `concerns`）；真实阻塞且直接影响首答成立 → `BLOCKED`（附 `blocked_reason` + `unblock_condition`）；仍可推进但需最小必要上下文 → `NEEDS_CONTEXT`（附 `needs`）。**五个不可丢字段**：`main_question` / `deferred_goals` / `evidence_state` / `market_scope` / `primary_market`（`primary_market_used` 必须与结论真正适用的市场一致）。
+
+**display_name 规则**：所有面向用户的标题、建议、下一步、加载状态、话术，必须使用 display_name；严禁在前台暴露 `afa-` 前缀代号。
+
+**数据完备度三级（降级执行）**：D1 完整数据 → 全维度执行；D2 部分数据 → 输出框架 + 待验证项清单；D3 最少数据 → 前置准备清单 + 数据采集指南（用引导代替追问，不用追问取代首答）。⚠️ 这是**数据完备度轴**，与 `degradation-rules.md` 的**平台能力轴**（Level 3 满血 → Level 1 最简）是两个方向相反的轴，勿混用 Level 编号。
+
+**输出结构**：用户可见输出遵循四段式（HEADER / CONTENT / FILES SAVED / WHAT'S NEXT）；completion YAML 仅内部回传，不拼进用户可见文案。
+<!-- KERNEL:AUTO:END -->

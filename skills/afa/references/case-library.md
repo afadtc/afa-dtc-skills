@@ -6,6 +6,8 @@
 
 ---
 
+> **来源与口径（2026 更新）**：案例 1-13 为据公开报道整理的**说明性案例**，量化数字仅供示意、非官方披露，引用时以品牌官方与权威报道为准；§九 的 2025-2026 新常态案例逐条标注出处，未独立核实处已标"据报道 / 行业传闻，未核实"。
+
 ## 一、从零到一的冷启动案例
 
 ### 案例 1：Glossier — 社区驱动冷启动
@@ -442,6 +444,33 @@
 留存优化            Chewy, AG1, Nespresso
 避坑参考            Brandless, Casper, Outdoor Voices
 ```
+
+---
+
+## 九、2025-2026 新常态案例（带出处）
+
+> 以下为关税新常态、TikTok Shop 原生、溢价品牌三类的近期案例，均按"据 XX 报道"口径整理，未独立核实的具体数字已标注。
+
+### 案例 14：Marais USA — 关税新常态下的供应链重置（幸存者）
+
+- **背景**：2025-08-29 美国 de minimis 对所有国家终止后，靠小包直发 + 免税的低价跨境模型失效。
+- **动作（据报道）**：Marais USA 转向 DTC 模式，并把生产**迁至美国本土（洛杉矶）**，以更高单位成本换取更短交期、成本稳定与更强供应链控制。
+- **可复用模式**：关税冲击下"近岸/在岸 + DTC 直控"是一条生存路径——用确定性（交期、成本、控制力）对冲政策不确定性；对多数中国卖家，对应做法是"美国海外仓本土备货、按批发价缴税 + 原产地多元化（中国+1）"（见 `../../afa-expand/references/tariff-new-normal-playbook.md`）。
+- 来源：[Retail TouchPoints：后 de minimis 时代结构重置](https://www.retailtouchpoints.com/executive-viewpoints/the-structural-reset-navigating-the-post-de-minimis-era-in-dtc-ecommerce/619621)。据报道整理，未独立核实。
+
+### 案例 15：Wonderskin — TikTok Shop 原生美妆爆发
+
+- **背景**：美妆品牌，主战场在 TikTok Shop，靠视觉演示 + 达人联盟长起来。
+- **动作（据报道）**：核心唇釉以"上妆/撕拉"强视觉效果驱动，被报道"每 5 秒卖出一件"；Lip Liner Stay-N-Peel 单品 GMV 被报道破 $46M。打法是把"演示型产品 + 联盟创作者"喂进 TikTok Shop 的内容-成交闭环。
+- **可复用模式**：TikTok Shop 原生打法 = 强演示产品 × 达人联盟规模（美国 GMV 约 42% 由联盟驱动，见 `../../afa-tt/references/tiktok-shop-playbook.md`）；GMV Max 默认化后，素材池 + 联盟比手动投放更关键。
+- 来源：[Top Growth Marketing：TikTok Shop 案例](https://topgrowthmarketing.com/tiktok-shop-case-study/)。据报道整理，具体数字未独立核实。
+
+### 案例 16：Mejuri — 溢价品牌建设（替代已退场的旧案例）
+
+- **背景**：精致珠宝赛道长期绑定"送礼"场景。
+- **动作（据报道）**：Mejuri 把品类重定义为"女性为自己购买的日常轻奢"，开辟送礼之外的自购市场，用内容与社区建立溢价与复购，而非靠折扣。
+- **可复用模式**：溢价不是定高价，而是换一个消费场景与叙事（自购/日常/悦己），把"被送礼"变成"主动买"；用品牌资产而非折扣拉复购，是 Casper/Brandless 之外更健康的对标。
+- 来源：[Trendtrack：Top DTC 品牌 2026](https://www.trendtrack.io/blog-post/top-dtc-brands)。据报道整理，未独立核实。
 
 ---
 

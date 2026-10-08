@@ -1,11 +1,11 @@
 ---
 name: afa-paid
-description: "付费获客 Supervisor——统筹 Meta/Google/TikTok 广告与创意生产的跨渠道预算分配、策略协同与路由。Use when user mentions: 付费广告, paid ads, 广告投放, 预算分配, budget allocation, 跨渠道广告, 广告策略, ad strategy, 获客成本, CAC, 广告效果, 投放优化, 多渠道广告."
+description: "付费获客 Supervisor——统筹 Meta/Google/TikTok 广告与创意的预算分配与协同。触发词: 付费广告, paid ads, 广告投放, 预算分配, 多渠道广告, 投放优化, ad budget, budget allocation, media buying, acquisition cost。"
 ---
 
-# afa-paid — 付费获客 Supervisor
+# 付费获客 Supervisor
 
-> **层级**：Supervisor（中层路由器）· **版本**：v2.4.7
+> **层级**：Supervisor（中层路由器）· **版本**：v2.6
 > **管辖流程**：Meta 广告 · Google 广告 · TikTok 广告 · 创意生产
 
 ---
@@ -95,7 +95,7 @@ completion:
 
 ### 用户可见输出协议
 
-除上述 completion YAML 外，所有面向用户的输出必须显式遵循 `_system/output-format.md` 的四段式结构。任何标题、建议、下一步、加载状态和摘要都必须使用人类可读名称，不得直接暴露 `afa-*` 内部代号。若内部编排需要保留 module_id，必须先映射为 `display_name` 后才能进入前台文案。
+除上述 completion YAML 外，所有面向用户的输出必须显式遵循 `../afa/_system/output-format.md` 的四段式结构。任何标题、建议、下一步、加载状态和摘要都必须使用人类可读名称，不得直接暴露 `afa-*` 内部代号。若内部编排需要保留 module_id，必须先映射为 `display_name` 后才能进入前台文案。
 
 ```markdown
 # HEADER
@@ -112,7 +112,7 @@ completion:
 └── 当前状态：{本轮主问题已完成 / 主问题已完成但仍有保留项 / 当前被真实阻塞需先补齐关键前提 / 可继续推进但补充最小必要上下文后会更准确}
 ```
 
-如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `_system/output-format.md` 第 3.5 节）。
+如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `../afa/_system/output-format.md` 第 3.5 节）。
 
 仅当当前收尾本质上是职责回交、真实阻塞或最小必要补充上下文时，才可不追加自然语言升级出口。
 
@@ -122,7 +122,8 @@ completion:
 
 | 用户意图信号 | 路由目标 | 前置条件检查 |
 |:---|:---|:---|
-| 广告素材、创意、视频脚本、广告文案、Hook | **创意生产流程** | 检查 `voice-and-tone.md` 是否已有 |
+| 广告素材、创意、视频脚本、广告文案、Hook | **创意生产流程** | 检查 `voice-and-tone.md` 是否已有（工作流 D 测品场景豁免） |
+| 测品冷启动、测试店投放、「产品验证过了，帮我测」、测品期 D+3~D+7 数据判读 | 进入**测品冷启动工作流**（工作流 D） | 已有通过验证的候选产品（最小测品档案） |
 | Facebook 广告、Meta 广告、Instagram 广告 | **Meta 广告流程** | 检查 `products.md` + `audience.md` |
 | Google 广告、搜索广告、Shopping、PMax | **Google Ads 流程** | 检查 `products.md` + `audience.md` |
 | TikTok 广告、TikTok Shop | **TikTok 广告流程** | 检查 `products.md` + `audience.md` |
@@ -209,6 +210,32 @@ completion:
   Step 3 → 对应平台流程（更新素材并设置测试）
 ```
 
+### 工作流 D：测品冷启动（对应 Hub WF12 付费部分）
+
+```
+触发：supply_chain_mode = dropshipping 且已有通过验证的候选产品
+      （来自品牌基建组工作流 D / 变现留存组工作流 E 的交接，或用户自述已完成验证）
+前置：与工作流 A 不同，不要求品牌定位已确认——测试店阶段以最小测品档案
+      （products.md 候选品条目 + audience.md 客户语言摘要）为输入；路由表中创意生产流程的
+      voice-and-tone.md 前置检查在本工作流豁免
+
+执行链：
+  Step 1 → 创意生产流程（测品广告手册：形态选型默认静态图 + 静态图生产线 3-5 版式；
+           豁免 creative-kit / 品牌视觉基建前置）
+    输出：同产品同标题多版式素材组
+  ⟐ 用户确认点：预算档位（粗筛 / 验证）按用户预算宽松度由其拍板
+  Step 2 → Meta 广告流程（Day-0 冷启动结构：验证档 1 CBO + 1 广告组 broad + 3-5 静态图，
+           粗筛档每品 1 广告组 ABO；地理以上游 primary_market 为准；Advantage+ 增强测试期全关）
+  Step 3 → 测品判读执行（D+3 / D+5 / D+7）：规则真源为产品上市引擎模式 F Step 3-4，本流程负责执行与回传
+    Kill → 回传 Hub，产品回选品池
+    Iterate → 修正后再测 1 轮（不允许第三轮）
+    Scale → 本结构内 20% 阶梯放量；满足 Meta 广告流程扩量前提后交接扩量 SOP，并回传 Hub 触发赢家品牌化评估
+
+测品期数据回流：用户带着 D+3~D+7 数据回来时直接进入 Step 3，不重新分诊
+单渠道说明：测试期只跑 Meta 是刻意的变量控制，不是渠道押注；
+跨渠道分散在赢家进入放大期后按工作流 A 与跨平台协调规则执行。
+```
+
 ---
 
 ## 5. 跨平台协调规则
@@ -240,7 +267,7 @@ completion:
 
 规则 5：长程任务追踪
   多步骤工作流执行时，每个 Step 完成后同步更新 todo.md
-  → 遵守 _system/interaction-protocol.md 第七章
+  → 遵守 ../afa/_system/interaction-protocol.md 第七章
 ```
 
 ---
@@ -281,12 +308,12 @@ completion:
 
 ## 8. Preamble & Visible Loading (启动协议)
 
-> **系统协议加载**：在执行任何路由或协调任务前，必须严格遵守 `_system/` 目录下的全局协议。
-> - 遵循 `_system/preamble.md` 进行初始化检查和规则优先级判定。
-> - 遵循 `_system/iron-rules.md` 中的全局强制铁律（所有模块必须遵守）。
-> - 遵循 `_system/interaction-protocol.md` 进行默认推进、必要确认与跨流程协同。
-> - 遵循 `_system/brand-memory-protocol.md` 进行 Brand Brain 读写规则。
-> - 遵循 `_system/skill-directory.md` 获取全局模块拓扑视野。
+> **系统协议加载**：在执行任何路由或协调任务前，必须严格遵守 `../afa/_system/` 目录下的全局协议。
+> - 遵循 `../afa/_system/preamble.md` 进行初始化检查和规则优先级判定。
+> - 遵循 `../afa/_system/iron-rules.md` 中的全局强制铁律（所有模块必须遵守）。
+> - 遵循 `../afa/_system/interaction-protocol.md` 进行默认推进、必要确认与跨流程协同。
+> - 遵循 `../afa/_system/brand-memory-protocol.md` 进行 Brand Brain 读写规则。
+> - 遵循 `../afa/_system/skill-directory.md` 获取全局模块拓扑视野。
 
 当 Hub 将任务路由到付费获客统筹层时，必须输出以下可见的加载状态：
 
@@ -298,3 +325,54 @@ completion:
 ├── 可用引擎：Meta 广告 · Google 广告 · TikTok 广告 · 创意生产
 └── 路由决策就绪
 ```
+
+---
+
+## 9. 跨渠道度量与扩量（2026）
+
+付费获客进入"AI 自动化默认"时代后，本统筹层的增量价值从"调各平台参数"转向"跨渠道裁决"：谁拿增量、听谁的归因、何时开第四渠道。
+
+### 9.1 增量测试与 MMM 统筹裁决
+
+各平台自带的 Conversion Lift / GeoLift 只证明"本平台有没有增量"，无法回答"预算在平台之间怎么分"。本统筹层负责统筹：
+
+- **平台自归因只作参考、不作裁决**：Meta/Google/TikTok 的平台内 ROAS 普遍高估自身贡献（尤其在归因窗口收紧后，见各平台流程补丁）。跨渠道预算分配以**增量**为准。
+- **两把尺子**：①**跨渠道 Holdout / GeoLift 增量测试**——按地理或人群留出对照组，测某渠道的真实增量；②**MMM（营销组合模型）**——历史数据充足时，用统计模型给各渠道边际贡献定权重。二者冲突时，以增量实验（因果）优先于 MMM（相关）。
+- **裁决节奏**：季度级用 MMM 定预算大盘，月度/活动级用增量实验校准，平台自归因只用于日常盯盘。
+
+### 9.2 服务器端追踪基座（先统一，后分发）
+
+归因口径收紧（Meta view-through 取消、iOS 限制、Insights API 历史受限）后，服务器端事件是"统一真源"的基座：
+
+- **先建统一层**：用 **CAPI Gateway** 或 **GA4 服务器端容器（sGTM）** 收敛一份服务器端事件真源，再分发给 Meta CAPI、Google Enhanced Conversions、TikTok Events API。
+- **好处**：事件匹配质量（EMQ）更高、跨平台口径一致、少受浏览器与 iOS 限制影响，并为增量测试与 MMM 提供干净数据。
+- **落地顺序**：先 server-side 打通核心事件（Purchase / ATC / Lead）→ 再逐平台接分发 → 最后校准去重，避免重复计数。
+
+### 9.3 第四付费渠道的条件性开启（CTV / AppLovin）
+
+CTV 与 AppLovin 不是默认标配，而是**扩量期的条件性下一站**。仅当同时满足以下触发条件才评估开启，避免过早分散预算：
+
+- Meta 日耗已接近打满（如 $25-30k/天量级）且**边际 ROAS 明显衰减**（再加预算换不回等比转化）；
+- 核心渠道已稳定盈利，有可承受学习期的现金与素材储备。
+
+两个候选：
+
+- **AppLovin**：2025-10 起以 Axon Ads 自助（邀请制）开放，**2026 年 6 月起对所有广告主开放自助**（原 $10M GMV / $20K 日耗 Meta 门槛取消），平台已更名 **AppLovin Ads**（"Axon"现指其 AI 推荐引擎）；在部分 DTC 品牌已占广告支出 10-15%，定位"Meta 打满后的下一站"。
+- **CTV（联网电视）**：在部分品牌媒介占比冲向 20-30%，且正从"品牌曝光"渠道变为**可测量的效果渠道**（配合 §9.1 增量测试评估真实增量）。
+
+> **来源**：[Pigeon：2026 DTC 渠道组合分层（AppLovin 占比、开启时机）](https://www.pigeondigital.com/insight/dtc-channel-mix-2026-by-stage)；[EvolveAMZ：CTV for Ecom 2026 Playbook](https://evolveamz.com/connected-tv-ctv-advertising-ecommerce-2026/)；[AppLovin 官方：AppLovin Ads 面向所有广告主开放（2026-06）](https://www.applovin.com/en/blog/applovin-ads-now-open)；[PPC Land：Axon 自助 6 月全量开放](https://ppc.land/applovins-1-84b-q1-beats-guidance-as-axon-platform-opens-to-all-in-june/)。核实于 2026-07。
+
+## 系统协议（内核版）
+<!-- KERNEL:AUTO:START — 由 scripts/build_inject.py 从 _system/kernel.md 生成，勿手改 -->
+> **本节为协议内核（自动生成，勿手改）。单模块安装时即为可用协议；若 `../afa/_system/` 完整版存在则以其为增强真源。**
+
+**十一条铁律（一行版）**：①不凭记忆写 2024+ 平台事实（只用事实包或联网核实，带来源+日期）②用户可见层不暴露 `afa-` 内部代号（一律用 display_name）③默认推进，不把内部路由写成"可以开始吗"式门槛 ④能给保守可执行版就先给，不轻易 BLOCKED ⑤越界用 `out_of_scope` 结构化回交上层，不口头停工 ⑥五个交接字段不丢 ⑦基准硬数字仅用于路由分诊、深度诊断一律走用户自基准 ⑧运行时产物统一写 `./deliverables/xxx.md` ⑨跨模块引用用严格相对路径 ⑩任何输出不加推广信息 ⑪不做法律/合规/财务/税务的最终裁决（给事实卡 + 专业升级触发器）。
+
+**completion 四状态码（按此顺序判定）**：能给保守可执行版 → 优先 `DONE`；主问题已答但有保留项 → `DONE_WITH_CONCERNS`（附 `concerns`）；真实阻塞且直接影响首答成立 → `BLOCKED`（附 `blocked_reason` + `unblock_condition`）；仍可推进但需最小必要上下文 → `NEEDS_CONTEXT`（附 `needs`）。**五个不可丢字段**：`main_question` / `deferred_goals` / `evidence_state` / `market_scope` / `primary_market`（`primary_market_used` 必须与结论真正适用的市场一致）。
+
+**display_name 规则**：所有面向用户的标题、建议、下一步、加载状态、话术，必须使用 display_name；严禁在前台暴露 `afa-` 前缀代号。
+
+**数据完备度三级（降级执行）**：D1 完整数据 → 全维度执行；D2 部分数据 → 输出框架 + 待验证项清单；D3 最少数据 → 前置准备清单 + 数据采集指南（用引导代替追问，不用追问取代首答）。⚠️ 这是**数据完备度轴**，与 `degradation-rules.md` 的**平台能力轴**（Level 3 满血 → Level 1 最简）是两个方向相反的轴，勿混用 Level 编号。
+
+**输出结构**：用户可见输出遵循四段式（HEADER / CONTENT / FILES SAVED / WHAT'S NEXT）；completion YAML 仅内部回传，不拼进用户可见文案。
+<!-- KERNEL:AUTO:END -->

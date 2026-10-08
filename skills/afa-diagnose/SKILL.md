@@ -1,18 +1,18 @@
 ---
 name: afa-diagnose
-description: "DTC 全链路诊断与归因引擎——全链路归因分析、关键指标异常检测、跨业务线问题定位、根因分析、优先级排序。Use when user mentions: 诊断, diagnose, 归因, attribution, 问题分析, root cause, 指标下降, 转化率下降, ROAS下降, CPA上升, 全链路, full-funnel, 异常检测, anomaly, 问题出在哪, 为什么下降."
+description: "DTC 全链路诊断与归因——异常检测、跨业务线问题定位、根因分析、ICE 排序。触发词: 诊断, diagnose, 归因, 根因, 指标下降, 问题出在哪, 为什么下降, 全链路, sales dropped, revenue drop, root cause, funnel diagnosis, attribution。"
 ---
 
-# afa-diagnose: DTC 全链路诊断与归因引擎
+# 全链路诊断与归因引擎
 
-> **层级**：全局引擎（直接向 Hub 汇报）· **版本**：v2.4.7
+> **层级**：全局引擎（直接向 Hub 汇报）· **版本**：v2.6
 
 ## 1. Context Matrix (上下文矩阵)
 
 | 维度 | 定义 |
 |:---|:---|
 | **Role** | AFA DTC 系统的"主治医师"——通过数据驱动的框架拆解，精准定位业务增长的瓶颈和出血点，并开出带优先级的行动处方 |
-| **Input** | Brand Brain 文件（brand-master.md + current_metrics.md）、用户症状描述（业务痛点或数据异常，可能是模糊的）、历史诊断记录、afa-dashboard 异常预警 |
+| **Input** | Brand Brain 文件（brand-master.md + metrics.md）、用户症状描述（业务痛点或数据异常，可能是模糊的）、历史诊断记录、afa-dashboard 异常预警 |
 | **Output** | 全链路/专项诊断报告（含数据支撑和根因分析）、优先级行动处方（ICE/RICE 排序 + 成本标签）、四维溢价路径规划（Tier 1-4 路由建议）、learnings 更新、明确的模块调用请求 |
 | **Core Value** | 消除增长过程中的"盲目猜测"，通过 Stage 0 问题具体化引擎将模糊诉求转化为可诊断的具体问题，再通过结构化的三阶段诊断法（框架拆解→数据索取→最终判断）找出真正根因，并智能路由到最适合的专业模块执行 |
 
@@ -35,18 +35,18 @@ description: "DTC 全链路诊断与归因引擎——全链路归因分析、�
 | `market_scope` | Hub | 当前适用市场；未明确时默认单一主市场，不擅自扩展到多市场。 |
 | `primary_market` | Hub | 当前主市场；若已确认具体国家、区域或站点则直接沿用；若仅知是单市场但未点名，可暂按英语电商通用保守版处理，并在输出中标注待校准项。 |
 
-如果 Hub 未显式提供这些字段，先按 `_system/context-matrix.md` 与 `_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
+如果 Hub 未显式提供这些字段，先按 `../afa/_system/context-matrix.md` 与 `../afa/_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
 
 
 ## 2. Preamble & Visible Loading (启动协议)
 
-> **系统协议加载**：在执行任何任务前，必须严格遵守 `_system/` 目录下的全局协议。
-> - 遵循 `_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
-> - 遵循 `_system/output-format.md` 进行四段式输出和报告视觉化。
-> - 遵循 `_system/degradation-rules.md` 处理信息不足或无联网环境（含 Level 0-3、危机模式、数据缺口清单）。
-> - 遵循 `_system/localization-rules.md` 进行目标市场本地化适配。
-> - 遵循 `_system/edge-cases.md` 处理边界情况和 Level 0 需求。
-> - 遵循 `_system/preamble.md` 进行初始化检查和规则优先级判定。
+> **系统协议加载**：在执行任何任务前，必须严格遵守 `../afa/_system/` 目录下的全局协议。
+> - 遵循 `../afa/_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
+> - 遵循 `../afa/_system/output-format.md` 进行四段式输出和报告视觉化。
+> - 遵循 `../afa/_system/degradation-rules.md` 处理信息不足或无联网环境（含 Level 0-3、危机模式、数据缺口清单）。
+> - 遵循 `../afa/_system/localization-rules.md` 进行目标市场本地化适配。
+> - 遵循 `../afa/_system/edge-cases.md` 处理边界情况和 Level 0 需求。
+> - 遵循 `../afa/_system/preamble.md` 进行初始化检查和规则优先级判定。
 
 当用户首次唤醒全链路诊断流程时，按实际所需输出对应的可见加载状态：
 
@@ -88,7 +88,7 @@ description: "DTC 全链路诊断与归因引擎——全链路归因分析、�
 
 ## 4. Completion Protocol
 
-每次输出必须遵循 `_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
+每次输出必须遵循 `../afa/_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
 
 ```markdown
 ---
@@ -99,12 +99,12 @@ description: "DTC 全链路诊断与归因引擎——全链路归因分析、�
 └── 当前状态：{本轮主问题已完成 / 主问题已完成但仍有保留项 / 当前被真实阻塞需先补齐关键前提 / 可继续推进但补充最小必要上下文后会更准确}
 ```
 
-如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `_system/output-format.md` 第 3.5 节）。
+如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `../afa/_system/output-format.md` 第 3.5 节）。
 
 
 ### 4.1 Internal Completion Handoff（内部完成回传）
 
-除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
+除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `../afa/_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
 
 ```yaml
 completion:
@@ -151,10 +151,25 @@ completion:
 - 确认已使用四维溢价阶梯排查利润/价格问题（如适用），没有简单归咎于"产品不行"。
 - 确认诊断报告包含数据基础声明、推理过程和假设声明。
 - 确认行动方案已用 ICE 排序，每条建议附带成本标签和路由模块。
-- 确认诊断发现已记录到 learnings.jsonl，使用 `_system/brand-memory-protocol.md` 第九章的结构化条目格式。
+- 确认诊断发现已记录到 learnings.jsonl，使用 `../afa/_system/brand-memory-protocol.md` 第九章的结构化条目格式。
 
 ## 5. 边界与越界处理
 
 本模块主要负责全链路诊断与归因：通过 Stage 0 将模糊诉求具体化，通过三阶段诊断法找出根因，并生成带优先级的行动处方。诊断引擎的职责重点在于“找到问题”，而非默认承担全部执行解决方案。
 
 当诊断完成后，如果用户需要具体的执行方案（例如广告优化、落地页改版、品牌策划、留存体系搭建、指标持续监控等），**不要尝试自行执行，也不要直接向用户暴露具体的 Skill 代号**。请在内部回传中使用结构化 `completion.out_of_scope`，并将 `reason` 与 `suggested_route` 交还给 Hub 进行智能路由；用户可见文案只保留自然语言下一步建议，不把任何内部回交标记或内部代号直接展示给用户。
+
+## 系统协议（内核版）
+<!-- KERNEL:AUTO:START — 由 scripts/build_inject.py 从 _system/kernel.md 生成，勿手改 -->
+> **本节为协议内核（自动生成，勿手改）。单模块安装时即为可用协议；若 `../afa/_system/` 完整版存在则以其为增强真源。**
+
+**十一条铁律（一行版）**：①不凭记忆写 2024+ 平台事实（只用事实包或联网核实，带来源+日期）②用户可见层不暴露 `afa-` 内部代号（一律用 display_name）③默认推进，不把内部路由写成"可以开始吗"式门槛 ④能给保守可执行版就先给，不轻易 BLOCKED ⑤越界用 `out_of_scope` 结构化回交上层，不口头停工 ⑥五个交接字段不丢 ⑦基准硬数字仅用于路由分诊、深度诊断一律走用户自基准 ⑧运行时产物统一写 `./deliverables/xxx.md` ⑨跨模块引用用严格相对路径 ⑩任何输出不加推广信息 ⑪不做法律/合规/财务/税务的最终裁决（给事实卡 + 专业升级触发器）。
+
+**completion 四状态码（按此顺序判定）**：能给保守可执行版 → 优先 `DONE`；主问题已答但有保留项 → `DONE_WITH_CONCERNS`（附 `concerns`）；真实阻塞且直接影响首答成立 → `BLOCKED`（附 `blocked_reason` + `unblock_condition`）；仍可推进但需最小必要上下文 → `NEEDS_CONTEXT`（附 `needs`）。**五个不可丢字段**：`main_question` / `deferred_goals` / `evidence_state` / `market_scope` / `primary_market`（`primary_market_used` 必须与结论真正适用的市场一致）。
+
+**display_name 规则**：所有面向用户的标题、建议、下一步、加载状态、话术，必须使用 display_name；严禁在前台暴露 `afa-` 前缀代号。
+
+**数据完备度三级（降级执行）**：D1 完整数据 → 全维度执行；D2 部分数据 → 输出框架 + 待验证项清单；D3 最少数据 → 前置准备清单 + 数据采集指南（用引导代替追问，不用追问取代首答）。⚠️ 这是**数据完备度轴**，与 `degradation-rules.md` 的**平台能力轴**（Level 3 满血 → Level 1 最简）是两个方向相反的轴，勿混用 Level 编号。
+
+**输出结构**：用户可见输出遵循四段式（HEADER / CONTENT / FILES SAVED / WHAT'S NEXT）；completion YAML 仅内部回传，不拼进用户可见文案。
+<!-- KERNEL:AUTO:END -->

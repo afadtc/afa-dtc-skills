@@ -1,0 +1,6 @@
+{"id":"org-01","business_line":"organic","user_input":"技术SEO 和产品页SEO 想优化搜索排名","expect_route":"afa-seo","expected_visible":"我先做技术体检，再优化产品页结构和内链。","cost_tag":"medium"}
+{"id":"org-02","business_line":"organic","user_input":"内容日历 和 UGC 社区怎么运营","expect_route":"afa-social","expected_visible":"我帮你排一个月的内容日历，并设计 UGC 征集机制。","cost_tag":"medium"}
+{"id":"org-03","business_line":"organic","user_input":"想找 KOC 和网红做种草和联盟","expect_route":"afa-influencer","expected_visible":"我帮你筛选匹配的达人，并设计联盟合作模式。","cost_tag":"medium"}
+{"id":"org-04","business_line":"organic","user_input":"有舆情负面，要做危机公关和声誉管理","expect_route":"afa-pr","expected_visible":"我先分级舆情，再给危机响应和声誉修复的动作。","cost_tag":"high"}
+{"id":"org-05","business_line":"organic","user_input":"ChatGPT搜索 和 Perplexity 里看不到我，想做 GEO","expect_route":"afa-geo","expected_visible":"我先审计你在 AI 搜索里的可见度，再重塑可被引用的内容结构。","cost_tag":"medium"}
+{"id":"org-06","business_line":"organic","user_input":"想降低广告依赖做有机增长","expect_route":"afa-organic","expected_visible":"我按你的资源把 SEO、社交、公关排一个有机增长组合。","cost_tag":"high"}

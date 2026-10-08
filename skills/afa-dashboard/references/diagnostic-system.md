@@ -96,7 +96,7 @@ Step 3: 维度下钻归因
 2. {follow_up_action}（建议承接方向：{owner_or_direction}）
 
 **影响评估**：
-如果不处理，预计每周损失 ${estimated_loss}
+如果不处理，预计每周损失 ${estimated_loss}（推导：${loss_formula}；数据基础：${data_basis}）
 ```
 
 ---

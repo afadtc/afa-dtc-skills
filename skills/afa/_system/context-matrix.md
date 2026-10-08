@@ -2,11 +2,9 @@
 
 > **协议层级**：全局强制 · afa Hub 路由时必须遵守
 >
-> **版本**：v2.4.7
+> **版本**：v2.6
 >
 > **来源说明**：本文件为当前生效的全局协议，供 Hub、Supervisor 与 Worker 统一遵守。
->
-> **v2.0.8 变更**：回传格式中 `status` 升级为四状态码枚举（DONE / DONE_WITH_CONCERNS / BLOCKED / NEEDS_CONTEXT），新增 `handoff_summary` 字段
 
 当 afa 将任务路由到某个专业模块时，必须为该模块编译精准的上下文包。这是整个系统质量的关键——给太多上下文会稀释焦点，给太少会导致泛化输出。
 
@@ -59,12 +57,12 @@ evidence_state: sufficient / partial / minimal
 market_scope: single_market / multi_market / unknown
 primary_market: "{主市场；若未知写 unknown}"
 stage: "{Level 0 / 0→1 / 1→10 / 10→100 / 衰退期}"
-health_status: "{健康 / 亚健康 / 危机}"  # v1.9 新增
-crisis_mode: none/cash_crisis/pr_crisis  # v1.9 新增，危机类型枚举，子 Skill 据此切换对应止血模式
-seasonal_mode: none/pre_season/peak_season/off_season  # v1.9.3 新增，季节阶段枚举，子 Skill 据此调整策略和 KPI 基准
-supply_chain_mode: dropshipping/wholesale/manufacturing/dtc  # v1.9.5 新增，供应链模式枚举，子 Skill 据此调整建议优先级排序
-premium_tier: "Tier 1-4"  # v1.9.8 新增，四维溢价阶梯的当前主攻层级（非用户会员等级），子 Skill 据此对齐策略
-urgency_level: CRITICAL/HIGH/MEDIUM/LOW  # v2.2.8 补全，紧急程度枚举，由诊断引擎或 Hub 根据用户情境判定，子 Skill 据此调整策略优先级和时间框架
+health_status: "{健康 / 亚健康 / 危机}"
+crisis_mode: none/cash_crisis/pr_crisis  # 危机类型枚举，子 Skill 据此切换对应止血模式
+seasonal_mode: none/pre_season/peak_season/off_season  # 季节阶段枚举，子 Skill 据此调整策略和 KPI 基准
+supply_chain_mode: dropshipping/wholesale/manufacturing/dtc  # 供应链模式枚举，子 Skill 据此调整建议优先级排序；dropshipping 且诉求为测品时同时作为 WF12 / 测品快速通道的切换触发器（用户明示一件代发/测试店即可判定）
+premium_tier: "Tier 1-4"  # 四维溢价阶梯的当前主攻层级（非用户会员等级），子 Skill 据此对齐策略
+urgency_level: CRITICAL/HIGH/MEDIUM/LOW  # 紧急程度枚举，由诊断引擎或 Hub 根据用户情境判定，子 Skill 据此调整策略优先级和时间框架
 user_request: "{用户的原始需求描述}"
 diagnosis:
   root_cause: "{诊断出的根因，如有}"

@@ -53,7 +53,7 @@ afa-influencer 提供 6 种标准化的工作模式，以应对不同的业务�
     4.  对每个候选人进行假粉检测、参与度审计和历史合作记录检查。
     5.  输出包含足够支持当前阶段决策的结构化短名单，按综合匹配度排序。
     6.  为每个候选人提供建议的合作模式和预估报价范围。
-*   **输出格式**：`creator-shortlist.md` 模板。
+*   **输出格式**：`./deliverables/creator-shortlist.md` 模板。
 *   **质量检查**：每个候选人必须包含完整的 3C 评估，禁止仅列出名字和粉丝数。
 
 ### 模式 2：[OUTREACH] 冷拓展与邀约模式
@@ -66,7 +66,7 @@ afa-influencer 提供 6 种标准化的工作模式，以应对不同的业务�
     4.  设计适合当前合作目标的跟进序列，每个触点提供新价值。
     5.  为最后一封邮件设计"分手邮件"策略，礼貌结束并留下未来合作的可能性。
     6.  根据创作者体量、联系方式和合作复杂度推荐最佳触达渠道，不固化为单一路径。
-*   **输出格式**：`outreach-sequence.md` 模板。
+*   **输出格式**：`./deliverables/outreach-sequence.md` 模板。
 *   **质量检查**：每封邮件必须包含至少 1 个个性化元素，禁止生成群发模板。
 
 ### 模式 3：[BRIEF] 创作者内容简报模式
@@ -76,7 +76,7 @@ afa-influencer 提供 6 种标准化的工作模式，以应对不同的业务�
     1.  整合 Brand Brain 信息。
     2.  明确视觉要求、关键信息点和 CTA。
     3.  加入广告披露提示和平台政策注意事项。
-*   **输出格式**：`creator-brief.md` 模板。
+*   **输出格式**：`./deliverables/creator-brief.md` 模板。
 
 ### 模式 4：[AFFILIATE] 联盟计划设计模式
 *   **触发条件**：品牌准备从零启动或优化现有的联盟营销计划。
@@ -85,7 +85,7 @@ afa-influencer 提供 6 种标准化的工作模式，以应对不同的业务�
     1.  设计具有竞争力的佣金结构（基础 + 阶梯）。
     2.  规划招募策略和入驻流程。
     3.  列出所需的素材清单。
-*   **输出格式**：`affiliate-program-design.md` 模板。
+*   **输出格式**：`./deliverables/affiliate-program-design.md` 模板。
 
 ### 模式 5：[DIAGNOSE] 渠道诊断与优化模式
 *   **触发条件**：网红合作 ROI 不达标，联盟计划缺乏活力，或用户表达"网红合作效果不好""联盟计划没人参与"等意图。
@@ -115,7 +115,7 @@ afa-influencer 提供 6 种标准化的工作模式，以应对不同的业务�
 
 ## 三、输出格式规范
 
-### 3.1 创作者候选人短名单 (creator-shortlist.md)
+### 3.1 创作者候选人短名单 (./deliverables/creator-shortlist.md)
 
 ```markdown
 # 创作者候选人短名单：[项目名称]
@@ -141,7 +141,7 @@ afa-influencer 提供 6 种标准化的工作模式，以应对不同的业务�
 ...
 ```
 
-### 3.2 多触点跟进序列 (outreach-sequence.md)
+### 3.2 多触点跟进序列 (./deliverables/outreach-sequence.md)
 
 ```markdown
 # 创作者触达序列：[项目名称]
@@ -166,7 +166,7 @@ afa-influencer 提供 6 种标准化的工作模式，以应对不同的业务�
   [在合适窗口内重申 CTA 或礼貌结束对话]
 ```
 
-### 3.3 创作者内容简报 (creator-brief.md)
+### 3.3 创作者内容简报 (./deliverables/creator-brief.md)
 
 ```markdown
 # 创作者内容简报：[品牌名称] x [创作者名称]

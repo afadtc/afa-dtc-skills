@@ -1,0 +1,7 @@
+{"id":"fnd-01","business_line":"foundation","user_input":"帮我做市场调研，看这个赛道分析值不值得进","expect_route":"afa-explore","expected_visible":"我先帮你做市场规模和赛道分析，给一个进入判断。","cost_tag":"medium"}
+{"id":"fnd-02","business_line":"foundation","user_input":"用户画像不清晰，想挖一下 VOC","expect_route":"afa-explore","expected_visible":"我从真实评论里提炼 VOC，帮你补齐用户画像。","cost_tag":"medium"}
+{"id":"fnd-03","business_line":"foundation","user_input":"我要做品牌定位和品牌故事","expect_route":"afa-brand","expected_visible":"我先用定位画布确认差异点，再写品牌故事。","cost_tag":"medium"}
+{"id":"fnd-04","business_line":"foundation","user_input":"定价没想清楚，帮我看产品组合和 COGS","expect_route":"afa-product","expected_visible":"我按 COGS 和溢价阶梯帮你把产品组合和定价理顺。","cost_tag":"medium"}
+{"id":"fnd-05","business_line":"foundation","user_input":"新品要上市，做冷启动和 PMF 判定","expect_route":"afa-launch","expected_visible":"我给你四阶段上市计划，先做 MVP 测试再判 PMF。","cost_tag":"high"}
+{"id":"fnd-06","business_line":"foundation","user_input":"帮我做竞品分析和逆向工程","expect_route":"afa-compete","expected_visible":"我逆向拆解竞品的流量和定价，找差异化机会。","cost_tag":"medium"}
+{"id":"fnd-07","business_line":"foundation","user_input":"我要做品牌基建，从零开始把品牌规划和产品上市这条线整体排一遍","expect_route":"afa-foundation","expected_visible":"我把这条线拆成市场验证、竞品、定位、产品、上市五段，按顺序推进，先确认第一段。","cost_tag":"high"}

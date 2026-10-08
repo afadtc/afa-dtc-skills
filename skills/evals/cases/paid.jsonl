@@ -1,0 +1,6 @@
+{"id":"paid-01","business_line":"paid","user_input":"Facebook广告 CBO 跑不动，想调 Advantage+","expect_route":"afa-fb","expected_visible":"我先看账户结构，再决定 CBO 和 Advantage+ 的取舍。","cost_tag":"medium"}
+{"id":"paid-02","business_line":"paid","user_input":"Meta投放 像素 没配好想复查","expect_route":"afa-fb","expected_visible":"我帮你核对像素和转化事件是否正确回传。","cost_tag":"low"}
+{"id":"paid-03","business_line":"paid","user_input":"Google Ads 的 PMax 和 Shopping 怎么优化","expect_route":"afa-gg","expected_visible":"我按 Feed 质量和搜索词报告帮你优化 PMax 与 Shopping。","cost_tag":"medium"}
+{"id":"paid-04","business_line":"paid","user_input":"TikTok Shop 想投 GMV Max","expect_route":"afa-tt","expected_visible":"我先判断你的达人内容储备，再决定 GMV Max 的投放节奏。","cost_tag":"medium"}
+{"id":"paid-05","business_line":"paid","user_input":"广告素材创意疲劳了，要新的 hook","expect_route":"afa-creative","expected_visible":"我给你一组新的创意角度和 hook 变体去测试。","cost_tag":"medium"}
+{"id":"paid-06","business_line":"paid","user_input":"三个渠道的预算分配怎么排，付费广告整体策略","expect_route":"afa-paid","expected_visible":"我按各渠道边际 ROAS 帮你重新分配预算。","cost_tag":"high"}

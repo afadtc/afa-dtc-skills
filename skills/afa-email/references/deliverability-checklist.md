@@ -20,6 +20,28 @@
 
 ---
 
+## 1.5、Gmail / Yahoo / Microsoft 批量发件人强制门槛（2024+，必读）
+
+自 2024 年起，Gmail 与 Yahoo 对**批量发件人**（向其用户单日发送 ≥ 5,000 封即永久归入此类，一旦定级不因发送量回落而解除）设定强制门槛，不达标直接进垃圾箱或被拒收：
+
+| 要求 | 门槛 | 说明 |
+|---|---|---|
+| 身份验证 | **SPF + DKIM + DMARC 三件套齐全** | DMARC 至少 `p=none` 起步（详见 §2） |
+| 垃圾投诉率 | **< 0.3%**（Google Postmaster 口径），理想 < 0.1% | 一旦超 0.3%，送达率断崖 |
+| 一键退订 | **RFC 8058 List-Unsubscribe-Post**（一键退订）+ 两日内处理 | 营销邮件必须支持邮件端一键退订 |
+| 相关性 | 只发给真正想收的人 | 高投诉率 = 名单/内容不相关的信号 |
+
+**2025-2026 执法升级（关键）：**
+
+- **2025 年 11 月起，Gmail 从"临时延迟投递"升级为"永久拒收"**不合规批量邮件——过去的软性惩罚变硬。
+- **Microsoft（Outlook/Hotmail）的同类要求不是「2026 年才来」，而是 2025-04 公告、2025-05-05 起已经执行**：向 Outlook/Hotmail/Live 日发 ≥ 5,000 封的域名，若 SPF/DKIM/DMARC 不达标，先被**投递到垃圾箱**（宽限期），随后升级为**直接拒收**，退信码为 `550 5.7.515 Access denied, sending domain [SendingDomain] does not meet the required authentication level`。批量发件人须按三大邮箱统一达标，不能只优化 Gmail。
+
+> 达不到门槛不是"送达率低一点"，而是"直接进不了收件箱"。新域名/新名单尤其要先把三件套和一键退订配齐再放量。
+
+> **来源**：[Microsoft 官方公告：Outlook 高发件量发件人新要求（2025-04 发布，2025-05-05 起执行）](https://techcommunity.microsoft.com/blog/microsoftdefenderforoffice365blog/strengthening-email-ecosystem-outlook%E2%80%99s-new-requirements-for-high%E2%80%90volume-senders/4399730)；[EmailWarmup：Gmail/Yahoo 批量发件人要求](https://emailwarmup.com/blog/email-deliverability/gmail-and-yahoo-bulk-sender-requirements/)；[MailRisk：2026 三大邮箱发件人要求](https://mailrisk.io/guides/gmail-yahoo-sender-requirements-2026)；[Red Sift：批量发件人要求（含 Microsoft）](https://redsift.com/guides/bulk-email-sender-requirements)。核实于 2026-07。
+
+---
+
 ## 2. 技术配置基础（Technical Setup）
 
 如果技术身份没有建立好，后面的内容再优秀也可能直接进垃圾箱，甚至被接收服务器拒收。技术配置属于所有发送工作的底座，不可省略。

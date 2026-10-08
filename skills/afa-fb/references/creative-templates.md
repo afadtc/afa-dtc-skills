@@ -1,7 +1,7 @@
 # Meta 广告创意模板库
 
-> **用途**：为 afa-fb 提供 Meta 平台特有的广告创意模板、投放测试机制和平台规格。
-> **通用文案框架**：PAS/HSO/BAB/AIDA 等通用文案框架、CTA 变体库、UGC 全漏斗应用框架、季节性创意日历等平台无关的创意知识，已统一归入 **afa-creative**（参见 `copywriting-frameworks.md`、`seasonal-creative-calendar.md`）。本文件仅保留 Meta 平台特有的创意执行知识。
+> **用途**：为 Meta 广告引擎 提供 Meta 平台特有的广告创意模板、投放测试机制和平台规格。
+> **通用文案框架**：PAS/HSO/BAB/AIDA 等通用文案框架、CTA 变体库、UGC 全漏斗应用框架、季节性创意日历等平台无关的创意知识，已统一归入 创意引擎（参见 `../../afa-creative/references/copywriting-frameworks.md`、`../../afa-creative/references/seasonal-creative-calendar.md`）。本文件仅保留 Meta 平台特有的创意执行知识。
 
 ---
 
@@ -180,7 +180,7 @@ Use Code [优惠码] | Free Shipping Included
 
 ## 二、Meta 视频广告 Hook 脚本模板
 
-以下 Hook 模板针对 Meta 平台（Feed、Stories、Reels）的用户行为特征设计。通用的 Hook 心理学框架请参见 afa-creative 的 `ad-testing-matrix.md`。
+以下 Hook 模板针对 Meta 平台（Feed、Stories、Reels）的用户行为特征设计。通用的 Hook 心理学框架请参见 afa-creative 的 `../../afa-creative/references/ad-testing-matrix.md`。
 
 ### Hook 类型 1：问题共鸣型
 
@@ -289,7 +289,7 @@ Use Code [优惠码] | Free Shipping Included
 
 **目标**：吸引注意力，建立初步兴趣。
 
-**Meta 平台创意原则**：前 3 秒决定一切（Hook 是生命线）；展示问题优先于展示产品；UGC 风格优于品牌广告风格；移动端优先（竖屏 9:16）；必须添加字幕（85% 用户静音观看）。
+**Meta 平台创意原则**：前 3 秒决定一切（Hook 是生命线）；展示问题优先于展示产品；UGC 风格优于品牌广告风格；移动端优先（竖屏 9:16）；必须添加字幕（平台侧常引用的静音观看比例约 85%；随平台与时期波动，字幕一律必配）。
 
 **推荐创意类型**：UGC 开箱/首次体验视频、问题共鸣 + 解决方案视频、前后对比（视觉冲击）、KOC 日常场景植入、趣味/反常识短视频。
 
@@ -313,7 +313,7 @@ Use Code [优惠码] | Free Shipping Included
 
 这是 Meta 广告平台特有的创意测试机制，基于 CBO 和 ASC 两种投放方式的配合。
 
-### 4.1 测试活动（占预算 10-20%）
+### 4.1 测试活动（占预算 10-20%＝成熟期/稳态口径；冷启动期为 30%，按阶段配比见 `planning-and-budget.md` §7.1）
 
 **目的**：快速筛选优胜创意。
 
@@ -321,7 +321,7 @@ Use Code [优惠码] | Free Shipping Included
 
 **测试维度**：Hook 测试（同一内容，不同前 3 秒）；格式测试（视频 vs 图片 vs 轮播）；角度测试（痛点 vs 利益 vs 社证）；文案测试（长文案 vs 短文案）；CTA 测试（不同行动号召）。
 
-**优胜标准**：CTR 高于账户平均 1.5 倍；CPA 低于账户平均 80%；至少 10 次转化（统计显著性）。
+**优胜标准**：CTR 高于账户平均 1.5 倍；CPA ≤ 账户平均值的 80%（即比账户均值至少低 20%）；至少 10 次转化（统计显著性）。
 
 **优胜处理**：毕业到 ASC 主力活动。
 
@@ -331,7 +331,7 @@ Use Code [优惠码] | Free Shipping Included
 
 **设置**：ASC（Advantage+ Shopping Campaign），集中预算。
 
-**创意管理**：每周加入 2-3 条新毕业的优胜创意；淘汰表现最差的 2-3 条旧创意；保持 15-30 条活跃创意；监控创意疲劳度（频次大于 3 为警戒线）。
+**创意管理**：每周加入 2-3 条新毕业的优胜创意；淘汰表现最差的 2-3 条旧创意；保持 15-30 条活跃创意；监控创意疲劳度（**频次 > 2.5 为警戒线、> 4.0 为危险线，7 天窗口**——口径真源 `benchmark-data.md` §九）。
 
 **节奏**：形成"测试 → 毕业 → 扩量 → 淘汰"的持续循环。
 
@@ -365,8 +365,8 @@ Meta 平台对文案有特殊的折叠行为，不同长度的文案在不同场
 | 轮播 | 1:1 | 1080x1080 | — | 每张 < 30MB |
 | Collection | 1:1 | 1080x1080 | — | < 30MB |
 
-**视频最佳实践**：前 3 秒必须有 Hook；添加字幕（85% 静音观看）；竖屏优先（9:16 > 4:5 > 1:1）；时长 15-30 秒效果最佳；结尾明确 CTA + 品牌 logo。
+**视频最佳实践**：前 3 秒必须有 Hook；添加字幕（静音观看比例约 85%，见上文创意原则）；竖屏优先（9:16 > 4:5 > 1:1）；时长 15-30 秒效果最佳；结尾明确 CTA + 品牌 logo。
 
 ---
 
-*本模板库为 afa-fb 提供 Meta 平台特有的创意和文案参考。通用文案框架请参见 afa-creative 的 `copywriting-frameworks.md`；通用 Hook 心理学框架请参见 afa-creative 的 `ad-testing-matrix.md`；UGC 脚本法则请参见 afa-creative 的 `reali-tea-scripting.md`。使用时请根据品牌调性进行个性化调整。*
+*本模板库为 Meta 广告引擎 提供 Meta 平台特有的创意和文案参考。通用文案框架请参见 afa-creative 的 `../../afa-creative/references/copywriting-frameworks.md`；通用 Hook 心理学框架请参见 afa-creative 的 `../../afa-creative/references/ad-testing-matrix.md`；UGC 脚本法则请参见 afa-creative 的 `../../afa-creative/references/reali-tea-scripting.md`。使用时请根据品牌调性进行个性化调整。*

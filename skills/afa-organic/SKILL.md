@@ -1,11 +1,11 @@
 ---
 name: afa-organic
-description: "有机增长 Supervisor——统筹 SEO、社交内容、网红合作、公关传播、AI 搜索优化的跨渠道有机流量策略与路由。Use when user mentions: 有机增长, organic growth, 免费流量, free traffic, SEO+社交, 内容营销, content marketing, 降低广告依赖, 自然流量, organic traffic, 有机策略."
+description: "有机增长 Supervisor——统筹 SEO、社交、网红、公关、GEO 的跨渠道有机流量路由。触发词: 有机增长, organic growth, 免费流量, 内容营销, 自然流量, 降低广告依赖, organic traffic, content marketing, free traffic。"
 ---
 
 # 有机增长统筹层
 
-> **层级**：Supervisor（中层路由器）· **版本**：v2.4.7
+> **层级**：Supervisor（中层路由器）· **版本**：v2.6
 > **管辖流程**：搜索内容 · 社交内容 · 达人合作 · 公关传播 · AI 搜索优化
 
 ---
@@ -98,7 +98,7 @@ completion:
 
 ### 用户可见输出协议
 
-除上述 completion YAML 外，所有面向用户的输出必须显式遵循 `_system/output-format.md` 的四段式结构。任何用户可见的标题、建议、下一步和加载文案都必须使用人类可读名称，不得直接暴露 `afa-*` 内部代号。若内部编排需要保留 module_id，必须先映射为 `display_name` 后才能进入前台文案。
+除上述 completion YAML 外，所有面向用户的输出必须显式遵循 `../afa/_system/output-format.md` 的四段式结构。任何用户可见的标题、建议、下一步和加载文案都必须使用人类可读名称，不得直接暴露 `afa-*` 内部代号。若内部编排需要保留 module_id，必须先映射为 `display_name` 后才能进入前台文案。
 
 ```markdown
 # HEADER
@@ -115,7 +115,7 @@ completion:
 └── 当前状态：{本轮主问题已完成 / 主问题已完成但仍有保留项 / 当前被真实阻塞需先补齐关键前提 / 可继续推进但补充最小必要上下文后会更准确}
 ```
 
-如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `_system/output-format.md` 第 3.5 节）。
+如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `../afa/_system/output-format.md` 第 3.5 节）。
 
 仅当当前收尾本质上是职责回交、真实阻塞或最小必要补充上下文时，才可不追加自然语言升级出口。
 
@@ -129,7 +129,7 @@ completion:
 | 社交媒体、Instagram/TikTok 内容、UGC、社群 | **社交流程** | 检查 `voice-and-tone.md` |
 | 网红合作、KOL、达人营销、Influencer | **达人合作流程** | 检查 `audience.md` + `brand-master.md` |
 | 公关、媒体报道、品牌背书、新闻稿 | **公关传播流程** | 检查 `brand-master.md` + `voice-and-tone.md` |
-| AI 搜索优化、GEO、Perplexity、ChatGPT 可见度 | **AI 搜索优化流程** | 必需检查 `products.md`；`keywords.md` 仅作可选增强输入，正式依赖以 `_system/brand-memory-protocol.md` 为准 |
+| AI 搜索优化、GEO、Perplexity、ChatGPT 可见度 | **AI 搜索优化流程** | 必需检查 `products.md`；`keywords.md` 仅作可选增强输入，正式依赖以 `../afa/_system/brand-memory-protocol.md` 为准 |
 | 「怎么获取免费流量」「做内容营销」 | 进入**内容营销体系工作流** | 见下方 |
 | 「想提升品牌影响力」 | 进入**影响力构建工作流** | 见下方 |
 | 有机流量下降、内容没效果（诊断类） | 进入**诊断路由**（见下方） | 询问症状细节 |
@@ -254,7 +254,7 @@ completion:
 
 规则 5：长程任务追踪
   多步骤工作流执行时，每个 Step 完成后同步更新 todo.md
-  → 遵守 _system/interaction-protocol.md 第七章
+  → 遵守 ../afa/_system/interaction-protocol.md 第七章
 ```
 
 ---
@@ -297,12 +297,12 @@ completion:
 
 ## 8. Preamble & Visible Loading (启动协议)
 
-> **系统协议加载**：在执行任何路由或协调任务前，必须严格遵守 `_system/` 目录下的全局协议。
-> - 遵循 `_system/preamble.md` 进行初始化检查和规则优先级判定。
-> - 遵循 `_system/iron-rules.md` 中的全局强制铁律（所有模块必须遵守）。
-> - 遵循 `_system/interaction-protocol.md` 进行默认推进、必要确认与跨流程协同。
-> - 遵循 `_system/brand-memory-protocol.md` 进行 Brand Brain 读写规则。
-> - 遵循 `_system/skill-directory.md` 获取全局模块拓扑视野。
+> **系统协议加载**：在执行任何路由或协调任务前，必须严格遵守 `../afa/_system/` 目录下的全局协议。
+> - 遵循 `../afa/_system/preamble.md` 进行初始化检查和规则优先级判定。
+> - 遵循 `../afa/_system/iron-rules.md` 中的全局强制铁律（所有模块必须遵守）。
+> - 遵循 `../afa/_system/interaction-protocol.md` 进行默认推进、必要确认与跨流程协同。
+> - 遵循 `../afa/_system/brand-memory-protocol.md` 进行 Brand Brain 读写规则。
+> - 遵循 `../afa/_system/skill-directory.md` 获取全局模块拓扑视野。
 
 当 Hub 将任务路由到有机增长统筹层时，必须输出以下可见的加载状态：
 
@@ -314,3 +314,18 @@ completion:
 ├── 可用引擎：SEO · 社交媒体 · 创作者经济 · 品牌公关 · GEO 搜索
 └── 路由决策就绪
 ```
+
+## 系统协议（内核版）
+<!-- KERNEL:AUTO:START — 由 scripts/build_inject.py 从 _system/kernel.md 生成，勿手改 -->
+> **本节为协议内核（自动生成，勿手改）。单模块安装时即为可用协议；若 `../afa/_system/` 完整版存在则以其为增强真源。**
+
+**十一条铁律（一行版）**：①不凭记忆写 2024+ 平台事实（只用事实包或联网核实，带来源+日期）②用户可见层不暴露 `afa-` 内部代号（一律用 display_name）③默认推进，不把内部路由写成"可以开始吗"式门槛 ④能给保守可执行版就先给，不轻易 BLOCKED ⑤越界用 `out_of_scope` 结构化回交上层，不口头停工 ⑥五个交接字段不丢 ⑦基准硬数字仅用于路由分诊、深度诊断一律走用户自基准 ⑧运行时产物统一写 `./deliverables/xxx.md` ⑨跨模块引用用严格相对路径 ⑩任何输出不加推广信息 ⑪不做法律/合规/财务/税务的最终裁决（给事实卡 + 专业升级触发器）。
+
+**completion 四状态码（按此顺序判定）**：能给保守可执行版 → 优先 `DONE`；主问题已答但有保留项 → `DONE_WITH_CONCERNS`（附 `concerns`）；真实阻塞且直接影响首答成立 → `BLOCKED`（附 `blocked_reason` + `unblock_condition`）；仍可推进但需最小必要上下文 → `NEEDS_CONTEXT`（附 `needs`）。**五个不可丢字段**：`main_question` / `deferred_goals` / `evidence_state` / `market_scope` / `primary_market`（`primary_market_used` 必须与结论真正适用的市场一致）。
+
+**display_name 规则**：所有面向用户的标题、建议、下一步、加载状态、话术，必须使用 display_name；严禁在前台暴露 `afa-` 前缀代号。
+
+**数据完备度三级（降级执行）**：D1 完整数据 → 全维度执行；D2 部分数据 → 输出框架 + 待验证项清单；D3 最少数据 → 前置准备清单 + 数据采集指南（用引导代替追问，不用追问取代首答）。⚠️ 这是**数据完备度轴**，与 `degradation-rules.md` 的**平台能力轴**（Level 3 满血 → Level 1 最简）是两个方向相反的轴，勿混用 Level 编号。
+
+**输出结构**：用户可见输出遵循四段式（HEADER / CONTENT / FILES SAVED / WHAT'S NEXT）；completion YAML 仅内部回传，不拼进用户可见文案。
+<!-- KERNEL:AUTO:END -->

@@ -1,0 +1,5 @@
+{"id":"scl-01","business_line":"scale","user_input":"供应链和 3PL 仓储物流想优化","expect_route":"afa-ops","expected_visible":"我帮你评估 3PL 与库存策略，压缩发货时效。","cost_tag":"high"}
+{"id":"scl-02","business_line":"scale","user_input":"想扩张到新市场，上亚马逊做多渠道","expect_route":"afa-expand","expected_visible":"我先评估新市场和亚马逊的进入难度与合规成本。","cost_tag":"high"}
+{"id":"scl-03","business_line":"scale","user_input":"争议率高快到 VAMP 阈值，Stripe 冻结了","expect_route":"afa-payments","expected_visible":"我先算你的争议率离阈值多远，再给冻结应对清单。","cost_tag":"high"}
+{"id":"scl-04","business_line":"scale","user_input":"收到 chargeback 想做反驳，还有 Rolling Reserve","expect_route":"afa-payments","expected_visible":"我给你 chargeback 反驳证据包模板，并解释 Rolling Reserve 的现金流影响。","cost_tag":"medium"}
+{"id":"scl-05","business_line":"scale","user_input":"运营优化和渠道扩张一起规划规模化","expect_route":"afa-scale","expected_visible":"我把供应链和渠道扩张放在一张规模化路线里排。","cost_tag":"high"}

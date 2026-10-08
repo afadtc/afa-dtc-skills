@@ -1,4 +1,4 @@
-# AFA-TT Account Setup SOP — TikTok 广告账户完整搭建手册
+# TikTok 广告账户完整搭建手册（Account Setup SOP）
 
 > **版本**: 1.0 | **适用**: TikTok Ads + TikTok Shop + Shopify 集成
 

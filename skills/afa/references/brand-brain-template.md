@@ -32,7 +32,7 @@
 - **月均营收**：
 - **团队规模**：
 - **融资状态**：[自筹 / 种子轮 / A轮 / ...]
-- **供应链模式**：[dropshipping / dtc]  « v1.9.5 新增，由 Hub 自动检测并填写 »
+- **供应链模式**：[dropshipping / wholesale / manufacturing / dtc]  « 由 Hub 自动检测并填写；四值枚举与 `../_system/context-matrix.md` 的 `supply_chain_mode` 一致 »
   - 判定依据：[e.g. AliExpress 代发、配送时间 15-25 天、无私标]
   - 检测日期：[YYYY-MM-DD]
 
@@ -203,7 +203,7 @@
   3. [卖点三]
 - **目标客户**：[这个产品主要卖给谁]
 - **竞品对标**：[对标哪个竞品的哪个产品]
-- **产品来源**：[自产 / 代工 / AliExpress / 1688 / CJ / 其他]  « v1.9.5 新增 »
+- **产品来源**：[自产 / 代工 / AliExpress / 1688 / CJ / 其他]
 - **复购周期**：[天/周/月/不复购]
 - **当前转化率**：[%]
 - **当前月销量**：[件]
@@ -377,31 +377,17 @@
 
 ## 七、learnings.jsonl 模板
 
-```markdown
-# Learnings Log — [品牌名]
+> ⚠️ 本文件是**结构化记忆**，不是 markdown 日志。严格遵循 `../_system/brand-memory-protocol.md` 第九章：**每行一条完整的单行 JSON（JSONL）**，禁止跨行、禁止分节标题格式；新记录追加到文件末尾。
 
-> 本文件记录所有模块执行后的关键发现和教训。
-> 按时间倒序排列（最新的在最上面）。
+**八个字段**：`ts`（ISO 8601 时间戳）· `worker`（产生该教训的模块名，全局通用写 `global`）· `type`（`pitfall` / `pattern` / `preference` / `error` / `correction` / `promoted`）· `key`（简短唯一标识）· `insight`（一句话，必须含可操作的行动指导）· `confidence`（1-10）· `source`（`observed` / `user-stated` / `error-recovery`）· `related_files`（数组，可选）。
 
-## [日期] — [模块名] — [主题]
+初始化时本文件可为**空文件**；首次写入的示例行：
 
-### 发现
-- [发现一]
-- [发现二]
+> 🔒 下方 JSONL 示例中的 `worker` 字段为**内部系统字段，仅供系统使用**——它只写入 learnings.jsonl 供模块过滤加载，**不出现在任何用户可见输出中**（铁律 2 仍然适用：前台一律用 display_name）。
 
-### 教训
-- [教训一]
-
-### 行动项
-- [ ] [下一步行动]
-
-### 数据支撑
-- [相关数据]
-
----
-
-## [日期] — [模块名] — [主题]
-[同上结构]
+```jsonl
+{"ts":"2026-04-08T10:00:00Z","worker":"global","type":"preference","key":"no-emoji-in-copy","insight":"用户明确要求全渠道文案不使用 emoji，目标客群偏专业，后续所有文案遵循","confidence":10,"source":"user-stated","related_files":["voice-and-tone.md"]}
+{"ts":"2026-04-09T14:30:00Z","worker":"afa-convert","type":"pattern","key":"trust-badge-above-fold","insight":"退货保障标识前置到首屏后加购率提升，后续落地页优先在首屏展示信任标识","confidence":7,"source":"observed","related_files":["products.md"]}
 ```
 
 ---
@@ -440,7 +426,7 @@
 | Google | | [自管/代理] | |
 | TikTok | | [自管/代理] | |
 
-## 物流与供应链（v1.9.5 强化）
+## 物流与供应链
 
 - **履约方式**：[自发货 / 3PL / AliExpress 代发 / CJ Dropshipping / 混合]
 - **仓储**：[自仓 / 3PL / 无库存（代发）]
@@ -586,13 +572,15 @@
 
 ## 十二、assets.md 模板
 
+> **本节是 `assets.md` 文件结构（表头与分区）的唯一真源。** 写入语义（append-only：所有模块可追加，任何模块不得删除、截断或覆盖已有条目）由 `../_system/brand-memory-protocol.md` 第二章与第五章规定。
+
 ```markdown
 # Assets Registry — [品牌名]
 
 > 最后更新：[日期]
-> 本文件记录所有 AFA 模块产出的资产。
+> 本文件记录所有 AFA 模块产出的资产。由系统自动维护，新条目追加在对应表格底部（只追加，不删改）。
 
-## 资产清单
+## 资产清单（活跃）
 
 | ID | 类型 | 名称 | 创建模块 | 创建日期 | 状态 | 说明 |
 |:---|:---|:---|:---|:---|:---|:---|
@@ -602,6 +590,11 @@
 ## 资产使用追踪
 
 | 资产 ID | 使用场景 | 开始日期 | 效果指标 | 备注 |
+|:---|:---|:---|:---|:---|
+
+## 已退役资产
+
+| 资产 ID | 名称 | 类型 | 退役日期 | 原因 |
 |:---|:---|:---|:---|:---|
 ```
 

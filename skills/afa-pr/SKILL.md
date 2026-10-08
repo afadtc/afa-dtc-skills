@@ -1,11 +1,11 @@
 ---
 name: afa-pr
-description: "DTC 品牌公关与声誉管理引擎——媒体权威建设、UGC 增长循环、声誉监控与危机响应、品牌资产保护、内容原子化。Use when user mentions: 公关, PR, 媒体报道, media coverage, 新闻稿, press release, 危机公关, crisis PR, 声誉管理, reputation, 品牌公关, 媒体关系, media relations, 负面评价, 舆情, 品牌保护, UGC, 买家秀, 用户评价, 媒体套件, media kit."
+description: "DTC 公关与声誉管理——媒体权威、UGC 循环、危机响应、品牌保护、GEO 友好新闻稿。触发词: 公关, PR, 媒体报道, 新闻稿, 危机公关, 声誉管理, 舆情, UGC, media kit, press release, media coverage, reputation management, crisis pr。复杂问题先经 afa。"
 ---
 
-# afa-pr — 品牌公关与声誉管理引擎
+# 品牌公关与声誉管理引擎
 
-> **上层承接**：有机增长统筹层 · **版本**：v2.4.7
+> **上层承接**：有机增长统筹层 · **版本**：v2.6
 >
 > 品牌公关与声誉管理引擎 — 媒体权威建设、UGC 增长循环、声誉监控与危机响应、品牌资产保护
 
@@ -16,7 +16,7 @@ description: "DTC 品牌公关与声誉管理引擎——媒体权威建设、UG
 | **Role** | AFA DTC 系统的公关与声誉基础设施 |
 | **核心能力** | CPR 冷推框架 · UGC 飞轮 · 危机分级响应 · 品牌保护 Takedown · 内容原子化 · PR 成熟度评估 |
 | **四大支柱** | ① 媒体关系与权威建设 ② UGC 与社区飞轮 ③ 声誉监控与危机响应 ④ 品牌资产保护 |
-| **拥有资产** | pr-strategy.md · media-kit.md · media-list.csv · ugc-playbook.md · crisis-response.md · brand-protection.md · mentions-log.md |
+| **拥有资产** | ./deliverables/pr-strategy.md · ./deliverables/media-kit.md · media-list.csv · ./deliverables/ugc-playbook.md · ./deliverables/crisis-response.md · ./deliverables/brand-protection.md · ./deliverables/mentions-log.md |
 | **Input From** | afa-brand（品牌定位/故事）· afa-social（社交内容）· afa-cx（客户体验数据） |
 | **Output To** | afa-seo（高质量外链）· afa-email（PR成果复用）· afa-social（内容原子化分发）· afa-creative（广告素材背书） |
 
@@ -42,7 +42,7 @@ description: "DTC 品牌公关与声誉管理引擎——媒体权威建设、UG
 | `crisis_level` | Hub / Supervisor / User | 危机等级触发器；用于决定先止血、后扩散还是先做日常权威建设。 |
 | `organic_distribution_need` | Hub / Supervisor | 协同分发触发器；用于识别 PR 成果是否需要后续交给社媒、SEO 或邮件体系放大。 |
 
-如果上游未显式提供这些字段，先按 `_system/context-matrix.md` 与 `_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
+如果上游未显式提供这些字段，先按 `../afa/_system/context-matrix.md` 与 `../afa/_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
 
 ### 1.2 执行输入触发器
 
@@ -56,7 +56,7 @@ description: "DTC 品牌公关与声誉管理引擎——媒体权威建设、UG
 | `crisis_mode` | `pr_crisis` | 立即启动模式 3 危机公关 SOP；监控社交负面言论 |
 | `seasonal_mode` | `off_season` | 不因淡季销量下降触发危机；使用 YoY 评估趋势 |
 | `seasonal_mode` | `pre_season` | 提前按 PR 年度日历和截稿期（Lead Time）准备 Pitch |
-| `seasonal_mode` | `peak` | 聚焦节日礼单 Pitch + 大促期 UGC 收集 + 危机预防 |
+| `seasonal_mode` | `peak_season` | 聚焦节日礼单 Pitch + 大促期 UGC 收集 + 危机预防 |
 | `supply_chain_mode` | `dropshipping` | 温和提示 PR 优先级较低；聚焦社交证明收集和微型网红合作 |
 | `supply_chain_mode` | `wholesale` | 提升 B2B 行业媒体关系和客户案例研究优先级 |
 | `supply_chain_mode` | `manufacturing` | 提升品牌故事型 PR 和思想领导力内容优先级 |
@@ -64,13 +64,13 @@ description: "DTC 品牌公关与声誉管理引擎——媒体权威建设、UG
 
 ## 2. Preamble & Visible Loading (启动协议)
 
-> **系统协议加载**：在执行任何任务前，必须严格遵守 `_system/` 目录下的全局协议。
-> - 遵循 `_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
-> - 遵循 `_system/output-format.md` 进行四段式输出和报告视觉化。
-> - 遵循 `_system/degradation-rules.md` 处理信息不足或无联网环境。
-> - 遵循 `_system/localization-rules.md` 进行目标市场本地化适配。
-> - 遵循 `_system/edge-cases.md` 处理边界情况和 Level 0 需求。
-> - 遵循 `_system/preamble.md` 进行初始化检查和规则优先级判定。
+> **系统协议加载**：在执行任何任务前，必须严格遵守 `../afa/_system/` 目录下的全局协议。
+> - 遵循 `../afa/_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
+> - 遵循 `../afa/_system/output-format.md` 进行四段式输出和报告视觉化。
+> - 遵循 `../afa/_system/degradation-rules.md` 处理信息不足或无联网环境。
+> - 遵循 `../afa/_system/localization-rules.md` 进行目标市场本地化适配。
+> - 遵循 `../afa/_system/edge-cases.md` 处理边界情况和 Level 0 需求。
+> - 遵循 `../afa/_system/preamble.md` 进行初始化检查和规则优先级判定。
 
 当用户首次唤醒公关与声誉管理流程时，必须输出以下可见的加载状态：
 
@@ -165,7 +165,7 @@ description: "DTC 品牌公关与声誉管理引擎——媒体权威建设、UG
 ├── 加载：references/crisis-monitoring-response.md
 ├── Step A：评估危机级别（Level 1/2/3 + 影响范围 + 扩散状态）
 ├── Step B：生成响应预案（内部行动清单 + 对外声明模板）
-├── Step C：建立/更新监控机制（关键词+平台+阈值：正常<20%/警告20-40%/危机>40%）
+├── Step C：建立/更新监控机制（关键词+平台+阈值参考起点：正常<20%/警告20-40%/危机>40%，按品牌历史基线校准（监控分级为定性判定，见 crisis-monitoring-response.md §2，不设固定数字口径））
 ├── Step D：制定降温与修复策略（正面内容覆盖计划）
 └── 输出物：危机评估报告 + 官方声明模板 + 监控预警设置指南
 
@@ -200,7 +200,7 @@ Anti-patterns 交叉验证（加载 references/anti-patterns.md）：
 
 ICE 优先级排序（当输出包含多条建议时）：
 ├── I（Impact）：该建议对 PR 目标的影响程度（1-10）
-├── C（Confidence）：基于当前数据的信心程度（1-10）
+├── C（Data Basis 数据基础）：该建议的数据支撑强度（1-10）
 ├── E（Ease）：执行难度和所需资源（1-10）
 └── 按 ICE 总分降序排列，标注预期影响和成本/时间标签
 
@@ -226,9 +226,9 @@ Crisis Mode 检查：
 
 ```
 写回 brand-brain/pr/：
-├── 更新 pr-strategy.md（如有策略变更）
-├── 更新 media-kit.md（如有新资产）
-├── 更新 mentions-log.md（如有新报道/事件）
+├── 更新 ./deliverables/pr-strategy.md（如有策略变更）
+├── 更新 ./deliverables/media-kit.md（如有新资产）
+├── 更新 ./deliverables/mentions-log.md（如有新报道/事件）
 └── 追加 learnings.jsonl（本次执行中的新教训）
 
 内容原子化提示（当有新 PR 成果时）：
@@ -242,7 +242,7 @@ Crisis Mode 检查：
 
 ## 4. Completion Protocol
 
-每次输出必须遵循 `_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
+每次输出必须遵循 `../afa/_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
 
 ```markdown
 ---
@@ -253,12 +253,12 @@ Crisis Mode 检查：
 └── 当前状态：{本轮主问题已完成 / 主问题已完成但仍有保留项 / 当前被真实阻塞需先补齐关键前提 / 可继续推进但补充最小必要上下文后会更准确}
 ```
 
-如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `_system/output-format.md` 第 3.5 节）。
+如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `../afa/_system/output-format.md` 第 3.5 节）。
 
 
 ### 4.1 Internal Completion Handoff（内部完成回传）
 
-除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
+除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `../afa/_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
 
 ```yaml
 completion:
@@ -301,7 +301,7 @@ completion:
 
 完成前检查清单：
 - 输出末尾附加下一步建议 + 协同流程提示（如需社交媒体放大 PR 成果 / 邮件营销执行索评流 / SEO 利用外链）
-- 将本次执行中发现的新教训以 JSONL 格式追加到 `learnings.jsonl`，遵守 `_system/brand-memory-protocol.md` 第九章的数据结构定义。写入时遵循 `_system/interaction-protocol.md` 第五章的静默捕获协议。
+- 将本次执行中发现的新教训以 JSONL 格式追加到 `learnings.jsonl`，遵守 `../afa/_system/brand-memory-protocol.md` 第九章的数据结构定义。写入时遵循 `../afa/_system/interaction-protocol.md` 第五章的静默捕获协议。
 
 ## 5. 边界与越界处理
 
@@ -320,3 +320,18 @@ completion:
 | 网红商务谈判/佣金 | 属于网红营销 | 回交上层 → afa-influencer |
 | 客服工单/退换货 | 属于客户体验 | 回交上层 → afa-cx |
 | 复杂法律诉讼/专利 | 超出专业边界 | 建议咨询专业律师 |
+
+## 系统协议（内核版）
+<!-- KERNEL:AUTO:START — 由 scripts/build_inject.py 从 _system/kernel.md 生成，勿手改 -->
+> **本节为协议内核（自动生成，勿手改）。单模块安装时即为可用协议；若 `../afa/_system/` 完整版存在则以其为增强真源。**
+
+**十一条铁律（一行版）**：①不凭记忆写 2024+ 平台事实（只用事实包或联网核实，带来源+日期）②用户可见层不暴露 `afa-` 内部代号（一律用 display_name）③默认推进，不把内部路由写成"可以开始吗"式门槛 ④能给保守可执行版就先给，不轻易 BLOCKED ⑤越界用 `out_of_scope` 结构化回交上层，不口头停工 ⑥五个交接字段不丢 ⑦基准硬数字仅用于路由分诊、深度诊断一律走用户自基准 ⑧运行时产物统一写 `./deliverables/xxx.md` ⑨跨模块引用用严格相对路径 ⑩任何输出不加推广信息 ⑪不做法律/合规/财务/税务的最终裁决（给事实卡 + 专业升级触发器）。
+
+**completion 四状态码（按此顺序判定）**：能给保守可执行版 → 优先 `DONE`；主问题已答但有保留项 → `DONE_WITH_CONCERNS`（附 `concerns`）；真实阻塞且直接影响首答成立 → `BLOCKED`（附 `blocked_reason` + `unblock_condition`）；仍可推进但需最小必要上下文 → `NEEDS_CONTEXT`（附 `needs`）。**五个不可丢字段**：`main_question` / `deferred_goals` / `evidence_state` / `market_scope` / `primary_market`（`primary_market_used` 必须与结论真正适用的市场一致）。
+
+**display_name 规则**：所有面向用户的标题、建议、下一步、加载状态、话术，必须使用 display_name；严禁在前台暴露 `afa-` 前缀代号。
+
+**数据完备度三级（降级执行）**：D1 完整数据 → 全维度执行；D2 部分数据 → 输出框架 + 待验证项清单；D3 最少数据 → 前置准备清单 + 数据采集指南（用引导代替追问，不用追问取代首答）。⚠️ 这是**数据完备度轴**，与 `degradation-rules.md` 的**平台能力轴**（Level 3 满血 → Level 1 最简）是两个方向相反的轴，勿混用 Level 编号。
+
+**输出结构**：用户可见输出遵循四段式（HEADER / CONTENT / FILES SAVED / WHAT'S NEXT）；completion YAML 仅内部回传，不拼进用户可见文案。
+<!-- KERNEL:AUTO:END -->

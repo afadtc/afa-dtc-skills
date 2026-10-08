@@ -36,7 +36,7 @@
     ├── 里程碑
     └── 退出标准
 
-输出文件：expansion-strategy.md
+输出文件：./deliverables/expansion-strategy.md
 ```
 
 ### 模式 B：Marketplace 入驻执行
@@ -53,7 +53,7 @@
 ├── Step 5：库存与履约方案（FBA/自发货/3PL）
 └── Step 6：阶段性运营计划
 
-输出文件：marketplace-plan.md
+输出文件：./deliverables/marketplace-plan.md
 ```
 
 ### 模式 C：批发计划设计
@@ -81,7 +81,7 @@
 │   └── 零售陈列指南
 └── Step 5：批发运营流程
 
-输出文件：wholesale-plan.md
+输出文件：./deliverables/wholesale-plan.md
 ```
 
 ### 模式 D：国际化进入规划
@@ -117,7 +117,7 @@
     ├── 后续阶段：根据利润与风险信号决定是否扩大投入
     └── 复盘节点：决定是否升级专业方或继续推进
 
-输出文件：international-plan.md
+输出文件：./deliverables/international-plan.md
 ```
 
 ### 模式 E：线下零售进入（Retail Entry Strategy）
@@ -152,7 +152,7 @@
     ├── 归因模型（线下体验 → 线上购买）
     └── 复盘模板
 
-输出文件：retail-entry.md
+输出文件：./deliverables/retail-entry.md
 ```
 
 ### 模式 F：渠道健康审计（Channel Health Audit）
@@ -191,7 +191,7 @@
     ├── 中期计划（按当前建设周期设定）
     └── 长期战略（按阶段目标与资源约束设定）
 
-输出文件：channel-scorecard.md（更新）+ expansion-strategy.md（更新）
+输出文件：./deliverables/channel-scorecard.md（更新）+ ./deliverables/expansion-strategy.md（更新）
 ```
 
 ---

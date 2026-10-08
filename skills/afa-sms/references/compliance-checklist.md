@@ -20,6 +20,24 @@ SMS 合规的核心不是“文案里加一句 STOP”这么简单，而是要�
 
 ---
 
+## 〇、10DLC 注册与 2025-2026 TCPA 时间线（执行前置，必读）
+
+### 10DLC 注册是发送前置条件（美国本地号码 A2P）
+
+在美国用本地号码发 A2P（应用到个人）营销短信，**必须先完成 10DLC 注册**：注册 **Brand（品牌）+ Campaign（用途）**，由运营商审核。未注册或信息不实的后果是**限流、过滤直至拦截**——不是"合规瑕疵"而是"根本发不出去"。放量前先确认服务商已完成 Brand+Campaign 注册并通过审核。
+
+### TCPA 2025-2026 时间线更正
+
+| 规则 | 状态 | 对操盘的影响 |
+|---|---|---|
+| **1:1 同意规则**（每个营销方需单独同意） | **2025-01-24 被第十一巡回法院废除**（未生效即失效） | 表单**不必**再为每个合作方拆分单独勾选；但"明确、针对 SMS 的同意"仍是底线（见 §一） |
+| **撤回同意规则** | **2025-04-11 生效** | 用户可用**任意合理方式**退订（STOP / QUIT / CANCEL / UNSUBSCRIBE / END 等自然语言均算），须在 **10 个工作日内**落实 |
+| **"一次退订覆盖全渠道"（revoke-all）** | **进一步延期至 2027-01-31**（FCC 2026-01 令，仍在征求意见） | 暂不强制"一次 STOP 覆盖全公司全渠道"，但**强烈建议**已按此设计，避免临期返工 |
+
+> 现有 STOP/关键词退订、合理方式退订、10 个工作日落实等义务**均已生效**，不受 revoke-all 延期影响，必须照做。
+
+> **来源**：[Kelley Drye：第十一巡回法院废除 1:1 同意规则](https://www.kelleydrye.com/viewpoints/blogs/ad-law-access/eleventh-circuit-vacates-tcpa-11-consent-rule)；[BCLP：撤回同意规则 2025-04-11 生效](https://www.bclplaw.com/en-US/events-insights-news/the-tcpas-new-opt-out-rules-take-effect-on-april-11-2025-what-does-this-mean-for-businesses.html)；[FCC 进一步延期 revoke-all 至 2027-01-31](https://www.consumerfinancialserviceslawmonitor.com/2026/01/fcc-further-extends-effective-date-for-tcpa-revoke-all-rule/)；[MessageIQ：10DLC 与 SMS 法规 2026](https://messageiq.io/blogs/sms-marketing-laws/)。核实于 2026-07。
+
 ## 一、订阅要求（Opt-in Requirements）
 
 营销短信的合规起点，是用户是否以明确、自主、可证明的方式完成订阅。不能把短信营销授权埋在模糊文案、默认勾选项或与其他条款的强绑定中。

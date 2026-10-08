@@ -1,6 +1,6 @@
 # AI 搜索优化诊断摘要 (GEO/AEO Diagnostic Summary for SEO)
 
-> **定位说明**：本文件仅用于帮助 afa-seo 识别"用户的问题是否属于 AI 搜索优化（GEO）领域"。完整的 GEO 优化策略、AI 可见度审计 SOP、内容块模板、Schema 标记策略、第三方平台播种计划等深度执行知识，请参见 **afa-geo** 模块。
+> **定位说明**：本文件仅用于帮助 SEO 引擎 识别"用户的问题是否属于 AI 搜索优化（GEO）领域"。完整的 GEO 优化策略、AI 可见度审计 SOP、内容块模板、Schema 标记策略、第三方平台播种计划等深度执行知识，请参见 **afa-geo** 模块。
 
 ---
 
@@ -35,6 +35,6 @@
 - Schema 标记策略（FAQPage、Product、HowTo）
 - 第三方平台播种（Reddit、Wikipedia、评测网站）
 - AI 情感分析与声誉修复
-- 地理套利与落地成本计算
+- （地理套利与落地成本计算**不属 afa-geo**：如涉及，afa-geo 会转交 afa-expand）
 
 > **交接规则**：当用户的问题涉及"AI 搜索"、"AI 引用"、"Perplexity"、"ChatGPT 搜索"、"AI Overviews"、"GEO"、"AEO"等关键词时，应引导至 **afa-geo**。afa-seo 不应尝试基于本文件的摘要信息来执行 GEO 优化任务。

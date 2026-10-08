@@ -1,18 +1,18 @@
 ---
 name: afa-scale
-description: "运营与扩张 Supervisor——统筹供应链运营与渠道扩张的路由与协同，管辖 afa-ops 与 afa-expand。Use when user mentions: 扩张, scale, 运营优化, operations, 供应链, supply chain, 新市场, 渠道扩张, channel expansion, 规模化, scaling, 多市场运营."
+description: "运营与扩张 Supervisor——统筹 ops、expand、payments 的路由与协同。触发词: 扩张, scale, 运营优化, 供应链, 渠道扩张, 规模化, 多市场运营, scale operations, expansion strategy, multi-channel, scaling。"
 ---
 
-# afa-scale — 运营与扩张 Supervisor
+# 运营与扩张统筹层
 
-> **层级**：Supervisor（中层路由器）· **版本**：v2.4.7
-> **管辖 Worker**：afa-ops · afa-expand
+> **层级**：Supervisor（中层路由器）· **版本**：v2.6
+> **管辖 Worker**：`afa-ops` · `afa-expand` · `afa-payments`
 
 ---
 
 ## 1. 定位
 
-afa-scale 是 AFA DTC 系统的运营与扩张中枢。它不执行具体的供应链管理或渠道拓展操作，而是在 Hub 完成高层意图识别后，接管运营效率优化和业务扩张规划的二级路由和协调。
+运营与扩张统筹层是 AFA DTC 系统的运营与扩张中枢。它不执行具体的供应链管理或渠道拓展操作，而是在 Hub 完成高层意图识别后，接管运营效率优化和业务扩张规划的二级路由和协调。
 
 **核心使命**：确保供应链运营和渠道扩张这两个规模化引擎协同工作，在运营基础稳固的前提下推动业务扩张，避免「扩张速度超过运营能力」的常见陷阱。
 
@@ -61,7 +61,7 @@ completion:
   needs:
     - what: "{仅 NEEDS_CONTEXT 时填写}"
       where: "{去哪里获取，具体到菜单路径}"
-  workers_executed: [afa-ops, afa-expand, ...]
+  workers_executed: [afa-ops, afa-expand, afa-payments, ...]
   files_written:
     - path: "./brand-brain/{file}.md"
       type: "{profile / asset}"
@@ -92,7 +92,7 @@ completion:
 
 ### 用户可见输出协议
 
-除上述 completion YAML 外，所有面向用户的输出必须显式遵循 `_system/output-format.md` 的四段式结构。任何标题、建议、下一步、加载状态和摘要都必须使用人类可读名称，不得直接暴露 `afa-*` 内部代号。若内部编排需要保留 module_id，必须先映射为 `display_name` 后才能进入前台文案。
+除上述 completion YAML 外，所有面向用户的输出必须显式遵循 `../afa/_system/output-format.md` 的四段式结构。任何标题、建议、下一步、加载状态和摘要都必须使用人类可读名称，不得直接暴露 `afa-*` 内部代号。若内部编排需要保留 module_id，必须先映射为 `display_name` 后才能进入前台文案。
 
 ```markdown
 # HEADER
@@ -109,7 +109,7 @@ completion:
 └── 当前状态：{本轮主问题已完成 / 主问题已完成但仍有保留项 / 当前被真实阻塞需先补齐关键前提 / 可继续推进但补充最小必要上下文后会更准确}
 ```
 
-如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `_system/output-format.md` 第 3.5 节）。
+如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `../afa/_system/output-format.md` 第 3.5 节）。
 
 仅当当前收尾本质上是职责回交、真实阻塞或最小必要补充上下文时，才可不追加自然语言升级出口。
 
@@ -128,7 +128,8 @@ completion:
 | 自动化、工作流、API、集成 | Mode 5: 自动化蓝图 | 当前手动流程清单 |
 | 供应商、断供、交期、供应链风险 | Mode 6: 供应链风险评估 | 供应商清单 + 采购记录 |
 | 现金流、对账、支付失败、财务 | Mode 7: 财务运营优化 | 财务数据 + 支付系统报表 |
-| PayPal 纠纷、争议率、风控 | Mode 3/7 组合 | 争议率数据 + 退货数据 |
+| 对账口径、争议准备金记账 | Mode 7（财务运营） | 财务数据 |
+| PayPal 纠纷、争议率、冻结、风控 | → **afa-payments**（见 3.3，勿再进 ops） | 近期争议率 / 事件数 |
 
 ### 3.2 afa-expand 路由（全渠道扩张引擎）
 
@@ -141,12 +142,24 @@ completion:
 | 线下零售、Pop-up、实体店 | Mode E: 线下零售进入 | 品牌定位 + 库存能力 |
 | 渠道表现不好、渠道冲突、蚕食 | Mode F: 渠道健康审计 | 各渠道收入/毛利/CAC 数据 |
 
-### 3.3 意图模糊时的引导
+### 3.3 afa-payments 路由（支付风控引擎）
+
+| 用户意图信号 | 对应 Worker 工作模式 | 前置条件检查 |
+|:---|:---|:---|
+| 争议率高、VAMP、被封号风险 | Mode A: 争议率健康与 VAMP 自查 | 近期争议率 / TC 事件数 |
+| 收到 chargeback、要反驳 | Mode B: chargeback 反驳 SOP | 订单 / 物流 / 沟通记录 |
+| Stripe/PayPal 冻结、Rolling Reserve | Mode C: 冻结应对 | 网关 / 冻结通知 |
+| 支付方式选型、BNPL、欺诈过滤 | Mode D: 支付组合与欺诈过滤 | 目标市场 / 现有网关 |
+
+> 争议率根因若在物流/客服，payments 会回交 afa-ops / afa-cx。
+
+### 3.4 意图模糊时的引导
 
 ```
 「你想优化现有运营，还是拓展新渠道/新市场？」
   ├── 优化运营 → afa-ops（根据具体痛点匹配7个模式之一）
   ├── 拓展渠道/市场 → afa-expand（根据具体方向匹配6个模式之一）
+  ├── 支付争议/冻结/风控 → afa-payments
   └── 两者都想 → 先执行运营准备度评估（见§5），再规划扩张
 ```
 
@@ -204,7 +217,10 @@ completion:
 ### 工作流 C：Dropshipping → DTC 过渡
 
 ```
-触发：supply_chain_mode = dropshipping 且用户表达升级意愿
+触发：supply_chain_mode = dropshipping 且用户表达升级意愿；
+      或 Hub WF12（测试店快速测品）跑出达标赢家后转入（赢家品牌化入口）
+      WF12 入口最低门槛：验证档 Scale 出口达成后，连续 2 周 CPA 持续达标或日均 ≥10 单；
+      未达门槛只做 Step 1 评估、不启动私标/囤货
 
 执行链：
   Step 1 → afa-ops（Mode 1: 单位经济审计）
@@ -215,14 +231,16 @@ completion:
   Step 2 → afa-expand（DTC 过渡规划）
     └── 输出：分阶段过渡方案（私标→小批量→自有库存→3PL）
     ↓
-  完成后回传 Hub，建议更新 supply_chain_mode
+  完成后回传 Hub，建议更新 supply_chain_mode；
+  来源为 WF12 时，suggested_next 指向品牌基建组工作流 A 的 Step 3（品牌定位）起，
+  Step 1-2 以测品期积累的 products.md / competitors.md 为输入
 ```
 
 ---
 
 ## 5. 运营准备度评估（扩张前置检查）
 
-当任何扩张计划启动前，必须对以下6个维度进行运营准备度评估：
+当任何扩张计划启动前，必须对以下7个维度进行运营准备度评估：
 
 | 维度 | 评估标准 | 红灯（暂缓扩张） | 黄灯（先补强） | 绿灯（可执行） |
 |:---|:---|:---|:---|:---|
@@ -232,6 +250,7 @@ completion:
 | **财务健康** | 现金流能否支撑扩张投入 | CCC >60天 或现金储备 <2个月 | 现金流紧张但可调整 | 现金流健康 |
 | **团队能力** | 团队能否运营新渠道 | 创始人工时 >60% 且无法招聘 | 需要招聘/外包但可执行 | 有专人或可快速到位 |
 | **系统集成** | 技术栈能否支持多渠道 | 无库存同步方案 | 需要新增集成但方案明确 | 已有多渠道管理系统 |
+| **关税与合规韧性** | 落地成本可算、原产地是否多元、合规缓冲 | 依赖已取消的免税红利 / 单一原产地 / 无法算清落地成本 | 落地成本可估但缓冲薄、原产地集中 | 落地成本可实时核算、原产地多元、合规缓冲充足 |
 
 **评估规则**：
 - 任何维度出现红灯 → 该维度必须先修复，扩张计划暂缓
@@ -263,7 +282,7 @@ completion:
 
 规则 3：运营改善优先于扩张
   如果运营诊断发现以下严重问题，先解决再讨论扩张：
-  → 争议率 > 2%（支付风控风险）
+  → 争议率 ≥ 0.9%（支付风控风险；0.65%-0.9% 为内部预警带、VAMP 合并阈值 2026-04 起为 1.50%——口径真源为支付风控模块 `../afa-payments/references/core-frameworks.md` §1-§2，不在本模块另立分诊线）
   → 退货率 > 品类基准 2x（产品或履约问题）
   → 贡献利润率为负（扩张会放大亏损）
   → 断货率 > 5%（供应链无法支撑增量）
@@ -271,7 +290,7 @@ completion:
 
 规则 4：长程任务追踪
   多步骤工作流执行时，每个 Step 完成后同步更新 todo.md
-  → 遵守 _system/interaction-protocol.md 第七章
+  → 遵守 ../afa/_system/interaction-protocol.md 第七章
 
 规则 5：阶段性验证
   扩张计划执行后，按以下节奏验证：
@@ -312,20 +331,20 @@ completion:
 | SEO、社交媒体、网红、公关 | afa-organic | 通过 `completion.out_of_scope` 回交 |
 | 转化优化、留存、邮件、SMS | afa-monetize | 通过 `completion.out_of_scope` 回交 |
 | 全局诊断、数据体检 | Hub 直接承接 | 通过 `completion.out_of_scope` 回交 |
-| 财务/税务/法律问题 | 超出本模块专业判断范围 | 通过自然语言说明其不属于本模块可判断事项；仅在命中 `_system/edge-cases.md` 明确的真实阻塞场景时再使用 `completion` 的阻塞语义，并建议咨询专业顾问 |
+| 财务/税务/法律问题 | 超出本模块专业判断范围 | 通过自然语言说明其不属于本模块可判断事项；仅在命中 `../afa/_system/edge-cases.md` 明确的真实阻塞场景时再使用 `completion` 的阻塞语义，并建议咨询专业顾问 |
 
 ---
 
 ## 9. Preamble & Visible Loading (启动协议)
 
-> **系统协议加载**：在执行任何路由或协调任务前，必须严格遵守 `_system/` 目录下的全局协议。
-> - 遵循 `_system/preamble.md` 进行初始化检查和规则优先级判定。
-> - 遵循 `_system/iron-rules.md` 中的全局强制铁律（所有模块必须遵守）。
-> - 遵循 `_system/interaction-protocol.md` 进行默认推进、必要确认与跨 Skill 协同。
-> - 遵循 `_system/brand-memory-protocol.md` 进行 Brand Brain 读写规则。
-> - 遵循 `_system/skill-directory.md` 获取全局模块拓扑视野。
+> **系统协议加载**：在执行任何路由或协调任务前，必须严格遵守 `../afa/_system/` 目录下的全局协议。
+> - 遵循 `../afa/_system/preamble.md` 进行初始化检查和规则优先级判定。
+> - 遵循 `../afa/_system/iron-rules.md` 中的全局强制铁律（所有模块必须遵守）。
+> - 遵循 `../afa/_system/interaction-protocol.md` 进行默认推进、必要确认与跨 Skill 协同。
+> - 遵循 `../afa/_system/brand-memory-protocol.md` 进行 Brand Brain 读写规则。
+> - 遵循 `../afa/_system/skill-directory.md` 获取全局模块拓扑视野。
 
-当 Hub 将任务路由到 afa-scale 时，必须输出以下可见的加载状态：
+当 Hub 将任务路由到运营与扩张统筹层时，必须输出以下可见的加载状态：
 
 ```markdown
 [运营扩张组] 正在初始化运营与扩张中枢...
@@ -335,3 +354,18 @@ completion:
 ├── 可用引擎：运营效率（7种模式）· 全渠道扩张（6种模式）
 └── 路由决策就绪
 ```
+
+## 系统协议（内核版）
+<!-- KERNEL:AUTO:START — 由 scripts/build_inject.py 从 _system/kernel.md 生成，勿手改 -->
+> **本节为协议内核（自动生成，勿手改）。单模块安装时即为可用协议；若 `../afa/_system/` 完整版存在则以其为增强真源。**
+
+**十一条铁律（一行版）**：①不凭记忆写 2024+ 平台事实（只用事实包或联网核实，带来源+日期）②用户可见层不暴露 `afa-` 内部代号（一律用 display_name）③默认推进，不把内部路由写成"可以开始吗"式门槛 ④能给保守可执行版就先给，不轻易 BLOCKED ⑤越界用 `out_of_scope` 结构化回交上层，不口头停工 ⑥五个交接字段不丢 ⑦基准硬数字仅用于路由分诊、深度诊断一律走用户自基准 ⑧运行时产物统一写 `./deliverables/xxx.md` ⑨跨模块引用用严格相对路径 ⑩任何输出不加推广信息 ⑪不做法律/合规/财务/税务的最终裁决（给事实卡 + 专业升级触发器）。
+
+**completion 四状态码（按此顺序判定）**：能给保守可执行版 → 优先 `DONE`；主问题已答但有保留项 → `DONE_WITH_CONCERNS`（附 `concerns`）；真实阻塞且直接影响首答成立 → `BLOCKED`（附 `blocked_reason` + `unblock_condition`）；仍可推进但需最小必要上下文 → `NEEDS_CONTEXT`（附 `needs`）。**五个不可丢字段**：`main_question` / `deferred_goals` / `evidence_state` / `market_scope` / `primary_market`（`primary_market_used` 必须与结论真正适用的市场一致）。
+
+**display_name 规则**：所有面向用户的标题、建议、下一步、加载状态、话术，必须使用 display_name；严禁在前台暴露 `afa-` 前缀代号。
+
+**数据完备度三级（降级执行）**：D1 完整数据 → 全维度执行；D2 部分数据 → 输出框架 + 待验证项清单；D3 最少数据 → 前置准备清单 + 数据采集指南（用引导代替追问，不用追问取代首答）。⚠️ 这是**数据完备度轴**，与 `degradation-rules.md` 的**平台能力轴**（Level 3 满血 → Level 1 最简）是两个方向相反的轴，勿混用 Level 编号。
+
+**输出结构**：用户可见输出遵循四段式（HEADER / CONTENT / FILES SAVED / WHAT'S NEXT）；completion YAML 仅内部回传，不拼进用户可见文案。
+<!-- KERNEL:AUTO:END -->

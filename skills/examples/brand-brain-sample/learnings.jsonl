@@ -1,0 +1,5 @@
+{"ts":"2026-05-12T10:00:00Z","worker":"afa-fb","type":"pattern","key":"ugc_outperforms_studio","insight":"UGC 素材 CTR 稳定高于棚拍 1.8-2.2 倍，本品牌尤甚","confidence":8,"source":"observed","related_files":["products.md"]}
+{"ts":"2026-05-20T09:00:00Z","worker":"afa-email","type":"preference","key":"no_emoji_subject","insight":"用户明确要求邮件主题行不用 emoji","confidence":10,"source":"user-stated","related_files":[]}
+{"ts":"2026-06-02T14:00:00Z","worker":"afa-aov","type":"pitfall","key":"free_ship_threshold_49","insight":"免邮门槛从 $35 提到 $49 后弃购率上升 2.1pp，已回退","confidence":9,"source":"observed","related_files":["products.md"]}
+{"ts":"2026-06-15T11:00:00Z","worker":"afa-diagnose","type":"pattern","key":"cpm_not_creative","insight":"6 月 ROAS 下滑根因是品类 CPM 上涨而非素材疲劳，勿重复换素材","confidence":9,"source":"observed","related_files":[]}
+{"ts":"2026-06-28T16:00:00Z","worker":"afa-retain","type":"promoted","key":"repeat_window_45d","insight":"复购窗口集中在首单后 38-52 天，营养土补货提醒定在 D+40","confidence":10,"source":"observed","related_files":["products.md"]}

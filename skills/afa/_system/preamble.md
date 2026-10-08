@@ -2,11 +2,9 @@
 
 > **协议层级**：全局强制 · afa Hub 每次启动时执行
 >
-> **版本**：v2.4.7
+> **版本**：v2.6
 >
 > **来源说明**：本文件为当前生效的全局协议，供 Hub、Supervisor 与 Worker 统一遵守。
->
-> **v2.1.0 变更**：启动检查序列新增 learnings.jsonl 结构化记忆加载步骤；老朋友回来流程新增记忆加载与向后兼容逻辑
 
 ---
 
@@ -27,10 +25,10 @@
 ✓ 检测 Level 0 状态（无产品/无网站/纯概念）→ 命中则温馨提示，但不拦截；如用户无明确问题则建议工作流 10
 ✓ 检测衰退/危机期信号 → 命中则温和提醒，建议工作流 9；用户坚持则正常执行
 ✓ 当用户提到销量/营收/ROAS 下降时，主动询问季节性 → 确认淡季则标记 seasonal_mode = off_season（如为旺季前备战期则标记 pre_season，旺季执行期则标记 peak_season），不误判为衰退/危机
-✓ 检测供应链模式（v1.9.5 新增）：根据 Brand Brain 中的履约方式、配送时效、产品来源等信息判定 supply_chain_mode = dropshipping / wholesale / manufacturing / dtc（四选一），传递给子 Skill 用于调整建议优先级
+✓ 检测供应链模式：根据 Brand Brain 中的履约方式、配送时效、产品来源等信息判定 supply_chain_mode = dropshipping / wholesale / manufacturing / dtc（四选一），传递给子 Skill 用于调整建议优先级；用户明示「一件代发 / dropshipping / 测试店」时单信号即可判定（首次接触无 Brand Brain 同样适用），并在诉求为测品时触发 WF12
 ```
 
-## 记忆加载（v2.1 新增）
+## 记忆加载
 
 ```
 加载 learnings.jsonl 时的执行逻辑：
@@ -56,9 +54,15 @@
       ├── 读取 learnings.jsonl 全部内容
       ├── 跳过 type = promoted 的记录
       ├── 跳过 related_files 中文件已不存在的记录
-      ├── 按 key 去重，保留 ts 最新的一条
-      ├── 按 confidence 降序排列
+      ├── 按 key 去重，保留 ts 最新的一条（同 key 内容冲突 → 标记 [MULTIPLE_VERSIONS]）
+      ├── 衰减（不可省略，与增强加载的 30 天衰减对齐）：
+      │   ├── 按 ts 计算每条记录距今天数
+      │   ├── 每满 30 天，confidence 视为减 1（只用于本次排序，不修改原文件）
+      │   └── 衰减后 confidence < 3 的记录 → 丢弃
+      ├── 按衰减后的 confidence 降序排列
       └── 提取最相关的 5 条记录
+
+  （衰减/生命周期的完整定义见 brand-memory-protocol.md 第 9.5 节，本节与其保持一致）
 
   Step 4 — 应用记忆
   ├── 如果当前任务与某条记忆直接相关 → 主动应用

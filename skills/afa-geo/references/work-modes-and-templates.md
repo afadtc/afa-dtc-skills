@@ -28,9 +28,15 @@
 - **回答可抽取性**：页面是否存在可被回答引擎独立摘取的定义块、步骤块和 FAQ。
 - **多市场一致性**：不同地区页面是否避免价格、配送或适用范围表述冲突。
 
+### 1.4 Agentic Commerce 接入指标 (Agentic Commerce Readiness Metrics)
+
+- **协议接入就绪度**：是否已判明主要 AI 购买入口并接入对应协议（ChatGPT 侧 ACP / Google·Shopify 侧 UCP），Instant Checkout 是否开通。
+- **Catalog 收录状态**：商品是否被 Shopify Catalog / 结构化 feed 默认收录，关键字段（库存、价格、一级卖家标识）是否完整。
+- **AI 内可购可见度**：在 ChatGPT / Perplexity / Google AIO / Alexa for Shopping / Gemini 购物场景中，品牌商品是否出现在可下单结果里（配合 LLM Visibility Score 追踪）。
+
 ---
 
-## 2. 三大工作模式
+## 2. 四大工作模式
 
 ### 模式 1：AI 可见度审计模式 (GEO Audit Mode)
 
@@ -58,6 +64,16 @@
   2. 识别哪些地区需要优先补做本地化 FAQ、实体信息、比较块和信任说明。
   3. 输出《跨市场搜索信号输入备忘》，明确哪些内容机会值得提交给扩张规划模块作为辅助输入。
   4. 明确声明：该模式不输出市场进入、预算迁移、库存分配、定价或贸易结论。
+
+### 模式 4：Agentic Commerce 接入模式 (Agentic Commerce Onboarding Mode)
+
+- **触发条件**：用户问"怎么让商品能在 ChatGPT / AI 里直接被买到？"，或提到 ACP/UCP、Instant Checkout、Catalog 收录。
+- **执行动作**：
+  1. 判断主要 AI 购买入口（ChatGPT/ACP vs Google·Shopify/UCP），走双协议决策树（见 `agentic-commerce-playbook.md`）。
+  2. 补齐通用排序因子（库存 / 价格 / 质量 / 一级卖家 / 是否开通 Instant Checkout），核对 Shopify Catalog 收录、结构化 feed 与 `llms.txt` 实施。
+  3. 逐个测试对象跑一遍（ChatGPT / Perplexity / Google AIO / Alexa for Shopping / Gemini 购物），记录可购可见度。
+  4. 输出《Agentic Commerce 接入备忘》，用 LLM Visibility Score 追踪，优先补"第一方官网 + listings"。
+  5. 明确声明：本模式只做接入与可见度，不做支付合规、收单、定价或利润裁决（后者回交 afa-payments / afa-scale 等对应模块）。
 
 ---
 
@@ -110,6 +126,36 @@
 
 ## 3. GEO 边界声明
 > 本备忘仅提供搜索可见度与内容适配输入，不构成市场进入、贸易、定价或利润建议。
+```
+
+### 3.3 Agentic Commerce 接入备忘模板
+
+```markdown
+# [品牌/品类] Agentic Commerce 接入备忘
+
+**接入范围**：
+*   主要 AI 购买入口：[ChatGPT/ACP · Google·Shopify/UCP · 两者]
+*   测试对象：[ChatGPT / Perplexity / Google AIO / Alexa for Shopping / Gemini 购物]
+
+## 1. 协议与收录就绪度
+| 项目 | 状态 | 缺口 | 下一步 |
+| :--- | :--- | :--- | :--- |
+| 协议接入（ACP/UCP） | 已接 / 部分 / 未接 | [说明] | [动作] |
+| Instant Checkout | 已开通 / 未开通 | [说明] | [动作] |
+| Shopify Catalog / feed 收录 | 完整 / 部分 / 缺 | [缺失字段] | [动作] |
+| `llms.txt` | 已实施 / 未实施 | [说明] | [动作] |
+
+## 2. AI 内可购可见度（LLM Visibility Score 追踪）
+| 测试对象 | 是否出现在可下单结果 | 排序位置 | 备注 |
+| :--- | :--- | :--- | :--- |
+| [平台] | 是 / 否 | [位置] | [如缺一级卖家标识、库存字段] |
+
+## 3. 优先动作
+*   **优先补齐**：[第一方官网 + listings 结构化数据 / feed 字段 / 协议接入]
+*   **协同提示**：涉及支付合规、收单、定价或利润的问题，回交 afa-payments / afa-scale 处理。
+
+## 4. 边界声明
+> 本备忘仅提供 agentic commerce 接入与可购可见度输入，不构成支付合规、收单、定价或利润裁决。
 ```
 
 ---

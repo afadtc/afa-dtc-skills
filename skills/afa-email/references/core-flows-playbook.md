@@ -27,14 +27,14 @@
   │
   ▼
 [EMAIL] #1: The Welcome & The Offer
-  └─ 延迟：交易确认后尽快发送（通常为事件触发后即时出发）
+  └─ 延迟：订阅后尽快发送（通常为事件触发后即时发送）
   └─ 标题变体：
       A (Safe): "Welcome to [Brand]! Here's your [X]% off"
       B (Bold): "You're in! Your [X]% off code is inside"
       C (Personal): "[First Name], welcome to the family"
   └─ 预览文本："Your exclusive discount code + what makes us different"
   └─ 正文框架：
-      1. Header：醒目的折扣码 + "Shop Now" 按钮
+      1. Header：醒目的折扣码 + "Shop Now" 按钮（若用户同时 opt-in SMS：按跨渠道协同规则，欢迎折扣码改由 SMS 首发承载，本封 Header 改为品牌欢迎语+价值主张）
       2. Hero Image：高质量品牌形象图或畅销产品图
       3. The "Why"：一段话说明品牌为什么存在、解决什么问题
       4. Product Showcase：3-4 款畅销产品（动态推荐块）
@@ -179,8 +179,7 @@
   │   │
   │   ▼
   │   [WAIT] 按高价值挽回节奏安排下一触达窗口（常在首封后约 1 天内复查）
-      └─ 发送窗口：以收件人当地时间的品牌适配时段为准
-0
+  │     └─ 发送窗口：以收件人当地时间的品牌适配时段为准
   │   │
   │   ▼
   │   [SPLIT] 已打开 Email #1A?
@@ -191,21 +190,19 @@
   │     │     └─ CTA："Return to My Cart"
   │     │
   │     └─ NO (未打开) →
-  │         [SMS] [SMS] #1: 购物车提醒短信
-          └─ 正文："Hey [First Name]! You left items in your cart at [Brand]. Pick up where you left off → [短链]"（长度按平台与品牌写作规范控制）
-          └─ 发送窗口：以收件人当地时间的短信适配时段为准
-0
+  │         [SMS] #1: 购物车提醒短信
+  │           └─ 正文："Hey [First Name]! You left items in your cart at [Brand]. Pick up where you left off → [短链]"（长度按平台与品牌写作规范控制）
+  │           └─ 发送窗口：以收件人当地时间的短信适配时段为准
   │   │
   │   ▼
   │   [WAIT] 按标准路径第二轮复查节奏推进下一触达窗口
-        └─ 发送窗口：以收件人当地时间的品牌适配时段为准
+  │     └─ 发送窗口：以收件人当地时间的品牌适配时段为准
   │   │
   │   ▼
-  │   [EMAIL] [EMAIL] #3A: 补偿型挽回激励
-    └─ 标题："Here’s an extra reason to complete your order"
-    └─ 正文框架：如需提供激励，则使用经利润与品牌策略校准的补偿方案 + 购物车商品 + 真实时效说明
-    └─ CTA："Complete My Order" → 结账页面（如有激励则按实际规则自动应用）
-扣码）
+  │   [EMAIL] #3A: 补偿型挽回激励
+  │     └─ 标题："Here’s an extra reason to complete your order"
+  │     └─ 正文框架：如需提供激励，则使用经利润与品牌策略校准的补偿方案 + 购物车商品 + 真实时效说明
+  │     └─ CTA："Complete My Order" → 结账页面（如有激励则按实际规则自动应用）
   │
   └─ NO → 标准路径 (Standard Path)
       │
@@ -231,9 +228,8 @@
         └─ CTA："Complete My Order"
       │
       ▼
-[WAIT] 按高价值路径的第二轮复查节奏推进下一触达窗口
-      └─ 发送窗口：以收件人当地时间的品牌适配时段为准
-
+      [WAIT] 按标准路径第二轮复查节奏推进下一触达窗口
+        └─ 发送窗口：以收件人当地时间的品牌适配时段为准
       │
       ▼
       [EMAIL] #3B: 免运费激励
@@ -254,6 +250,7 @@
 - SMS 发送窗口：以收件人当地时间的短信适配时段为准
 - SMS 与 Email 的最小间隔：应保留足够缓冲，避免短时间内多通道连续打扰
 - BFCM 期间调整：可在首封邮件后适度提前短信提醒，但仍需结合拥挤度、时区与疲劳风险决定
+- 分层口径：本流将 SMS 收缩到高价值路径是**保守默认**——SMS 名单窄、单条有硬成本、打扰感强，把最贵触点留给期望值最高的购物车；全渠道瀑布真源（消息营销引擎 `../../afa-sms/references/omnichannel-orchestration.md`）的弃购示例为全量弃购适用。若品牌 SMS 名单质量高、毛利结构支持，可将 SMS 补位镜像扩展到标准路径（#1B 未打开时以 SMS 作互斥分支，触达预算仍为 3 次），选定口径后全渠道统一执行
 
 ### 2.5 KPI 目标
 
@@ -330,7 +327,7 @@
 
 ### 3.3 冲突排除规则
 
-- 进入本 Flow 时，不抑制其他 Flow
+- 进入本 Flow 时，暂停 Win-Back Flow（沉睡用户重新浏览视为再互动信号，优先走浏览挽回）；不抑制其他 Flow
 - 本 Flow 被以下 Flow 抑制：Abandoned Cart Flow, Welcome Series
 - 与 Campaign 的协调：本 Flow 不抑制 Campaign
 
@@ -365,7 +362,7 @@
   │
   ▼
 [EMAIL] #1: Order Confirmation & Excitement
-  └─ 延迟：交易确认后尽快发送（通常为事件触发后即时出发）
+  └─ 延迟：交易确认后尽快发送（通常为事件触发后即时发送）
   └─ 标题："Order confirmed! 🎉 Here's what's next"
   └─ 正文框架：
       1. 订单详情（动态块：商品、数量、价格）
@@ -468,7 +465,7 @@
 ### 4.3 冲突排除规则
 
 - 进入本 Flow 时，自动抑制：Win-Back Flow（用户已回归，无需召回）
-- 本 Flow 被以下 Flow 抑制：无（购后体验是最高优先级之一）
+- 本 Flow 被以下 Flow 抑制：Abandoned Cart Flow（用户购后又产生新弃购时，弃购流优先——与 §6 优先级瀑布一致）；除此之外无
 - 与 Campaign 的协调：Post-Purchase 前 3 封邮件期间（Day 0-3），抑制常规促销 Campaign
 
 ### 4.4 SMS 层叠策略
@@ -590,7 +587,7 @@
 ### 5.3 冲突排除规则
 
 - 进入本 Flow 时，不抑制其他 Flow
-- 本 Flow 被以下 Flow 抑制：Abandoned Cart Flow, Post-Purchase Flow
+- 本 Flow 被以下 Flow 抑制：Abandoned Cart Flow, Post-Purchase Flow, Browse Abandonment Flow（重新浏览＝再互动信号，暂停召回、转入浏览挽回）
 - 与 Campaign 的协调：Win-Back 活跃期间，仅发送 Win-Back 邮件，抑制常规 Campaign
 
 ### 5.4 SMS 层叠策略

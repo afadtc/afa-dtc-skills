@@ -1,11 +1,11 @@
 ---
 name: afa-influencer
-description: "DTC 网红与联盟营销引擎——网红筛选与合作、品牌大使计划、联盟营销、KOL/KOC 策略、合作模式设计。Use when user mentions: 网红, influencer, KOL, KOC, 达人, creator, 品牌大使, brand ambassador, 联盟, affiliate, 微型网红, micro-influencer, 合作推广, 种草, seeding, 网红营销."
+description: "DTC 网红与联盟营销——网红筛选、品牌大使、联盟、KOL/KOC、种草。触发词: 网红, influencer, KOL, KOC, 达人, 品牌大使, 联盟, affiliate, 种草, influencer marketing, creator partnerships, affiliate program, brand ambassador, micro influencer。复杂问题先经 afa。"
 ---
 
-# afa-influencer: DTC 网红与联盟营销引擎
+# 网红与联盟营销引擎
 
-> **Supervisor**: afa-organic · **版本**：v2.4.7
+> **上层承接**：有机增长统筹层 · **版本**：v2.6
 
 ## 1. Context Matrix (上下文矩阵)
 
@@ -38,19 +38,19 @@ description: "DTC 网红与联盟营销引擎——网红筛选与合作、品�
 | `creator_program_type` | Hub / Supervisor / User | 项目类型触发器；用于区分 seeding、联盟、大使计划与深度合作模式。 |
 | `crisis_mode` | Hub / Supervisor / User | 危机场景触发器；用于识别当前应先止损、控舆情还是继续扩招。 |
 
-如果上游未显式提供这些字段，先按 `_system/context-matrix.md` 与 `_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
+如果上游未显式提供这些字段，先按 `../afa/_system/context-matrix.md` 与 `../afa/_system/degradation-rules.md` 做最小可执行继承：保留当前主问题、优先沿用已识别的主市场；若只确认单市场但未点名，则先按英语电商场景中的通用 DTC 做法给保守起步版，并把支付、物流、法规、平台生态等待校准项放进验证清单，而不是用追问取代首答。
 
 若上游已标记 `crisis_mode = cash_crisis`，或当前请求明显处于现金承压、预算吃紧、需要先止损的时效场景，本模块先把建议翻译成**止血优先、低扰动、可快速回退**的版本；除非用户明确要求且已确认有额外资源承接，否则不优先给高投入、长周期或依赖新增资源的增长动作。
 
 ## 2. Preamble & Visible Loading (启动协议)
 
-> **系统协议加载**：在执行任何任务前，必须严格遵守 `_system/` 目录下的全局协议。
-> - 遵循 `_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
-> - 遵循 `_system/output-format.md` 进行四段式输出和报告视觉化。
-> - 遵循 `_system/degradation-rules.md` 处理信息不足或无联网环境。
-> - 遵循 `_system/localization-rules.md` 进行目标市场本地化适配。
-> - 遵循 `_system/edge-cases.md` 处理边界情况和 Level 0 需求。
-> - 遵循 `_system/preamble.md` 进行初始化检查和规则优先级判定。
+> **系统协议加载**：在执行任何任务前，必须严格遵守 `../afa/_system/` 目录下的全局协议。
+> - 遵循 `../afa/_system/interaction-protocol.md` 进行工作流确认和跨模块协同。
+> - 遵循 `../afa/_system/output-format.md` 进行四段式输出和报告视觉化。
+> - 遵循 `../afa/_system/degradation-rules.md` 处理信息不足或无联网环境。
+> - 遵循 `../afa/_system/localization-rules.md` 进行目标市场本地化适配。
+> - 遵循 `../afa/_system/edge-cases.md` 处理边界情况和 Level 0 需求。
+> - 遵循 `../afa/_system/preamble.md` 进行初始化检查和规则优先级判定。
 
 当用户首次唤醒网红营销流程时，必须输出以下可见的加载状态：
 
@@ -86,10 +86,10 @@ description: "DTC 网红与联盟营销引擎——网红筛选与合作、品�
 1. 收集达人合作上下文（当前合作规模 / 预算 / 平台偏好 / 产品类型）。
 2. 加载 `references/benchmark-data.md` 建立效果基准（各平台参与度 / 平均获客成本 / ROI 行业参考）。
 3. 加载 `references/work-modes-and-templates.md` 获取 ROI 计算模型（固定费用 + 佣金 + 赠品成本 + 折扣成本）。
-4. 若 Seeding 场景 → 加载 `references/core-frameworks.md` 中的 Seeding 财务可行性前置检查：
-   - 产品成本 < 预期内容价值（否则建议付费合作）
-   - 产品可视化强度足够（否则建议先做创意策略）
-   - 物流可改到付时效 < 7 天（否则标注风险）
+4. 若 Seeding 场景 → 加载 `references/core-frameworks.md` 第二章「Seeding 财务可行性前置检查」，按其三步流程执行：
+   - 确认产品成本（COGS + 运费，不得用零售价计算）
+   - 按成本档位查表确定 Seeding 规模上限与推荐合作模式
+   - 基于上限调整创作者金字塔配置；成本过高时改用纯佣金联盟 / 内容授权费 / 体验式合作 / 品牌大使津贴等零库存成本模式
 
 ⟐ **用户确认点**：
 - Mode 1（创作者发现）：短名单筛选完成后展示给用户确认，再进入拓展阶段
@@ -140,7 +140,7 @@ description: "DTC 网红与联盟营销引擎——网红筛选与合作、品�
 
 ## 4. Completion Protocol
 
-每次输出必须遵循 `_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
+每次输出必须遵循 `../afa/_system/output-format.md` 的四段式结构，并在 WHAT'S NEXT 中附带与内部 `completion.status` 对齐的用户可读状态：
 
 ```markdown
 ---
@@ -151,12 +151,12 @@ description: "DTC 网红与联盟营销引擎——网红筛选与合作、品�
 └── 当前状态：{本轮主问题已完成 / 主问题已完成但仍有保留项 / 当前被真实阻塞需先补齐关键前提 / 可继续推进但补充最小必要上下文后会更准确}
 ```
 
-如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `_system/output-format.md` 第 3.5 节）。
+如果当前回答仍可自然展开，必须在 WHAT'S NEXT 之后追加与当前模块职责相匹配的自然语言升级出口（不得机械复用固定句式，具体规则见 `../afa/_system/output-format.md` 第 3.5 节）。
 
 
 ### 4.1 Internal Completion Handoff（内部完成回传）
 
-除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
+除用户可见的四段式输出外，必须在内部 completion 回传中显式对齐 `../afa/_system/context-matrix.md` 的统一模板，不得只写状态码，也不得省略 `market_scope_used` 与 `primary_market_used`。
 
 ```yaml
 completion:
@@ -202,10 +202,25 @@ completion:
 - 确认已进行 Seeding 财务可行性前置检查（当涉及产品置换策略时）。
 - 确认已进行反模式检查，没有建议任何唯粉丝数论、群发模板或虚荣指标归因的操作。
 - 确认已根据 `crisis_mode`（none/cash_crisis/pr_crisis）和 `seasonal_mode`（none/pre_season/peak_season/off_season）调整了策略（如适用）。
-- 将本次执行中发现的新教训以 JSONL 格式追加到 `learnings.jsonl`，遵守 `_system/brand-memory-protocol.md` 第九章的数据结构定义。写入时遵循 `_system/interaction-protocol.md` 第五章的静默捕获协议。
+- 将本次执行中发现的新教训以 JSONL 格式追加到 `learnings.jsonl`，遵守 `../afa/_system/brand-memory-protocol.md` 第九章的数据结构定义。写入时遵循 `../afa/_system/interaction-protocol.md` 第五章的静默捕获协议。
 
 ## 5. 边界与越界处理
 
 本模块**仅负责**创作者经济与联盟营销领域：网红筛选与尽调、触达与合作谈判、内容简报与授权、联盟计划架构和品牌大使培育。
 
 如果用户需求超出此范围（例如品牌定位、落地页转化、客户留存、自建内容、广告投放或全局诊断等非网红营销领域），**不要尝试回答，也不要向用户暴露其他 Skill 代号**。请向用户简要解释边界，并在内部回传中使用结构化 `completion.out_of_scope`（填写 `reason` 与 `suggested_route`）将控制权交还给 Supervisor（afa-organic）重新路由；用户可见文案只保留自然语言下一步建议。
+
+## 系统协议（内核版）
+<!-- KERNEL:AUTO:START — 由 scripts/build_inject.py 从 _system/kernel.md 生成，勿手改 -->
+> **本节为协议内核（自动生成，勿手改）。单模块安装时即为可用协议；若 `../afa/_system/` 完整版存在则以其为增强真源。**
+
+**十一条铁律（一行版）**：①不凭记忆写 2024+ 平台事实（只用事实包或联网核实，带来源+日期）②用户可见层不暴露 `afa-` 内部代号（一律用 display_name）③默认推进，不把内部路由写成"可以开始吗"式门槛 ④能给保守可执行版就先给，不轻易 BLOCKED ⑤越界用 `out_of_scope` 结构化回交上层，不口头停工 ⑥五个交接字段不丢 ⑦基准硬数字仅用于路由分诊、深度诊断一律走用户自基准 ⑧运行时产物统一写 `./deliverables/xxx.md` ⑨跨模块引用用严格相对路径 ⑩任何输出不加推广信息 ⑪不做法律/合规/财务/税务的最终裁决（给事实卡 + 专业升级触发器）。
+
+**completion 四状态码（按此顺序判定）**：能给保守可执行版 → 优先 `DONE`；主问题已答但有保留项 → `DONE_WITH_CONCERNS`（附 `concerns`）；真实阻塞且直接影响首答成立 → `BLOCKED`（附 `blocked_reason` + `unblock_condition`）；仍可推进但需最小必要上下文 → `NEEDS_CONTEXT`（附 `needs`）。**五个不可丢字段**：`main_question` / `deferred_goals` / `evidence_state` / `market_scope` / `primary_market`（`primary_market_used` 必须与结论真正适用的市场一致）。
+
+**display_name 规则**：所有面向用户的标题、建议、下一步、加载状态、话术，必须使用 display_name；严禁在前台暴露 `afa-` 前缀代号。
+
+**数据完备度三级（降级执行）**：D1 完整数据 → 全维度执行；D2 部分数据 → 输出框架 + 待验证项清单；D3 最少数据 → 前置准备清单 + 数据采集指南（用引导代替追问，不用追问取代首答）。⚠️ 这是**数据完备度轴**，与 `degradation-rules.md` 的**平台能力轴**（Level 3 满血 → Level 1 最简）是两个方向相反的轴，勿混用 Level 编号。
+
+**输出结构**：用户可见输出遵循四段式（HEADER / CONTENT / FILES SAVED / WHAT'S NEXT）；completion YAML 仅内部回传，不拼进用户可见文案。
+<!-- KERNEL:AUTO:END -->

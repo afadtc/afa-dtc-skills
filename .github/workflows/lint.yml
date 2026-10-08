@@ -1,0 +1,35 @@
+name: repo-lint
+
+# 质量门禁：每次 push 与 PR 自动运行 scripts/repo_lint.py。
+# ERROR 类（死链 / 版本串 / frontmatter / 代号泄漏）存在即红灯；
+# WARN 类（SKILL.md 超 500 行、description 超量、模块计数）仅提示不阻断。
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 仓库为插件市场布局：模块与 scripts/evals/examples 整体位于 skills/，三道门禁的根目录参数指向 skills
+      - name: Run repo_lint (纯标准库，无需安装依赖)
+        run: python skills/scripts/repo_lint.py skills
+
+      - name: Verify kernel injection is in sync
+        run: python skills/scripts/build_inject.py skills --check
+
+      - name: Run routing evals (纯标准库)
+        run: python skills/evals/run_evals.py skills

@@ -1,6 +1,6 @@
 # 动态定价与价格测试 (Dynamic Pricing & Testing)
 
-> **产品基础定价（COGS 拆解、成本加成/竞争导向/价值导向/心理定价策略、单位经济模型）由 afa-product 的 `cogs-and-pricing-model.md` 负责。**
+> **产品基础定价（COGS 拆解、成本加成/竞争导向/价值导向/心理定价策略、单位经济模型）由产品策略引擎的 `../../afa-product/references/cogs-and-pricing-model.md` 负责。**
 > 本文件专注于：**如何通过价格测试和动态调整来提升 AOV**，属于定价的战术执行层面。
 
 价格优化并不等于对不同用户展示不同标价。DTC 品牌可以通过公开、可解释的价格测试、权益设计和优惠编排，在不破坏信任与公平性的前提下提升利润率和 AOV。
@@ -55,6 +55,6 @@
 
 ---
 
-> **如需了解产品的基础定价策略（COGS 核算、定价模型选择、毛利率目标设定），请参见 afa-product 的 `cogs-and-pricing-model.md`。**
+> **如需了解产品的基础定价策略（COGS 核算、定价模型选择、毛利率目标设定），请参见产品策略引擎的 `../../afa-product/references/cogs-and-pricing-model.md`。**
 >
-> **如需了解竞品价格监控与价格情报，请参见 afa-compete 的 `price-intelligence.md`。**
+> **如需了解竞品价格监控与价格情报，请参见竞争情报引擎的 `../../afa-compete/references/price-intelligence.md`。**

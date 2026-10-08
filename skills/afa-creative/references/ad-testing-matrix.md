@@ -1,6 +1,6 @@
 # 广告测试矩阵完整指南 (Ad Testing Matrix Playbook)
 
-本文件是 afa-creative 构建 4x3 广告测试矩阵的深度参考。涵盖 Hook 心理学库、Format 选择策略、矩阵构建流程和胜者迭代逻辑。
+本文件是创意引擎构建 4x3 广告测试矩阵的深度参考。涵盖 Hook 心理学库、Format 选择策略、矩阵构建流程和胜者迭代逻辑。
 
 ---
 
