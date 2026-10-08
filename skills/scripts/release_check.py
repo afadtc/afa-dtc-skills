@@ -3,8 +3,9 @@
 """发布物检查（第四道门禁）——检查发布 zip 的解压本体。
 
 前三道门禁（repo_lint / build_inject --check / run_evals）检查工作树；
-本脚本检查最终交付的 zip：解压后做结构/一致性/卫生断言，再用解压体自带的
-三道门禁复检本体，可选与上一版 zip 对比输出文件级变更清单。
+本脚本检查最终交付的 zip：解压后做结构/一致性/卫生断言，再用三道门禁复检本体
+（带工具目录的布局用解压体自带脚本；纯模块包用本脚本同目录的脚本），可选与
+上一版 zip 对比输出文件级变更清单。
 
 设计动因（发版实战中的两类真实事故）：
   1) 打包丢失类——工作树正确，但排除规则/打包过程吃掉文件（.github/ 曾被通配符误伤）；
@@ -23,10 +24,15 @@ import argparse, hashlib, json, os, re, shutil, subprocess, sys, tempfile, zipfi
 
 EXPECTED_SKILLS = 31  # 与 scripts/repo_lint.py 期望一致
 LEARNINGS = "examples/brand-brain-sample/learnings.jsonl"  # 必须存在，且逐行合法 JSONL
-# 两种合法布局：①平铺（模块目录与 scripts/evals/examples 同在 zip 根）；②插件市场布局（根为
-# .claude-plugin/ + README/CHANGELOG/LICENSE/.github，模块与 scripts/evals/examples 整体位于 skills/）。
-# 自动检测 skills/afa/SKILL.md 判定布局；ROOT_MUST 永远按 zip 根检查，MOD_MUST 按模块根检查。
+# 三种合法布局：①平铺（模块目录与 scripts/evals/examples 同在 zip 根）；②插件市场布局（根为
+# .claude-plugin/ + README/CHANGELOG/LICENSE/.github，模块与 scripts/evals/examples 整体位于 skills/）；
+# ③纯模块包（Release 附件：31 个模块目录直接在 zip 根，不含任何工具目录与仓库级文件，由
+# scripts/pack_modules.py 生成，解压后可整体拷入任何 Agent 工具的技能目录）。
+# 自动检测：skills/afa/SKILL.md → ②；afa/SKILL.md 且无 scripts/ → ③；否则 ①。
+# ROOT_MUST 按 zip 根检查、MOD_MUST 按模块根检查（③ 两者均不适用，改为「纯净性」断言）。
 ROOT_MUST = ["README.md", "CHANGELOG.md", "LICENSE", ".github/workflows/lint.yml"]
+PURE_FORBIDDEN = ["scripts", "evals", "examples", ".github", ".claude-plugin",
+                  "README.md", "CHANGELOG.md", "LICENSE"]  # ③ 顶层不得出现的条目
 MOD_MUST = ["examples", "examples/quickstart-and-sessions.md",
             "examples/brand-brain-sample/brand-master.md",
             "examples/brand-brain-sample/products.md", LEARNINGS,
@@ -121,10 +127,14 @@ def main():
                 and os.path.isfile(os.path.join(base, p)) and os.path.getsize(os.path.join(base, p)) == 0]
         add("C", "无零字节文件", not zero, zero[:3])
 
-        # 布局检测：skills/afa/SKILL.md 存在 → 插件市场布局，模块根为 skills/；否则平铺布局
+        # 布局检测：skills/afa/SKILL.md → ②插件市场布局（模块根 skills/）；
+        # afa/SKILL.md 且无 scripts/ → ③纯模块包；否则 ①平铺布局
         S = "skills" if os.path.isfile(os.path.join(base, "skills", "afa", "SKILL.md")) else ""
         mbase = os.path.join(base, S) if S else base
-        add("A", "布局识别", True, "skills/ 插件市场布局" if S else "平铺布局")
+        pure = (not S and os.path.isfile(os.path.join(base, "afa", "SKILL.md"))
+                and not os.path.isdir(os.path.join(base, "scripts")))
+        add("A", "布局识别", True,
+            "skills/ 插件市场布局" if S else ("纯模块包（Release 附件）" if pure else "平铺布局"))
 
         mods = sorted(d for d in os.listdir(mbase)
                       if d.startswith("afa") and os.path.isdir(os.path.join(mbase, d)))
@@ -135,29 +145,51 @@ def main():
                      if os.path.isfile(os.path.join(mbase, m, "SKILL.md"))
                      and "KERNEL:AUTO" not in open(os.path.join(mbase, m, "SKILL.md"), encoding="utf-8").read()]
         add("A", "协议内核块全量注入", not no_kernel, no_kernel[:3])
-        for p in ROOT_MUST:
-            add("A", f"存在 {p}", os.path.exists(os.path.join(base, p)))
-        for p in MOD_MUST:
-            add("A", f"存在 {(S + '/') if S else ''}{p}", os.path.exists(os.path.join(mbase, p)))
+        if pure:
+            # ③ 的契约：顶层只有模块目录——使用者「整体拷入技能目录」时不会带进任何非技能条目
+            extra = sorted(d for d in os.listdir(base) if d not in mods)
+            add("A", "纯模块包顶层仅含模块目录", not extra, extra[:5])
+            add("A", "纯模块包不含工具目录与仓库级文件",
+                not any(os.path.exists(os.path.join(base, p)) for p in PURE_FORBIDDEN))
+        else:
+            for p in ROOT_MUST:
+                add("A", f"存在 {p}", os.path.exists(os.path.join(base, p)))
+            for p in MOD_MUST:
+                add("A", f"存在 {(S + '/') if S else ''}{p}", os.path.exists(os.path.join(mbase, p)))
 
         def read(p):
             fp = os.path.join(base, p)
             return open(fp, encoding="utf-8").read() if os.path.isfile(fp) else ""
-        readme, chlog = read("README.md"), read("CHANGELOG.md")
-        rv = re.search(r"当前版本：(v[\d.]+)", readme)
-        cv = re.findall(r"^## (v[\d.]+)[^\n]*（当前发布版本）", chlog, re.M)
-        add("B", "README 与 CHANGELOG 版本一致",
-            bool(rv) and len(cv) == 1 and rv.group(1) == cv[0],
-            f"README={rv.group(1) if rv else '?'} CHANGELOG={cv}")
-        add("B", "「当前发布版本」标记唯一",
-            chlog.count("（当前发布版本）") == 1, f"出现 {chlog.count('（当前发布版本）')} 次")
+        if pure:
+            add("B", "纯模块包不带 README/CHANGELOG（版本一致性由仓库侧门禁保证）", True)
+        else:
+            readme, chlog = read("README.md"), read("CHANGELOG.md")
+            rv = re.search(r"当前版本：(v[\d.]+)", readme)
+            cv = re.findall(r"^## (v[\d.]+)[^\n]*（当前发布版本）", chlog, re.M)
+            add("B", "README 与 CHANGELOG 版本一致",
+                bool(rv) and len(cv) == 1 and rv.group(1) == cv[0],
+                f"README={rv.group(1) if rv else '?'} CHANGELOG={cv}")
+            add("B", "「当前发布版本」标记唯一",
+                chlog.count("（当前发布版本）") == 1, f"出现 {chlog.count('（当前发布版本）')} 次")
+            check_learnings(mbase, LEARNINGS)  # 显式断言：不靠 os.walk 撞见，缺失即 FAIL
 
-        check_learnings(mbase, LEARNINGS)  # 显式断言：不靠 os.walk 撞见，缺失即 FAIL
-
-        root_arg = S or "."
-        gates = [("repo_lint", [sys.executable, os.path.join(S, "scripts", "repo_lint.py"), root_arg], "errors=0"),
-                 ("kernel同步", [sys.executable, os.path.join(S, "scripts", "build_inject.py"), root_arg, "--check"], "待更新 0"),
-                 ("evals", [sys.executable, os.path.join(S, "evals", "run_evals.py"), root_arg], "失败 0")]
+        if pure:
+            # 纯模块包自身不带脚本与 evals：用本脚本同目录的 scripts/ 与同级 evals/ 复检解压本体。
+            # evals 以符号链接临时挂到解压目录（run_evals 从 root/evals/cases 读用例），不进 zip。
+            here = os.path.dirname(os.path.abspath(__file__))
+            tool_root = os.path.dirname(here)
+            try:
+                os.symlink(os.path.join(tool_root, "evals"), os.path.join(base, "evals"))
+            except OSError:  # Windows 无符号链接权限时退化为复制（仍在临时目录内，用完即清）
+                shutil.copytree(os.path.join(tool_root, "evals"), os.path.join(base, "evals"))
+            gates = [("repo_lint", [sys.executable, os.path.join(here, "repo_lint.py"), "."], "errors=0"),
+                     ("kernel同步", [sys.executable, os.path.join(here, "build_inject.py"), ".", "--check"], "待更新 0"),
+                     ("evals", [sys.executable, os.path.join(tool_root, "evals", "run_evals.py"), "."], "失败 0")]
+        else:
+            root_arg = S or "."
+            gates = [("repo_lint", [sys.executable, os.path.join(S, "scripts", "repo_lint.py"), root_arg], "errors=0"),
+                     ("kernel同步", [sys.executable, os.path.join(S, "scripts", "build_inject.py"), root_arg, "--check"], "待更新 0"),
+                     ("evals", [sys.executable, os.path.join(S, "evals", "run_evals.py"), root_arg], "失败 0")]
         for name, cmd, token in gates:
             try:
                 r = subprocess.run(cmd, cwd=base, capture_output=True, text=True, timeout=300)

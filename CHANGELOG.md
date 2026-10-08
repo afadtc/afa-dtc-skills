@@ -26,7 +26,9 @@
 
 **红线纪律**：全部新增内容不吸收"AI 编造评论/评价图、搬运他人视频素材、竞对原图作底图、假人设原生广告、永久假倒计时、无据功效数字"六类做法，逐条给出合规替代并指回既有真源（购后催评流程 / Spark Ads 授权 / AI 重建版式 / 明示广告身份 / 真实档期 / 铁律 9）。经验阈值一律标注内部经验、仅作分诊起点。
 
-**仓库布局与发布物**：GitHub 仓库沿用插件市场布局（`.claude-plugin/` + `skills/`），31 个模块与 scripts/evals/examples 整体位于 `skills/`，模块间相对引用不变；CI 三道门禁的根目录参数指向 `skills`；`release_check.py` 自动识别平铺与插件市场两种布局（根文件按 zip 根检查、模块与工具按模块根检查、门禁按布局拼装命令）；`.claude-plugin/marketplace.json` 与 `plugin.json` 版本同步 2.7.7、Skill 计数 30→31；GitHub 长版 README 与包内 README 合一，发布 zip 即仓库快照。
+**仓库布局与发布物**：GitHub 仓库沿用插件市场布局（`.claude-plugin/` + `skills/`），31 个模块与 scripts/evals/examples 整体位于 `skills/`，模块间相对引用不变；CI 三道门禁的根目录参数指向 `skills`；`release_check.py` 自动识别平铺与插件市场两种布局（根文件按 zip 根检查、模块与工具按模块根检查、门禁按布局拼装命令）；`.claude-plugin/marketplace.json` 与 `plugin.json` 版本同步 2.7.7、Skill 计数 30→31；GitHub 长版 README 与包内 README 合一。
+
+**Release 附件改为纯模块包 + 发布自动化**：Release 附件 `AFA_DTC_v2.7.7.zip` 回到 v2.4.7 发布物的形状——31 个模块目录直接在 zip 顶层，不带 scripts/evals/examples 与仓库级文件，解压后可整体拷入任何 Agent 工具的技能目录（WorkBuddy / 豆包工作 / 千问办公 / Codex / Cursor / Claude Code 等）；仓库快照由 GitHub 自动生成的 Source code 归档承担。新增 `scripts/pack_modules.py`（只收含 SKILL.md 的 `afa*` 目录，排除脏文件，模块数≠31 或出现零字节文件即拒绝出包）；`release_check.py` 识别第三种「纯模块包」布局，对其追加「顶层仅含模块目录」「不含工具目录与仓库级文件」两条纯净性断言，并用本脚本同目录的 scripts/ 与 evals/ 复跑前三道门禁（B 类版本一致性由仓库侧门禁保证）。新增 `.github/workflows/release.yml`：推送 `v*` 标签（或手动指定已有标签）→ 三道门禁 → 标签版本与 README / CHANGELOG / marketplace.json / plugin.json 及 README 中压缩包文件名一致性校验 → 打纯模块包 → 第四道门禁 → 创建或更新 GitHub Release（说明取自 `.github/release-notes/v<版本>.md`），任何一步失败不发布。README「如何安装」改为按所用软件分路（Claude 插件 / Claude Code / npx / 下载压缩包放进技能目录），附各软件技能目录与导入入口表、「一层一个模块」等注意事项，「如何更新」补压缩包路径。CI 动作升级至 `actions/checkout@v5` 与 `actions/setup-python@v6`（Node 24 运行时）。
 
 **终审修复 6 项（发版前语义自查所得）**：fb SKILL Phase 3 插行后未顺延致双"3."、creative SKILL Phase 3 同类双"4."（两处编号级联修正）；compete / launch 两个 SKILL 的共享继承上下文表补 `supply_chain_mode` 行、creative 执行输入表同步补行（消除"模块不接收字段却写适配"的 gg 类漏洞）；三级裁决 D+3 钩子率指标与静态图形态互斥——day-zero-testing 与 launch 模式 F 两处补口径注（视频=Hook 率、静态图=CTR 主判）；粗筛档 CTR 杀线（<0.8%）与全链路点击黑洞线（<0.5%）补分层口径注（只判死档从严，两线用途不同勿互替）。
 

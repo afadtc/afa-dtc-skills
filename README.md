@@ -19,6 +19,16 @@
 
 ## 如何安装
 
+先看你用的是哪个软件，对号入座。31 个模块是一个整体，**建议整套装**：模块之间有相对引用，整套放在同一个目录下才能全部接通；只拿一部分也能用，每个模块自带协议内核。
+
+| 你用的软件 | 怎么装 |
+| --- | --- |
+| claude.ai 网页 / Claude 桌面版 / Cowork | **方式一**：插件市场一键安装 |
+| Claude Code | **方式二**：两条命令 |
+| Codex / Cursor / Cline / OpenCode / Gemini CLI 等支持 Agent Skills 标准的工具 | **方式三**：`npx skills add`；或 **方式四** |
+| WorkBuddy / 豆包工作 / 千问办公 等桌面办公 Agent | **方式四**：下载压缩包，解压后整体放进软件的技能目录 |
+| 其他任何能读 `SKILL.md` 的 Agent | **方式四**：技能目录在哪，31 个文件夹就放哪 |
+
 ### 方式一：Claude 插件安装（claude.ai / Claude 桌面版 / Cowork，推荐）
 
 本仓库自带 `.claude-plugin/marketplace.json`，可以直接作为 Claude 插件市场添加，31 个 Skill 打包成一个插件 `afa`，之后在 Claude 里一键更新。
@@ -36,25 +46,54 @@ claude plugin marketplace add afadtc/afa-dtc-skills
 claude plugin install afa@afa-dtc-skills
 ```
 
-### 方式三：npx 一键安装（Cursor / Codex / Cline 等其他 Agent）
+### 方式三：npx 一键安装（Codex / Cursor / Cline / OpenCode / Gemini CLI 等）
 
 ```shell
 npx skills add afadtc/afa-dtc-skills
 ```
 
-### 方式四：手动安装
+这条命令会把仓库里的 31 个 Skill 装进它识别到的 Agent 工具；想指定装到哪个工具，加 `-a`（例如 `-a codex`）。
+
+### 方式四：下载压缩包，放进技能目录（WorkBuddy / 豆包工作 / 千问办公 / Codex / 任何 Agent 工具）
+
+1. 到 [Releases](https://github.com/afadtc/afa-dtc-skills/releases/latest) 下载 **`AFA_DTC_v2.7.7.zip`**（不是 Source code）。这个包解压出来就是 31 个 `afa-*` 文件夹，没有别的东西。
+2. 解压。
+3. 把 31 个文件夹**整体**复制进你所用软件的技能目录（见下表）；或在软件里用「导入技能 / 上传技能文件夹」选中它们。
+4. 重启软件（或新开一个会话），对它说一句「用 afa 帮我做独立站诊断」试试。
+
+| 软件 | 技能目录 / 导入入口 |
+| --- | --- |
+| WorkBuddy | `~/.workbuddy/skills/`（Windows：`C:\Users\<用户名>\.workbuddy\skills\`）；或「技能」页 → 添加技能 → 上传文件夹，也可以直接填本仓库地址导入 |
+| 豆包工作 | 左侧「插件·技能·伙伴」→ 技能 → 右上角「+」→ 导入本机技能文件夹；也可以粘贴本仓库地址 |
+| 千问办公 | `~/.qwenworkcn/skills/`；或「扩展」→「技能」→「安装技能」，也可以粘贴本仓库地址 |
+| Codex | `~/.codex/skills/`（项目级 `.codex/skills/`）；或在 Codex 里用 `$skill-installer` 指向本仓库 |
+| Claude Code（手动） | `~/.claude/skills/`（项目级 `.claude/skills/`） |
+| Cursor / Cline / OpenCode / Gemini CLI 等 | 各自的 skills 目录，或通用的 `~/.agents/skills/` |
+
+几点说明：
+
+- 技能目录下**一层一个模块**：`技能目录/afa-fb/SKILL.md` 这种层级才会被识别，多套一层就找不到。
+- 这些软件的「导入技能」功能多数一次只能导一个文件夹，装整套最省事的是直接复制进目录。
+- 只想装一部分：挑出对应文件夹即可。没装的模块，跨模块引用自然失效，核心协议不受影响。
+- Releases 页的 **Source code (zip)** 是整个仓库（含脚本、评测、CI），给想跑门禁、改代码的人用；装技能请用 `AFA_DTC_v2.7.7.zip`。
+- 各软件的入口名称以你当前版本的界面为准；发现对不上，请开 [Issue](https://github.com/afadtc/afa-dtc-skills/issues) 告诉我。
+
+想自己从源码取模块也可以：
 
 ```shell
 git clone https://github.com/afadtc/afa-dtc-skills.git
 ```
 
-将 `skills/` 下的模块目录复制到 `~/.claude/skills/` 或项目的 `.claude/skills/` 目录下即可。每个模块自带协议内核，单独拷出任何一个都能独立工作。
+模块在 `skills/` 目录下，把 `skills/afa*` 复制进技能目录即可（`skills/scripts`、`skills/evals`、`skills/examples` 是工具与示例，不是技能）。
 
 ## 如何更新
 
 - **Claude 插件方式**：在 **Customize → Plugins** 里对 `afa` 插件执行一次更新即可
 - **Claude Code 命令行**：`claude plugin marketplace update afa-dtc-skills`，然后 `claude plugin update afa@afa-dtc-skills`
 - **npx 方式**：重新运行安装命令即可，安装和更新用同一条命令：`npx skills add afadtc/afa-dtc-skills`
+- **压缩包方式**：到 [Releases](https://github.com/afadtc/afa-dtc-skills/releases/latest) 下载新版，删掉技能目录里旧的 `afa-*` 文件夹，放入新的。你的 `brand-brain/` 数据在工作目录里、不在模块文件夹内，不会丢。
+
+每个版本的变化看 [`CHANGELOG.md`](CHANGELOG.md)。
 
 ## 装好后，第一句话说什么
 
@@ -520,7 +559,9 @@ Worker 发现越界请求 → completion.out_of_scope → Supervisor → Hub 重
 | 一 | `scripts/repo_lint.py skills` | 死链、历史版本串、代号泄漏、§锚点存在性、模块计数、description 预算 | 每次提交（GitHub Actions） |
 | 二 | `scripts/build_inject.py skills --check` | 31 个 SKILL.md 的协议内核与 `kernel.md` 是否同步 | 每次提交 |
 | 三 | `evals/run_evals.py skills` | 54 条路由用例：路由可达 / 五字段在位 / 无代号泄漏 / 带成本标签 | 每次提交 |
-| 四 | `scripts/release_check.py <zip>` | 发布 zip 解压本体的结构（自动识别平铺 / 插件市场两种布局）、README/CHANGELOG 版本一致、learnings 协议、再复跑前三道 | 发版前 |
+| 四 | `scripts/release_check.py <zip>` | 发布 zip 解压本体的结构（自动识别纯模块包 / 平铺 / 插件市场三种布局）、纯模块包的纯净性、README/CHANGELOG 版本一致、learnings 协议、再复跑前三道 | 发版前；推送标签时自动 |
+
+发版本身也是自动的：推送 `v*` 标签 → `.github/workflows/release.yml` 依次跑前三道门禁、校验标签版本与 README / CHANGELOG / marketplace.json / plugin.json 一致、用 `scripts/pack_modules.py` 打纯模块包、跑第四道门禁，全部通过才创建 GitHub Release 并挂上 `AFA_DTC_v<版本>.zip`，说明取自 `.github/release-notes/v<版本>.md`。任何一步失败就不会有 Release。
 
 你的真实用例可以进入回归评测集：路由不准、内容过时，请开 [Issue](https://github.com/afadtc/afa-dtc-skills/issues) 附上原话与期望行为。
 
@@ -533,7 +574,10 @@ afa-dtc-skills/
 ├── .claude-plugin/
 │   ├── marketplace.json        # Claude 插件市场清单（发版时改 version，plugin.json 同步改）
 │   └── plugin.json             # 插件 afa 的元数据
-├── .github/workflows/lint.yml  # CI：三道门禁（根目录参数指向 skills）
+├── .github/
+│   ├── workflows/lint.yml      # CI：每次提交跑三道门禁（根目录参数指向 skills）
+│   ├── workflows/release.yml   # 推送 v* 标签：门禁 → 版本一致性 → 打纯模块包 → 第四道门禁 → 建 Release
+│   └── release-notes/          # 每个版本的 Release 说明（v2.7.7.md …）
 │
 ├── skills/                     # 31 个模块 + 工具，模块间相对引用全部在此目录内闭合
 │   ├── afa/                    # Hub — 系统入口与工作流编排
@@ -554,7 +598,7 @@ afa-dtc-skills/
 │   │   （Workers：afa-ops / afa-expand / afa-payments）
 │   ├── examples/               # 10 分钟上手 + 三段示例会话 + brand-brain 示例
 │   ├── evals/                  # 路由回归评测（54 条用例 + harness）
-│   └── scripts/                # 门禁脚本：repo_lint / build_inject / release_check
+│   └── scripts/                # 门禁与打包脚本：repo_lint / build_inject / release_check / pack_modules
 │
 ├── CHANGELOG.md                # 全库唯一保留历史版本号的地方
 ├── LICENSE

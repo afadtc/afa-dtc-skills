@@ -4,7 +4,7 @@
 
 ## 一、10 分钟上手
 
-**第 1 分钟 · 安装**：`npx skills add afadtc/afa-dtc-skills`（更新也是这条命令）。
+**第 1 分钟 · 安装**：Claude 用户在 Customize → Plugins 里添加市场 `afadtc/afa-dtc-skills` 装 `afa` 插件；Codex / Cursor 等用 `npx skills add afadtc/afa-dtc-skills`（更新也是这条命令）；WorkBuddy / 豆包工作 / 千问办公等桌面 Agent 到 GitHub Releases 下载 `AFA_DTC_v<版本>.zip`，解压后把 31 个文件夹整体放进软件的技能目录。各软件的具体入口见仓库 README「如何安装」。
 
 **第 2 分钟 · 开口**：直接说人话。不要问"你有什么功能"，直接说你的处境——"我卖宠物用品，主打美国市场，最近广告越投越亏"。系统会自动判断该走诊断、投放还是产品线，不会给你菜单让你选。
 

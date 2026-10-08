@@ -1,0 +1,95 @@
+name: release
+
+# 发布自动化：推送 v* 标签（或在 Actions 页手动指定一个已存在的标签）后自动完成——
+#   三道门禁 → 标签版本与 README / CHANGELOG / marketplace.json / plugin.json 一致性校验
+#   → skills/scripts/pack_modules.py 打「纯模块包」→ skills/scripts/release_check.py 第四道门禁
+#   → 创建（或更新）GitHub Release：附件 = AFA_DTC_v<版本>.zip（31 个模块目录在顶层，
+#     解压后可整体拷入任何 Agent 工具的技能目录），说明 = .github/release-notes/v<版本>.md。
+# 任何一步失败即不发布；Release 已存在时只覆盖附件与说明，不重复创建。
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "已存在的标签名（如 v2.7.7）"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref_name }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Gates 1-3 (repo_lint / kernel sync / routing evals)
+        run: |
+          python skills/scripts/repo_lint.py skills
+          python skills/scripts/build_inject.py skills --check
+          python skills/evals/run_evals.py skills
+
+      - name: Tag version must match README / CHANGELOG / marketplace.json / plugin.json
+        run: |
+          python - <<'EOF'
+          import json, os, re, sys
+          tag = os.environ["TAG"]
+          readme = open("README.md", encoding="utf-8").read()
+          chlog = open("CHANGELOG.md", encoding="utf-8").read()
+          mk = json.load(open(".claude-plugin/marketplace.json", encoding="utf-8"))
+          pl = json.load(open(".claude-plugin/plugin.json", encoding="utf-8"))
+          rv = re.search(r"当前版本：(v[\d.]+)", readme)
+          cv = re.findall(r"^## (v[\d.]+)[^\n]*（当前发布版本）", chlog, re.M)
+          got = {
+              "标签": tag,
+              "README 当前版本": rv.group(1) if rv else "?",
+              "CHANGELOG 当前发布版本": cv[0] if len(cv) == 1 else f"?{cv}",
+              "marketplace.json metadata.version": "v" + str(mk.get("metadata", {}).get("version")),
+              "marketplace.json plugins[0].version": "v" + str(mk["plugins"][0].get("version")),
+              "plugin.json version": "v" + str(pl.get("version")),
+          }
+          for k, v in got.items():
+              print(f"{k:38s} {v}")
+          if len(set(got.values())) != 1:
+              sys.exit("[错误] 版本号不一致——发布前请统一上述所有位置")
+          if f"AFA_DTC_{tag}.zip" not in readme:
+              sys.exit(f"[错误] README「如何安装」仍写着旧的压缩包文件名，应为 AFA_DTC_{tag}.zip")
+          print("[OK] 版本一致：", tag)
+          EOF
+
+      - name: Build pure module package
+        run: python skills/scripts/pack_modules.py skills "dist/AFA_DTC_${TAG}.zip"
+
+      - name: Gate 4 (release_check on the package)
+        run: python skills/scripts/release_check.py "dist/AFA_DTC_${TAG}.zip"
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NOTES=".github/release-notes/${TAG}.md"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG 已存在：覆盖附件与说明"
+            gh release upload "$TAG" dist/*.zip --clobber --repo "$GITHUB_REPOSITORY"
+            if [ -f "$NOTES" ]; then
+              gh release edit "$TAG" --title "$TAG" --notes-file "$NOTES" --latest --repo "$GITHUB_REPOSITORY"
+            fi
+          elif [ -f "$NOTES" ]; then
+            gh release create "$TAG" dist/*.zip --title "$TAG" --notes-file "$NOTES" --latest --verify-tag --repo "$GITHUB_REPOSITORY"
+          else
+            echo "::warning::缺少 $NOTES，改用 GitHub 自动生成的说明"
+            gh release create "$TAG" dist/*.zip --title "$TAG" --generate-notes --latest --verify-tag --repo "$GITHUB_REPOSITORY"
+          fi
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json tagName,name,isLatest,assets --jq '{tag: .tagName, name: .name, latest: .isLatest, assets: [.assets[].name]}'
