@@ -5,7 +5,8 @@ name: release
 #   → skills/scripts/pack_modules.py 打「纯模块包」→ skills/scripts/release_check.py 第四道门禁
 #   → 创建（或更新）GitHub Release：附件 = AFA_DTC_v<版本>.zip（31 个模块目录在顶层，
 #     解压后可整体拷入任何 Agent 工具的技能目录），说明 = .github/release-notes/v<版本>.md。
-# 任何一步失败即不发布；Release 已存在时只覆盖附件与说明，不重复创建。
+# 任何一步失败即不发布；Release 已发布时只覆盖附件与说明，不重复创建；若因删除/重打标签而残留同名草稿，
+# 先删草稿再新建（GitHub 会把标签被删的已发布 Release 转为草稿，草稿对外不可见）。
 
 on:
   push:
@@ -84,17 +85,28 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           NOTES=".github/release-notes/${TAG}.md"
-          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "Release $TAG 已存在：覆盖附件与说明"
-            gh release upload "$TAG" dist/*.zip --clobber --repo "$GITHUB_REPOSITORY"
-            if [ -f "$NOTES" ]; then
-              gh release edit "$TAG" --title "$TAG" --notes-file "$NOTES" --latest --repo "$GITHUB_REPOSITORY"
-            fi
-          elif [ -f "$NOTES" ]; then
-            gh release create "$TAG" dist/*.zip --title "$TAG" --notes-file "$NOTES" --latest --verify-tag --repo "$GITHUB_REPOSITORY"
+          if [ -f "$NOTES" ]; then
+            NOTES_ARGS=(--notes-file "$NOTES")
           else
             echo "::warning::缺少 $NOTES，改用 GitHub 自动生成的说明"
-            gh release create "$TAG" dist/*.zip --title "$TAG" --generate-notes --latest --verify-tag --repo "$GITHUB_REPOSITORY"
+            NOTES_ARGS=(--generate-notes)
+          fi
+          # 三种起点：none=无 Release；true=同名草稿（删除/重打标签时 GitHub 会把已发布的 Release 转为草稿）；false=已发布
+          STATE="$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft --jq '.isDraft' 2>/dev/null || echo none)"
+          echo "现有 Release 状态：$STATE"
+          if [ "$STATE" = "true" ]; then
+            echo "同名草稿残留：删除草稿后按新建处理（标签本身不动）"
+            gh release delete "$TAG" --yes --repo "$GITHUB_REPOSITORY"
+            STATE=none
+          fi
+          if [ "$STATE" = "false" ]; then
+            echo "Release $TAG 已发布：覆盖附件与说明"
+            gh release upload "$TAG" dist/*.zip --clobber --repo "$GITHUB_REPOSITORY"
+            if [ -f "$NOTES" ]; then
+              gh release edit "$TAG" --title "$TAG" --notes-file "$NOTES" --repo "$GITHUB_REPOSITORY"
+            fi
+          else
+            gh release create "$TAG" dist/*.zip --title "$TAG" "${NOTES_ARGS[@]}" --verify-tag --repo "$GITHUB_REPOSITORY"
           fi
           gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json tagName,name,isDraft,isPrerelease,url,assets \
             --jq '{tag: .tagName, name: .name, draft: .isDraft, prerelease: .isPrerelease, url: .url, assets: [.assets[] | {name, size}]}'
