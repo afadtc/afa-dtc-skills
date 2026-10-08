@@ -13,8 +13,12 @@ scripts/ evals/ examples/ 与仓库级文件（README / CHANGELOG / LICENSE / .g
   python scripts/pack_modules.py skills dist/AFA_DTC_v2.7.7.zip
 退出码：0=成功；1=模块数不符或根目录无效。
 产物应随后交给 scripts/release_check.py 复检（第四道门禁）。纯标准库。
+
+可复现构建：设置环境变量 SOURCE_DATE_EPOCH（Unix 秒，发布工作流取标签所指提交的时间）后，
+条目时间戳、权限位与顺序全部固定，同一提交在任何机器上打出的 zip 字节一致，sha256 可与
+Release 页面展示的值直接比对；未设置时条目时间取当前时刻。
 """
-import os, sys, zipfile
+import os, sys, time, zipfile
 
 EXPECTED_SKILLS = 31  # 与 scripts/repo_lint.py / scripts/release_check.py 期望一致
 DIRTY_DIRS = {".git", "__MACOSX", "__pycache__", ".pytest_cache"}
@@ -49,15 +53,24 @@ def main():
     if len(mods) != EXPECTED_SKILLS:
         sys.exit(f"[错误] 模块数 {len(mods)} ≠ 预期 {EXPECTED_SKILLS}：{mods}")
     os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
+    epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    stamp = time.gmtime(max(int(epoch), 315532800)) if epoch else time.localtime()  # zip 最早 1980-01-01
+    date_time = stamp[:6]
     n = 0
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
         for mod in mods:
             for full, arc in iter_files(root, mod):
                 if os.path.getsize(full) == 0:
                     sys.exit(f"[错误] 零字节文件：{arc}")
-                z.write(full, arc)
+                zi = zipfile.ZipInfo(arc, date_time=date_time)
+                zi.compress_type = zipfile.ZIP_DEFLATED
+                zi.create_system = 3                 # Unix 语义，权限位固定为 rw-r--r--
+                zi.external_attr = 0o100644 << 16
+                with open(full, "rb") as fh:
+                    z.writestr(zi, fh.read())
                 n += 1
-    print(f"[OK] {out}：{len(mods)} 个模块目录，{n} 个文件，{os.path.getsize(out):,} 字节")
+    print(f"[OK] {out}：{len(mods)} 个模块目录，{n} 个文件，{os.path.getsize(out):,} 字节"
+          + (f"，时间戳固定于 SOURCE_DATE_EPOCH={epoch}" if epoch else ""))
 
 
 if __name__ == "__main__":

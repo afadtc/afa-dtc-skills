@@ -69,8 +69,12 @@ jobs:
           print("[OK] 版本一致：", tag)
           EOF
 
-      - name: Build pure module package
-        run: python skills/scripts/pack_modules.py skills "dist/AFA_DTC_${TAG}.zip"
+      - name: Build pure module package (reproducible, timestamps = tagged commit time)
+        run: |
+          export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+          echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH"
+          python skills/scripts/pack_modules.py skills "dist/AFA_DTC_${TAG}.zip"
+          sha256sum "dist/AFA_DTC_${TAG}.zip"
 
       - name: Gate 4 (release_check on the package)
         run: python skills/scripts/release_check.py "dist/AFA_DTC_${TAG}.zip"
@@ -92,4 +96,5 @@ jobs:
             echo "::warning::缺少 $NOTES，改用 GitHub 自动生成的说明"
             gh release create "$TAG" dist/*.zip --title "$TAG" --generate-notes --latest --verify-tag --repo "$GITHUB_REPOSITORY"
           fi
-          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json tagName,name,isLatest,assets --jq '{tag: .tagName, name: .name, latest: .isLatest, assets: [.assets[].name]}'
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json tagName,name,isDraft,isPrerelease,url,assets \
+            --jq '{tag: .tagName, name: .name, draft: .isDraft, prerelease: .isPrerelease, url: .url, assets: [.assets[] | {name, size}]}'
